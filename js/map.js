@@ -18,12 +18,16 @@ function showTooltip() {
 }
 
 function hideTooltip() {
-  console.log(this.id)
+  // console.log(this.id)
   document.querySelector('.root .country-tooltip#' + this.id).remove()
 }
 
 function moveToCountry() {
-  alert('Clicked country ' + this.id)
+  const popup = document.querySelector('#continentPopup')
+  popup.style.display = 'block'
+  setTimeout(function() {
+    popup.classList.add('show');
+  }, 10)
 }
 
 function setTooltipPosition(e) {
@@ -31,7 +35,7 @@ function setTooltipPosition(e) {
   const positionY = e.clientY - 32;
 
   const tooltip = document.querySelector('.root .country-tooltip')
-  console.log(tooltip)
+  // console.log(tooltip)
   if (tooltip) {
     tooltip.style.left = `${positionX}px`
     tooltip.style.top = `${positionY}px`
@@ -10403,12 +10407,6 @@ function mapSvg() {
   		l-0.08,0.12l0.32,0.54l0.47,0.53l0.36-0.09l0.4-0.42l0.42-0.34l0.53-0.3l0.38-0.58l0.33-0.37l0.3-0.05L2284.5,1104.83z
   		 M2283.73,1102.89l-0.35,0.24l-0.25-0.04l0.05-0.48l0.15-0.33l0.36,0.03l0.09,0.2L2283.73,1102.89z M2252.87,1111.32l0.34-0.39
   		l-0.24-0.39l-0.39,0.22l-0.01,0.15l0.15,0.48L2252.87,1111.32z"/>
-  </g>
-  <g class="country" id="AD">
-  	<polygon class="st1" points="1824.35,938.79 1824.1,938.51 1822.91,938.2 1822.35,938.12 1821.99,938.33 1821.73,938.59
-  		1821.62,939.07 1821.68,939.25 1821.75,939.59 1821.73,939.96 1821.9,940.2 1822.22,940.23 1822.62,940.15 1823.06,940.01
-  		1823.84,939.6 1824.07,939.53 1824.14,939.3 1824.36,938.99 	"/>
-  	<rect class="st6" width="3840" height="2160"/>
   </g>
   </svg>
 
