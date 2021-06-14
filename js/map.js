@@ -13,11 +13,15 @@ function initMap() {
   svg.addEventListener('mousemove', setTooltipPosition)
 }
 
-function tooltip(id) {
+function tooltip(country) {
   const tooltip = document.createElement('div')
-  const countryName = getCountryName(countries(), id)
-  tooltip.className = 'tooltip country-tooltip'
-  tooltip.id = id
+  const countryName = getCountryName(countries(), country.id)
+  
+  if (country.classList.contains('sold')) {
+    tooltip.className = 'tooltip country-tooltip sold'
+  } else { tooltip.className = 'tooltip country-tooltip' }
+
+  tooltip.id = country.id
   tooltip.innerHTML = `
         <div class="tooltip-row">
           <p class="title">${countryName}</p>
@@ -33,7 +37,7 @@ function tooltip(id) {
   return tooltip
 }
 function showTooltip() {
-  document.querySelector('.root').appendChild(tooltip(this.id))
+  document.querySelector('.root').appendChild(tooltip(this))
 }
 function hideTooltip() {
   // console.log(this.id)
@@ -61,256 +65,213 @@ function moveToCountry() {
 
 function countries(countries) {
   // типо файлик countries.csv
-  countries = `Name,Code
-Afghanistan,AF
-Г…land Islands,AX
-Albania,AL
-Algeria,DZ
-American Samoa,AS
-Andorra,AD
-Angola,AO
-Anguilla,AI
-Antarctica,AQ
-Antigua and Barbuda,AG
-Argentina,AR
-Armenia,AM
-Aruba,AW
-Australia,AU
-Austria,AT
-Azerbaijan,AZ
-Bahamas,BS
-Bahrain,BH
-Bangladesh,BD
-Barbados,BB
-Belarus,BY
-Belgium,BE
-Belize,BZ
-Benin,BJ
-Bermuda,BM
-Bhutan,BT
-"Bolivia, Plurinational State of",BO
-"Bonaire, Sint Eustatius and Saba",BQ
-Bosnia and Herzegovina,BA
-Botswana,BW
-Bouvet Island,BV
-Brazil,BR
-British Indian Ocean Territory,IO
-Brunei Darussalam,BN
-Bulgaria,BG
-Burkina Faso,BF
-Burundi,BI
-Cambodia,KH
-Cameroon,CM
-Canada,CA
-Cape Verde,CV
-Cayman Islands,KY
-Central African Republic,CF
-Chad,TD
-Chile,CL
-China,CN
-Christmas Island,CX
-Cocos (Keeling) Islands,CC
-Colombia,CO
-Comoros,KM
-Congo,CG
-"Congo, the Democratic Republic of the",CD
-Cook Islands,CK
-Costa Rica,CR
-CГґte d'Ivoire,CI
-Croatia,HR
-Cuba,CU
-CuraГ§ao,CW
-Cyprus,CY
-Czech Republic,CZ
-Denmark,DK
-Djibouti,DJ
-Dominica,DM
-Dominican Republic,DO
-Ecuador,EC
-Egypt,EG
-El Salvador,SV
-Equatorial Guinea,GQ
-Eritrea,ER
-Estonia,EE
-Ethiopia,ET
-Falkland Islands (Malvinas),FK
-Faroe Islands,FO
-Fiji,FJ
-Finland,FI
-France,FR
-French Guiana,GF
-French Polynesia,PF
-French Southern Territories,TF
-Gabon,GA
-Gambia,GM
-Georgia,GE
-Germany,DE
-Ghana,GH
-Gibraltar,GI
-Greece,GR
-Greenland,GL
-Grenada,GD
-Guadeloupe,GP
-Guam,GU
-Guatemala,GT
-Guernsey,GG
-Guinea,GN
-Guinea-Bissau,GW
-Guyana,GY
-Haiti,HT
-Heard Island and McDonald Islands,HM
-Holy See (Vatican City State),VA
-Honduras,HN
-Hong Kong,HK
-Hungary,HU
-Iceland,IS
-India,IN
-Indonesia,ID
-"Iran, Islamic Republic of",IR
-Iraq,IQ
-Ireland,IE
-Isle of Man,IM
-Israel,IL
-Italy,IT
-Jamaica,JM
-Japan,JP
-Jersey,JE
-Jordan,JO
-Kazakhstan,KZ
-Kenya,KE
-Kiribati,KI
-"Korea, Democratic People's Republic of",KP
-"Korea, Republic of",KR
-Kuwait,KW
-Kyrgyzstan,KG
-Lao People's Democratic Republic,LA
-Latvia,LV
-Lebanon,LB
-Lesotho,LS
-Liberia,LR
-Libya,LY
-Liechtenstein,LI
-Lithuania,LT
-Luxembourg,LU
-Macao,MO
-"Macedonia, the Former Yugoslav Republic of",MK
-Madagascar,MG
-Malawi,MW
-Malaysia,MY
-Maldives,MV
-Mali,ML
-Malta,MT
-Marshall Islands,MH
-Martinique,MQ
-Mauritania,MR
-Mauritius,MU
-Mayotte,YT
-Mexico,MX
-"Micronesia, Federated States of",FM
-"Moldova, Republic of",MD
-Monaco,MC
-Mongolia,MN
-Montenegro,ME
-Montserrat,MS
-Morocco,MA
-Mozambique,MZ
-Myanmar,MM
-Namibia,NA
-Nauru,NR
-Nepal,NP
-Netherlands,NL
-New Caledonia,NC
-New Zealand,NZ
-Nicaragua,NI
-Niger,NE
-Nigeria,NG
-Niue,NU
-Norfolk Island,NF
-Northern Mariana Islands,MP
-Norway,NO
-Oman,OM
-Pakistan,PK
-Palau,PW
-"Palestine, State of",PS
-Panama,PA
-Papua New Guinea,PG
-Paraguay,PY
-Peru,PE
-Philippines,PH
-Pitcairn,PN
-Poland,PL
-Portugal,PT
-Puerto Rico,PR
-Qatar,QA
-RГ©union,RE
-Romania,RO
-Russia,RU
-Rwanda,RW
-Saint BarthГ©lemy,BL
-Saint Helena, Ascension and Tristan da Cunha,SH
-Saint Kitts and Nevis,KN
-Saint Lucia,LC
-Saint Martin (French part),MF
-Saint Pierre and Miquelon,PM
-Saint Vincent and the Grenadines,VC
-Samoa,WS
-San Marino,SM
-Sao Tome and Principe,ST
-Saudi Arabia,SA
-Senegal,SN
-Serbia,RS
-Seychelles,SC
-Sierra Leone,SL
-Singapore,SG
-Sint Maarten (Dutch part),SX
-Slovakia,SK
-Slovenia,SI
-Solomon Islands,SB
-Somalia,SO
-South Africa,ZA
-South Georgia and the South Sandwich Islands,GS
-South Sudan,SS
-Spain,ES
-Sri Lanka,LK
-Sudan,SD
-Suriname,SR
-Svalbard and Jan Mayen,SJ
-Swaziland,SZ
-Sweden,SE
-Switzerland,CH
-Syrian Arab Republic,SY
-"Taiwan, Province of China",TW
-Tajikistan,TJ
-"Tanzania, United Republic of",TZ
-Thailand,TH
-Timor-Leste,TL
-Togo,TG
-Tokelau,TK
-Tonga,TO
-Trinidad and Tobago,TT
-Tunisia,TN
-Turkey,TR
-Turkmenistan,TM
-Turks and Caicos Islands,TC
-Tuvalu,TV
-Uganda,UG
-Ukraine,UA
-United Arab Emirates,AE
-United Kingdom,GB
-United States,US
-United States Minor Outlying Islands,UM
-Uruguay,UY
-Uzbekistan,UZ
-Vanuatu,VU
-"Venezuela, Bolivarian Republic of",VE
-Viet Nam,VN
-"Virgin Islands, British",VG
-"Virgin Islands, U.S.",VI
-Wallis and Futuna,WF
-Western Sahara,EH
-Yemen,YE
-Zambia,ZM
-Zimbabwe,ZW`;
+  countries = `United States,USA
+  China,CHN
+  Japan,JPN
+  Germany,DEU
+  India,IND
+  United Kingdom,GBR
+  France,FRA
+  Italy,ITA
+  Brazil,BRA
+  Canada,CAN
+  Russian Federation,RUS
+  Korea, Rep.,KOR
+  Australia,AUS
+  Spain,ESP
+  Mexico,MEX
+  Indonesia,IDN
+  Netherlands,NLD
+  Saudi Arabia,SAU
+  Turkey,TUR
+  Switzerland,CHE
+  Poland,POL
+  Thailand,THA
+  Belgium,BEL
+  Sweden,SWE
+  Iran, Islamic Rep.,IRN
+  Nigeria,NGA
+  Argentina,ARG
+  Austria,AUT
+  United Arab Emirates,ARE
+  Norway,NOR
+  Israel,ISR
+  Ireland,IRL
+  Philippines,PHL
+  Singapore,SGP
+  Hong Kong SAR, China,HKG
+  Malaysia,MYS
+  South Africa,ZAF
+  Denmark,DNK
+  Colombia,COL
+  Egypt, Arab Rep.,EGY
+  Bangladesh,BGD
+  Chile,CHL
+  Pakistan,PAK
+  Finland,FIN
+  Vietnam,VNM
+  Czech Republic,CZE
+  Romania,ROU
+  Portugal,PRT
+  Iraq,IRQ
+  Peru,PER
+  Greece,GRC
+  New Zealand,NZL
+  Kazakhstan,KAZ
+  Qatar,QAT
+  Algeria,DZA
+  Hungary,HUN
+  Ukraine,UKR
+  Kuwait,KWT
+  Morocco,MAR
+  Ecuador,ECU
+  Slovak Republic,SVK
+  Puerto Rico,PRI
+  Cuba,CUB
+  Ethiopia,ETH
+  Kenya,KEN
+  Dominican Republic,DOM
+  Angola,AGO
+  Sri Lanka,LKA
+  Guatemala,GTM
+  Oman,OMN
+  Myanmar,MMR
+  Luxembourg,LUX
+  Bulgaria,BGR
+  Ghana,GHA
+  Panama,PAN
+  Tanzania,TZA
+  Belarus,BLR
+  Costa Rica,CRI
+  Croatia,HRV
+  CГґte d'Ivoire,CIV
+  Uzbekistan,UZB
+  Uruguay,URY
+  Lithuania,LTU
+  Slovenia,SVN
+  Macao SAR, China,MAC
+  Libya,LBY
+  Lebanon,LBN
+  Serbia,SRB
+  Congo, Dem. Rep.,COD
+  Azerbaijan,AZE
+  Jordan,JOR
+  Bolivia,BOL
+  Turkmenistan,TKM
+  Cameroon,CMR
+  Tunisia,TUN
+  Bahrain,BHR
+  Paraguay,PRY
+  Uganda,UGA
+  Latvia,LVA
+  Estonia,EST
+  Nepal,NPL
+  Sudan,SDN
+  South Sudan,SSDN
+  Cambodia,KHM
+  El Salvador,SLV
+  Honduras,HND
+  Cyprus,CYP
+  Papua New Guinea,PNG
+  Trinidad and Tobago,TTO
+  Iceland,ISL
+  Senegal,SEN
+  Zambia,ZMB
+  Yemen, Rep.,YEM
+  Zimbabwe,ZWE
+  Bosnia and Herzegovina,BIH
+  Afghanistan,AFG
+  Botswana,BWA
+  Lao PDR,LAO
+  Georgia,GEO
+  Mali,MLI
+  Gabon,GAB
+  Jamaica,JAM
+  West Bank and Gaza,PSE
+  Burkina Faso,BFA
+  Mozambique,MOZ
+  Albania,ALB
+  Malta,MLT
+  Benin,BEN
+  Haiti,HTI
+  Madagascar,MDG
+  Mauritius,MUS
+  Mongolia,MNG
+  Armenia,ARM
+  Bahamas, The,BHS
+  Brunei Darussalam,BRN
+  Niger,NER
+  North Macedonia,MKD
+  Nicaragua,NIC
+  Namibia,NAM
+  Guinea,GIN
+  Congo, Rep.,COG
+  Moldova,MDA
+  Chad,TCD
+  Equatorial Guinea,GNQ
+  Rwanda,RWA
+  Kyrgyz Republic,KGZ
+  Tajikistan,TJK
+  Kosovo,XKX
+  Malawi,MWI
+  Mauritania,MRT
+  Isle of Man,IMN
+  Bermuda,BMU
+  Monaco,MCO
+  Liechtenstein,LIE
+  Guam,GUM
+  Maldives,MDV
+  Montenegro,MNE
+  Cayman Islands,CYM
+  Fiji,FJI
+  Togo,TGO
+  Barbados,BRB
+  Guyana,GUY
+  Eswatini,SWZ
+  Sierra Leone,SLE
+  Virgin Islands (U.S.),VIR
+  Suriname,SUR
+  Djibouti,DJI
+  Andorra,AND
+  Faroe Islands,FRO
+  CuraГ§ao,CUW
+  Liberia,LBR
+  Aruba,ABW
+  Greenland,GRL
+  Burundi,BDI
+  Bhutan,BTN
+  Lesotho,LSO
+  Central African Republic,CAF
+  St. Lucia,LCA
+  Timor-Leste,TLS
+  Cabo Verde,CPV
+  Belize,BLZ
+  Gambia, The,GMB
+  Seychelles,SYC
+  Antigua and Barbuda,ATG
+  San Marino,SMR
+  Solomon Islands,SLB
+  Guinea-Bissau,GNB
+  Northern Mariana Islands,MNP
+  Grenada,GRD
+  Turks and Caicos Islands,TCA
+  Sint Maarten (Dutch part),SXM
+  Comoros,COM
+  St. Kitts and Nevis,KNA
+  Vanuatu,VUT
+  Samoa,WSM
+  St. Vincent and the Grenadines,VCT
+  American Samoa,ASM
+  Dominica,DMA
+  Tonga,TON
+  SГЈo TomГ© and Principe,STP
+  Micronesia, Fed. Sts.,FSM
+  Palau,PLW
+  Marshall Islands,MHL
+  Kiribati,KIR
+  Nauru,NRU
+  Tuvalu,TUV
+`;
   return countries = countries.split(/\r?\n|\r/).map(country => {
     return {
       name: country.split(',')[0],
@@ -338,7 +299,7 @@ function mapSvg() {
   return `
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
   	 viewBox="0 0 3840 2160" style="enable-background:new 0 0 3840 2160;" xml:space="preserve">
-  <g class="country" id="ZW">
+  <g class="country" id="ZWE">
   	<path class="st0" d="M2087.41,1486.47l-0.69-1.11l-0.5-0.96l-0.45-1.47l0.45-1.28l0.16-0.77l0-0.42l-0.2-0.4l-0.51-0.3l-0.42-0.19
   		l-0.14-0.53l0-0.63l0.19-0.35l1.12-0.56l0.25-0.3l0.13-0.34l0.01-0.49l0.34-1.22l0.43-1.15l0.03-0.41l-0.15-0.36l-0.12-0.65
   		l-0.08-0.98l-0.01-2.74l0.22-2.83l-0.1-1.6l-0.72-1.84l-0.07-1.33l0.52-0.93l0.09-0.55l-0.38-0.07l-0.78-0.06l-0.58-0.17
@@ -361,7 +322,7 @@ function mapSvg() {
   		l-0.64-1.41l1.03-1.63l0.06-1.06l-0.04-1.01l0.12-0.46l0.31-0.41l1.21-0.85l0.91-1.35l0.75-1.26l1.04-2.03l0.1-0.48l0.02-0.49
   		L2087.41,1486.47z M2051.93,1458.23L2051.93,1458.23L2051.93,1458.23L2051.93,1458.23z"/>
   </g>
-  <g class="country" id="ZM">
+  <g class="country" id="ZMB">
   	<path class="st0" d="M2090.55,1409.46l0.49-0.09l0.52-0.16l1.64-1.63l0.02-0.32l-0.3-0.55l-0.61-0.82l-0.14-0.34l-0.07-0.99
   		l-0.24-0.3l-0.9-0.67l-0.69-0.7l0.22-0.71l0.12-0.78l-0.34-0.43l-0.51-0.44l-0.31-0.65l-0.14-0.48l-0.4-0.19l-0.37-0.01l-0.27,0.3
   		l-0.29-0.03l-0.35-0.1l-0.12-0.42l-0.02-0.45l-0.24-0.3l-0.23-0.42l-0.03-0.22l-0.48-0.22l-0.9-0.49l-1.25-0.44l-1.02-0.49
@@ -403,7 +364,7 @@ function mapSvg() {
   		l-0.2-0.36l0.05-0.99l0.3-0.12l0.65-1.31l0.29-0.77l-0.35-0.62l-0.38-0.88l-0.17-0.56l-0.1-0.18l0.27-0.35L2090.55,1409.46z
   		 M2039.94,1467.59l-0.42,0.48l-0.03,0.04l0.6-0.65l-0.01,0L2039.94,1467.59z"/>
   </g>
-  <g class="country" id="ZA">
+  <g class="country" id="ZAF">
   	<path class="st0" d="M2128.69,1743.16l-0.7-0.51l-0.88-0.14l-0.3,0.26l-0.5,0.63l0.18,0.41l1.7,0.17l0.36-0.2l0.26-0.45
   		L2128.69,1743.16z M2084.18,1548.93l-0.94,0.02l-1.05,0.03l-1.3-0.25l-0.73,0.05l-0.26-0.13l-0.48-0.12l-0.25,0.06l-0.23,1.29
   		l-0.18,1.92l0.1,1.19l-1.82,0.04l-2.3-0.13l-1.65-0.52l-1.77-1.14l-1.05-1.77l-0.46-1.11l-0.64-0.06l-0.1-0.19l-0.06-1.36
@@ -444,12 +405,12 @@ function mapSvg() {
   		l0.24,0.45l0.34,0.37l0.8,0.65l0.34,0.16l0.82,0.96l0.88,0.66l1.01,0.76l0.69,0.38l0.35,0.11l0.29,0.67l0.29,0.5l0.17,0.47
   		L2057.21,1571.29z"/>
   </g>
-  <g class="country" id="YT">
+  <g class="country" id="MYT">
   	<polygon class="st0" points="2190.05,1425.58 2189.85,1425.55 2189.49,1425.07 2189.07,1425.48 2189.5,1426.2 2189.46,1426.62
   		2189.3,1427.14 2189.45,1427.67 2189.7,1427.9 2190.23,1427.83 2190.22,1427.35 2190.47,1426.73 2190.43,1426.53 2190.59,1425.92
   		"/>
   </g>
-  <g class="country" id="YE">
+  <g class="country" id="YEM">
   	<path class="st0" d="M2169.64,1202.85l-0.38,0.68l0.56-0.26l0.32-0.53l-0.11-0.03L2169.64,1202.85z M2168.24,1188.71l-0.17,0.75
   		l0.08,0.33l0.27-0.19l0.17-0.25l0.12-0.31l-0.19-0.55L2168.24,1188.71z M2169.29,1200.68l0.52,0.45l0.15,0.04l0.11-0.18l0.09-0.35
   		l-0.31-0.47L2169.29,1200.68z M2255.79,1175.79l-0.51-1.14l-0.51-1.14l-0.36-0.8l-0.6-0.28l-0.36-0.84l-0.37-0.86l-0.37-0.86
@@ -472,7 +433,7 @@ function mapSvg() {
   		l-0.23,0.26l-0.13,0.27l-0.61,0.58l1.55,0.92l0.83,0.71l1.02,0.2l3.46-0.35l1.19-0.73l1.2-0.31l0.31-0.34l0.51-0.25
   		L2266.09,1212.12z"/>
   </g>
-  <g class="country" id="XK">
+  <g class="country" id="XKX">
   	<polygon class="st1" points="1992.67,937.72 1992.15,937.72 1989.86,937.01 1989.97,936.2 1989.3,935.76 1988.57,935.37
   		1988.45,934.93 1987.64,934.05 1987.05,933.55 1986.3,933.3 1985.65,932.94 1985.26,932.72 1985.09,932.3 1985.09,932.06
   		1984.89,931.82 1984.58,931.85 1984.05,932.18 1983.4,932.46 1983.29,932.67 1983.52,933.16 1983.69,933.47 1983.61,933.76
@@ -484,16 +445,16 @@ function mapSvg() {
   		1991.31,942.12 1991.14,941.78 1990.94,941.3 1991.04,941.08 1991.71,940.7 1991.79,940.34 1992.73,938.6 1992.91,938.03
   		1992.92,937.84 	"/>
   </g>
-  <g class="country" id="WS">
+  <g class="country" id="WSM">
   	<path class="st0" d="M3390.32,1431.99l-1.49,0.15l-1.34,0.35l-0.92-0.06l0.29,0.53l0.72,0.56l1.04,1.25l0.43,0.07l1.29-0.22
   		l0.89,0.25l0.41-1.02l-0.38-1.07L3390.32,1431.99z M3397.67,1436.35l-0.38-0.24l-0.49-0.06l-0.32-0.54l-2.14-0.61l-1.07,0.15
   		l-0.51,0.28l0.15,0.42l0.98,0.81l0.41,0l1.14,0.39l2.31-0.01l0.04-0.2L3397.67,1436.35z"/>
   </g>
-  <g class="country" id="WF">
+  <g class="country" id="WLF">
   	<path class="st0" d="M3341.4,1438.62l-0.3-0.09l-0.14,0.2l0.3,0.48l0.47,0.11l0.48-0.06l0.03-0.13l-0.52-0.16L3341.4,1438.62z
   		 M3358.19,1429.91l-0.2,0.18l-0.2,0.5l0.16,0.33l0.14-0.07l0.27-0.55L3358.19,1429.91z"/>
   </g>
-  <g class="country" id="VU">
+  <g class="country" id="VUT">
   	<path class="st0" d="M3217.95,1448.89l-0.16-0.46l-0.42-2.18l-0.21-0.08l-0.32-0.46l-0.12-0.83l0.18-0.33l-0.41-0.11l-0.33,0.15
   		l-0.17,1.04l-0.37,0.66l-0.32,0.15l-0.63,0.01l-0.54-2.83l-0.7-0.79l-0.46-0.84l-0.34,0.04l-0.35,1.01l0.01,0.77l1.02,3.09
   		l-0.14,1.67l0.57,0.94l0.51,0.44l-0.01,0.55l0.57,0.03l0.93-0.49l1.32,0.02l0.89-0.82L3217.95,1448.89z M3219.95,1437.98
@@ -513,7 +474,7 @@ function mapSvg() {
   		l0.28,0.33L3226.47,1460.59z M3228.43,1466.94l-0.88,0.09l-0.18-0.07l-0.19,0.01l-0.21,0.06l-0.69,0.8l-0.28,0.57l0.2,0.06
   		l0.43-0.16l0.38,0.07l0.24,0.34l-0.46,0.3l1.24,0.23l1.05-0.08l0.51-0.88l-0.33-0.1L3228.43,1466.94z"/>
   </g>
-  <g class="country" id="VN">
+  <g class="country" id="VNM">
   	<path class="st0" d="M2731.29,1211.66l0.03-2.02l-0.4-0.59l-0.57-1.65l-0.32-0.51l0.14-1.46l-0.3-1.19l-0.04-2.25l0.35,0.76
   		l0.13-0.78l-0.49-1.68l-0.17-0.37l-0.14-0.49l-0.13-0.99l-0.46-0.97l-0.42-1.44l-0.02-1.4l-0.53-0.74l-0.7-1.7l-0.35-1.53
   		l-0.65-1.69l-0.66-0.42l-0.58-0.49l-0.81-0.87l-1.1-1.53l-0.44-0.94l-0.92-1l-0.1-0.34l-0.06-0.52l-0.22-0.09l-0.27,0.08
@@ -569,16 +530,16 @@ function mapSvg() {
   		l-0.73-0.43l-0.2,0.29l-0.41,1.24l0.47,0.02l1.21-1.1L2715.65,1138.38z M2708.97,1141.5l0.28,0.18l0.43,0.41l0.1-0.17l-0.09-0.37
   		l-0.5-0.61L2708.97,1141.5z"/>
   </g>
-  <g class="country" id="VI">
+  <g class="country" id="VIR">
   	<path class="st0" d="M1264.55,1163.56l0.56-0.23l-0.78-0.15l-0.3,0.27l0.14,0.08L1264.55,1163.56z M1264.92,1168.56l-0.71-0.38
   		l-1,0.19l-0.04,0.61l1.71-0.04l0.89-0.38H1264.92z M1263.17,1163.16l-0.45-0.09l-0.69,0.15l0.87,0.4l0.63-0.08L1263.17,1163.16z"/>
   </g>
-  <g class="country" id="VG">
+  <g class="country" id="VGB">
   	<path class="st0" d="M1265.18,1162.57l-0.37,0.27l0.2,0.11l0.66-0.03l0.41-0.31l-0.2-0.07L1265.18,1162.57z M1268.24,1159.99
   		l-0.3-0.11l-0.74,0.01l0.08,0.11l0.15,0.05l0.37,0.02l0.48,0.2l0.07,0L1268.24,1159.99z M1266.92,1162.3l0.05,0.12l0.14,0.01
   		l0.22-0.06l0.59-0.46l-0.85,0.04L1266.92,1162.3z"/>
   </g>
-  <g class="country" id="VE">
+  <g class="country" id="VEN">
   	<path class="st0" d="M1268.82,1226.74l0.49-0.15l0.5,0.49l0.39,0.14l0.52,0.03l0.64-0.05l0.76-0.75l0.08-0.21l-0.27-1.11
   		l-0.37-0.31l-0.96,0.84l-0.18,0.56l-0.71-0.03l-0.61-0.32l-0.24-0.37l-0.3,0.05l-0.83,0.24l-0.45,0.6l0.34,0.17L1268.82,1226.74z
   		 M1296.64,1242.55l-0.24,0.13l-0.89,0.68l-0.16,0.23l0.08,0.85l0.52-0.17l0.69-0.27l0.46-0.42l0.1-0.39l-0.43-0.31l0.05-0.18
@@ -628,17 +589,17 @@ function mapSvg() {
   		l-0.4-0.12l-0.61-0.02l-0.49,0.19l-0.51-0.11l-0.42-0.46l-0.02-0.38l0.25-0.54l-0.14-0.36l-0.8-1.14l0.01-0.31l0.58-0.51l0.33-0.43
   		l0.45-1.04l0.36-0.35l1.12-0.12l0.29-0.22l0.57-0.55l0.85-0.63l1.23-0.5l0.35-0.91l0.22-0.25l0.97-0.48l0.17-0.26L1305.77,1249z"/>
   </g>
-  <g class="country" id="VC">
+  <g class="country" id="VCT">
   	<path class="st0" d="M1294.25,1208.88l0-0.03l-0.01-0.03l-0.1,0.08l-0.23,0.15l-0.07,0.07l0.03,0.04l0.06,0.06l0,0.07l-0.19,0.04
   		l-0.13-0.04v0.06l0.1,0l0.09,0.02l0.07,0.04l0.04,0.06l0.06-0.06h-0.06l0.14-0.09l0.15-0.26l0.12-0.12l-0.04-0.03L1294.25,1208.88z
   		 M1293.24,1211.52l-0.06,0.01l-0.08,0.05l0,0.08l0.02,0.08l-0.05,0.06l-0.1,0.02l-0.02,0.03l0.08,0.03l0.09,0l0.05-0.05l0.02-0.07
   		l0.05-0.05l0.04-0.06l-0.02-0.08L1293.24,1211.52z M1294.76,1206.21l-0.36,0.02l-0.35,0.22l-0.37,0.37l-0.07,0.67l0.62,0.57
   		l0.25-0.13l0.34-0.38l0.09-0.78L1294.76,1206.21z"/>
   </g>
-  <g class="country" id="VA">
+  <g class="country" id="VAT">
   	<polygon class="st1" points="1914.46,945.57 1914.4,945.57 1914.37,945.62 1914.4,945.65 1914.47,945.64 	"/>
   </g>
-  <g class="country" id="UZ">
+  <g class="country" id="UZB">
   	<path class="st0" d="M2425.66,956.37l-1.2-0.32l-0.54,0.18l-0.5,0l-0.3-0.2l-1.45-0.08l-0.32-0.14l-0.96-0.98l-0.66-0.37
   		l-0.53-0.24l-0.58,0.04l-0.69,0.26l-0.22-0.12l-0.06-0.41l0-0.52l-0.14-0.55l-0.41-0.13l-0.53,0.22l-0.79-0.22l-0.67-0.08
   		l-0.17-1.17l-0.27-0.5l-0.28-0.52l-0.29-0.15l-0.48-0.26l-0.03-0.62l-0.1-0.17l-0.17-0.08l-0.23,0.07l-0.3,0.31l0.15,0.68
@@ -697,7 +658,7 @@ function mapSvg() {
   		l0.77,0.01l0.42-0.09l0.08-0.14l-0.31-0.72l0.42-0.68L2408.79,964.02z M2413.9,964.8l-0.47,0.12l-0.1,0.22l0.31,0.28l0.4,0.1
   		l0.23-0.43l0.09-0.45l-0.21,0.02L2413.9,964.8z"/>
   </g>
-  <g class="country" id="UY">
+  <g class="country" id="URY">
   	<polygon class="st1" points="1361.36,1601.83 1360.25,1601.41 1359.19,1600.68 1358.24,1599.75 1357.8,1598.78 1357.4,1597.73
   		1357.02,1596.9 1356.89,1596.52 1356.52,1596.37 1355.93,1595.95 1355.56,1595.55 1355.01,1595.33 1354.04,1595.08
   		1353.03,1594.65 1351.77,1593.63 1350.86,1592.49 1350.42,1591.74 1349.94,1591.22 1347.34,1590.35 1346.16,1589.31
@@ -720,7 +681,7 @@ function mapSvg() {
   		1358.26,1606.07 1358.71,1605.56 1359.33,1604.94 1359.89,1604.9 1360.32,1604.64 1360.59,1604.23 1360.67,1603.78
   		1360.67,1603.39 1360.77,1603.09 1361.08,1602.83 1361.48,1602.59 1361.81,1602.32 1361.89,1602.26 	"/>
   </g>
-  <g class="country" id="US">
+  <g class="country sold" id="USA">
   	<path class="st0" d="M593.12,743.81l-0.81,0.91l-0.61,0.82l0.4-0.07l1.37-1.29l1.3-0.77l0.11-0.42l-1,0.24L593.12,743.81z
   		 M675.75,782.98l-0.36-0.96l-0.77-2.55l-0.46-1.23l-0.52-1.03l-0.72-1.33l-0.8-0.79l-0.55-0.18l-1.82-1.23l-0.86-0.02l-0.33,0.22
   		l-0.69,1.11l-0.09,0.42l-0.37,0.43l-0.47,0.26l-0.89,0.18l-0.3,0.45l0.01,0.6l0.45,1.57l-0.12,0.52l-0.26,0.58l1.27-0.29l0.45-0.45
@@ -1281,11 +1242,7 @@ function mapSvg() {
   		 M1209.34,948.45l-0.23,0.6l-0.09,0.54l-0.24,0.37l0.47,0.05l0.42-0.27l0.08-1.63l-0.27,0.16L1209.34,948.45z M1208.47,948.94
   		l-0.16,0.56l0.09,0.48l0.23-0.19l0.09-0.57l-0.08-0.3L1208.47,948.94z"/>
   </g>
-  <g class="country" id="UK_-_IM">
-  	<polygon class="st1" points="1772.83,810.95 1772.68,810.83 1772.43,810.78 1771.73,811.13 1770.83,812.4 1770.13,812.89
-  		1769.73,814.12 1769.4,814.65 1769.56,814.69 1770.15,814.55 1770.84,814.81 1772.54,813.35 1772.71,812.89 1773.16,812.38 	"/>
-  </g>
-  <g class="country" id="UK">
+  <g class="country" id="GBR">
   	<path class="st0" d="M1756.25,780.67l0.32,0.03l0.25-0.16l0.16-0.25l-0.01-0.29l-0.14-0.26l-0.37-0.23l-0.93,0.39l0.41,0.57
   		L1756.25,780.67z M1782.09,758.38l0.48,0.01l0.48-0.16l0.05-0.09l-0.45-0.15l-0.09-0.15l-0.05-0.39l-0.37-0.6l-0.72-0.17
   		l-0.31,0.12l-0.05,0.34l0.28,0.52L1782.09,758.38z M1756.59,771.99l-0.44,0.06l-0.18,0.77l-2.01,0.49l0.01,0.12l0.27,0.39l0,0.16
@@ -1374,7 +1331,7 @@ function mapSvg() {
   		l-0.25,0.05l-0.25,0.2l-0.14,0.25l0.01,0.17L1748.04,773.67z M1788.54,866.06l-0.3,0.72l-0.77-0.24l-0.06-0.19l0.88-0.42l0.18,0
   		L1788.54,866.06z M1792.7,868.93l0.07,0.55l-0.37,0.12l-0.31-0.19h-0.63l-0.59,0.12l0.13-0.98l1.16,0.12L1792.7,868.93z"/>
   </g>
-  <g class="country" id="UG">
+  <g class="country" id="UGA">
   	<path class="st0" d="M2104.3,1303.07l-0.11-1.68l-0.42-1.4l-0.26-1.57l0.19-0.52l-0.33-0.92l-0.16-0.05l-0.27-0.2l-0.35-0.87
   		l-0.26-0.79l-0.16-0.2l-1.13-0.69l-0.56-1.63l-0.63-0.36l-0.34-1.62l-0.07-0.46l0.36-1.62l-0.03-0.37l-0.38-0.34l-1.06-0.35
   		l-0.86-0.67l0.11-0.23l0.06-0.24l-0.45-0.16l-1.31-2.77l-1.98,1.97l-1.46,1.45l-0.24,0.21l-0.42,0.27l-1.39,0.01l-1.43-0.17
@@ -1402,7 +1359,7 @@ function mapSvg() {
   		l0.18-0.45l-0.42-0.39L2080.85,1321.42z M2089.53,1316.33l-0.02,0.36l-0.02,0.36l-0.32,0.12l0.03,0.21l0.67,0.05l0.07,0.19
   		l0.56,0.34l-0.12-0.52l-0.07-0.36l0.47-0.27l0.14-0.47l-0.6-0.21L2089.53,1316.33z"/>
   </g>
-  <g class="country" id="UA">
+  <g class="country" id="UKR">
   	<path class="st0" d="M2076.18,900.6l-0.45-0.32l-0.64-0.74l0.17,0.7l0.3,0.51l1.15,0.46l2.6,0.49l1.19,0.14l-1.16-0.52
   		L2076.18,900.6z M2147.66,867.43l-0.58-0.68v-0.72l0.31-0.5l-0.12-0.37l-0.42-0.22l-0.61,0.06l-0.69,0.25l-0.81-0.05l-1.3-0.86
   		l-1.38-0.85l-0.79-0.03l-0.55-0.12l-0.48-0.44l-0.29-0.56l-0.31-0.25l-0.5,0.16l-0.73,0.26l-0.92-0.07l-1.19-0.65l-1.09-0.75
@@ -1463,7 +1420,7 @@ function mapSvg() {
   		l0.68-0.15l0.16-0.16l-0.12-0.32l-1.06-0.29l-0.93-0.4l-0.4-0.49l-0.16-0.52l0.61-0.31l1.1-0.3l0.73-0.71l0.79-0.77l0.33-0.56
   		l0.16-0.61L2147.66,867.43z"/>
   </g>
-  <g class="country" id="TZ">
+  <g class="country" id="TZA">
   	<path class="st0" d="M2143.71,1385.64l0.46-0.11l0.43-0.55l0.53-0.09l0.62-1.45l0.08-0.66l-0.14,0.12l-0.37,0.56l-1.09,0.85
   		l-0.47,0.58l-0.49,0.3l0.28,0.35L2143.71,1385.64z M2143.85,1363.92l0.29,0.19l0.35,0.12l0.39-0.41l0.48-1.17l0.05-0.84l-0.03-1.27
   		l0.13-0.4l-0.05-0.42l-0.71,0.33l-0.9-0.15l0.23,1.57l-0.46,2.14L2143.85,1363.92z M2139.92,1369.6l-0.2,0.75l0.52,0.86l0.58,0.03
@@ -1513,7 +1470,7 @@ function mapSvg() {
   		l0.98-0.74L2150.41,1406.33z M2086.39,1335.89l0.4,0.2l0.76,0.17l0.59,0.25l0.55,0.19l0.42,0.01l0.07-0.36l-0.36-0.39l-0.17-0.48
   		l-0.19-0.38l-0.59,0.07l-0.47,0l-0.19-0.6l-0.54,0.02l-0.46,0.28l0.15,0.35L2086.39,1335.89z"/>
   </g>
-  <g class="country" id="TW">
+  <g class="country" id="TWN">
   	<path class="st0" d="M2806.41,1109.72l-0.44-0.07l0.07,0.36l1.16,0.2l0.16-0.37l-0.37-0.59L2806.41,1109.72z M2836.03,1105.92
   		l0.61-0.7l-0.2-0.74l-0.44-0.43l-1.01-0.44l-0.39-0.25l-0.37-0.45l-0.42-0.38l-0.65-0.01l-0.57,0.25l-0.71,0.8l-2.27,0.84
   		l-0.46,0.29l-0.64,0.93l-0.53,1.02l-0.55,0.81l-0.66,0.72l-1.08,1.46l-3.96,6.83l-0.23,0.5l-0.06,1.12l0.15,1.13l-0.18,0.83
@@ -1522,13 +1479,13 @@ function mapSvg() {
   		l1.13-1.68l0.47-0.89l0.38-0.93l0.67-2.22l0.41-2.16l0.48-1.71l0.25-1.7l0.22-0.69l0.82-1.38l0.77-2.21l-0.01-0.94l-0.11-0.94
   		l0.06-0.7L2836.03,1105.92z"/>
   </g>
-  <g class="country" id="TT">
+  <g class="country" id="TTO">
   	<path class="st0" d="M1296.62,1227.6l-1.36,0.07l-0.8,0.24l-1.65,0.06l-0.8,0.27l-1.07,0.14l-0.5,0.25l0.13,0.16l0.8,0.3l0.35,0.22
   		l0.17,0.3l0.11,0.54l-0.29,2.29l-0.25,0.13l-0.87,0.08l-0.24,0.44l-2.06,1.04l1.13-0.13l1.47,0.17l3.56-0.11l1.37-0.48l0.07-0.28
   		l0.04-0.79l0.26-0.52l-0.4-0.53l-0.18-0.81l0.15-0.64l-0.12-0.95l0.31-0.39L1296.62,1227.6z M1299.61,1223.5l-1.23,0.39l-0.8,0.58
   		l-0.05,0.34l0.46-0.08l1.77-0.72l0.18-0.52L1299.61,1223.5z"/>
   </g>
-  <g class="country" id="TR">
+  <g class="country" id="TUR">
   	<path class="st0" d="M2030.57,958.47l1.15,0.12l1.83-0.18l1.8-0.02l-0.6,0.82l-2.3,0.99l-0.78,0.54l-0.85,0.75l-0.01,0.66
   		l0.07,0.45l-0.29,0.6l-0.2,0.66l0.58-0.21l0.49-0.27l1.16-1.37l2.56-2.35l1.71-0.66l2.39-1.23l1.45-1.52l0.58-1.33l2.09-0.4
   		l1.5,0.23l1.35-0.71l0.73-0.19l1.03,0.09l4.09,0.97l1.48-0.34l0.33-0.53l0.3-0.79l0.21-0.89l-0.93-0.19l-5.06-2.19l-1.25-0.88
@@ -1579,13 +1536,13 @@ function mapSvg() {
   		l0.14,0.46l-0.06,1.46l0.13,0.39l0.24,0.28l0.3,0.05l0.37-0.32l0.64-0.46l0.79-0.5l0.59-0.46l0.34-0.17l0.53,0.02l0.52,0.08
   		l0.29,0.22l0.01-0.13l-0.07-0.59l0.32-0.51L2186.98,991.13z"/>
   </g>
-  <g class="country" id="TO">
+  <g class="country" id="TON">
   	<path class="st0" d="M3368.09,1500.04l0.05,0.28l0.41,0.6l0.05-1.32l-0.09,0.03L3368.09,1500.04z M3366.62,1498.46l-0.12,0
   		l-0.32-0.12l0.35-0.08l-0.57-0.24l-0.63-0.05l-0.19-0.12l0.04-0.27l-0.37,0.34l0.23,0.45l1.12,0.58l0.39,0.35l0.61-0.9l0.05-0.28
   		l-0.45,0.09L3366.62,1498.46z M3376.55,1475.78l-0.29,0.05l-0.56,0.6l0.13,0.2l0.37,0.3l0.15,0.01l0.32-0.51l0.25-0.27l0.02-0.17
   		L3376.55,1475.78z"/>
   </g>
-  <g class="country" id="TN">
+  <g class="country" id="TUN">
   	<path class="st0" d="M1904.69,1015.43l0.03-0.46l-0.22-0.17l-0.86,0.72l-0.25,0.6L1904.69,1015.43z M1906.84,1036.4l-0.67-1.1v-1.3
   		l0.04-1.08l0.07-0.64l0.3-1.78l0.02-0.25l-0.88-0.4l-0.53,0.14l-0.87-0.23l-0.27-0.15l0.25-0.21l0.32-0.14l-0.11-0.21l-0.9-0.57
   		l-0.55-1.82l-1.07-0.6l-0.5,0.87l-0.59,0.14l-0.89,0.04l-0.16-0.9l0.07-0.75l-2.18,0.25l-1.26-0.62l-1.23-1.15l-0.93-1.95
@@ -1603,7 +1560,7 @@ function mapSvg() {
   		l0.46-0.55l1.51-0.86l1.37-0.78l1.6-0.82l1.24-0.64l0.26-0.56L1906.84,1036.4z M1901.69,1023.57l-1.49,0.04l-0.1,0.31l-0.1,1.1
   		l0.29,0.2l0.23,0l0.61,0.29l0.22-0.03l0.41-0.26l0.22-0.04l0.3-0.22l0.37-0.37l-0.03-0.19l-0.13-0.17L1901.69,1023.57z"/>
   </g>
-  <g class="country" id="TM">
+  <g class="country" id="TKM">
   	<path class="st0" d="M2256.87,973.54l-0.33-0.02l-0.29,0.43l0.23,1.53l0.46,1.38l0.08-0.46l-0.46-2.3L2256.87,973.54z
   		 M2370.01,986.33l0.87-1.42l-0.02-0.27l-0.17-0.26l-0.27-0.23l-1.56-0.39l-0.46-0.21l-0.6-0.45l-0.76-0.47l-0.66-0.33l-1.04-0.43
   		l-0.96-0.24l-0.56,0.18l-0.52,0.23l-0.49,0.01l-0.49-0.13l-1.8-1.08l-2.72-1.86l-2.16-1.3l-1.35-0.62l-0.32-0.2l-0.76-0.59
@@ -1644,7 +1601,7 @@ function mapSvg() {
   		l1.14-0.59l1.16-0.43l1.8-0.09l2.12-0.04l0.45-1.13l0.28-0.96l0.35-0.5l0.51-0.4l0.18-0.08l1.14,0.59l1.75,0.9l2.04,0.45l1.02,0.23
   		l0.42-0.04l-0.1-1.07l0.01-1.36L2370.01,986.33z"/>
   </g>
-  <g class="country" id="TL">
+  <g class="country" id="TL" style="display: none;">
   	<path class="st0" d="M2867.95,1386.9l-0.21,0.08l-0.31,0.24l-0.65,0.81l0.61,0.31L2867.95,1386.9z M2881.52,1389.04l-0.36-0.18
   		l-1.32-0.21l-0.78-0.27l-0.52,0.22l-0.5,0.3l-0.94,0.38l-0.97,0.31l-0.75,0.1l-3.02,0.15l-2.26-0.02l-0.85,0.05l-3.56,0.7
   		l-0.49,0.13l-1.22,0.48l-0.52,0.51l-0.75,1.27l-0.88,0.7l-0.06,0.75l0.18,0.18l0.31,0.09l1.07-0.51l0.2,0.1l0.21,0.23l0,0.68
@@ -1653,7 +1610,7 @@ function mapSvg() {
   		l1.53-1.34L2881.52,1389.04z M2854.4,1397.03l0.14,0.29l0.32,0.35l0.21,0.06l0.16-0.08l1.24,0.12l0.31-0.12l0.47-0.54l0.31-0.3
   		l0.21-0.64l0.05-0.41l-2.07,0.56L2854.4,1397.03z"/>
   </g>
-  <g class="country" id="TJ">
+  <g class="country" id="TJK">
   	<path class="st0" d="M2404.52,955.31l0.25-0.02l-0.03-0.24l-0.26-0.41l-0.39-0.23l-0.19,0.1l0.16,0.33L2404.52,955.31z
   		 M2404.05,965.93l-0.58-0.16l-0.13,0l0.05,0.19l0.25,0.34l0.34,0.37l0.44,0.04l0.75-0.38l-0.03-0.2l-0.29-0.1L2404.05,965.93z
   		 M2442.21,989.57l-0.93-0.77l-0.59-0.41l-0.18-0.28l0.15-0.83l0.22-0.83l-0.14-0.32l-0.18-0.27l-0.08-0.9l-0.41-1.09l-0.45-0.64
@@ -1687,7 +1644,7 @@ function mapSvg() {
   		l-0.18,0.29l0.22,0.21l0.81,0.07l1.68-0.5l1.09-0.32l0.75-0.13l0.31-0.42l0.47-0.42l0.75-0.03l0.81,0.22l0.67,0.13l1.14-0.12
   		l0.6,0.36l0.84,0.69l0.38,0.43l0.13,0.1l0.23-0.18l0.76-0.42l0.59-0.49l0.33-0.4L2442.21,989.57z"/>
   </g>
-  <g class="country" id="TH">
+  <g class="country" id="THA">
   	<path class="st0" d="M2648.64,1263.38l0.31,0.68l0.16-0.05l0.32-0.41l-0.4-1.21L2648.64,1263.38z M2643.91,1254.63l-0.06,0.09
   		l0,0.65l0.25,0.44l0.31,0.21l-0.22-1.01L2643.91,1254.63z M2638.06,1250.64l-0.24-0.47l-0.17,0.25l-0.33,1.77l0.29,1.26l0.16-0.05
   		l0.35-0.4l0.35,0.01l0.09-0.62l-0.09-0.53l0.3-1.02L2638.06,1250.64z M2639.99,1252.27l0.1-0.14l0.1-1.04l-0.63-0.43
@@ -1740,7 +1697,7 @@ function mapSvg() {
   		l0.83-0.42l0.68-0.47l0.45-0.5l0.18-0.52l0.02-0.6l0.19-1.56l0.2-0.76l-0.11-0.93l-0.36-0.74v-1.1l0.13-0.54l0.06-0.35l0.51-0.45
   		l0.35-0.64l0.2-0.84l0.02-0.61L2699.3,1186.2z"/>
   </g>
-  <g class="country" id="TG">
+  <g class="country" id="TGO">
   	<polygon class="st1" points="1824.68,1265.91 1824.38,1264.81 1823.51,1263.5 1823.16,1263.26 1822.99,1262.61 1823.2,1262.19
   		1823.1,1261.9 1823.03,1261.02 1822.6,1260.05 1823.39,1260.01 1823.39,1256.88 1823.38,1253.88 1823.38,1251.32 1823.38,1249.29
   		1823.23,1246.86 1823.21,1245.08 1823.18,1242.72 1822.89,1241.99 1821.7,1240.74 1821.37,1240.09 1821.32,1239.24
@@ -1760,7 +1717,7 @@ function mapSvg() {
   		1818.14,1266.13 1818.54,1266.69 1818.84,1266.93 1819.3,1267.09 1819.68,1267.17 1819.7,1267.64 1820.74,1267.16 1823.37,1266.57
   		1823.27,1266.28 	"/>
   </g>
-  <g class="country" id="TF">
+  <g class="country" id="ATF">
   	<path class="st0" d="M2392.57,1765.75l-0.02,0.47l0.16,0.35l0.52-0.09l0.33-0.27l0.62-0.9l-0.22-0.66l-0.86-0.13l-0.84,0.04
   		l-0.14,0.39l0.16,0.41L2392.57,1765.75z M2245.85,1737.6l-0.36-0.34l-0.7,0.49l0.31,0.57l0.55,0.22l0.61-0.09l-0.16-0.48
   		L2245.85,1737.6z M2403.75,1767.33l-0.39-0.58l-0.66-0.25l-0.72-0.03l-0.3,0.19l-0.65,0.64l-1.24,0.01l-0.65,0.26l-1.09,0.67
@@ -1773,7 +1730,7 @@ function mapSvg() {
   		l-0.26-0.46l0.09-0.19l0.49,0.08l0.36-0.19l0.35-0.34l0.11-0.44l0.65-0.04l1.45-0.02l0.61,0.31l0.5,0.58l0.34,0.11l0.4-0.01
   		l0.21-0.25l-0.18-0.49l0.8-0.41l0.44-0.68l0.16-0.7L2403.75,1767.33z"/>
   </g>
-  <g class="country" id="TD">
+  <g class="country" id="TCD">
   	<polygon class="st1" points="2011.7,1184.25 2011.7,1180.41 2011.69,1176.58 2011.69,1172.73 2011.69,1168.88 2011.68,1165.03
   		2011.68,1161.17 2011.68,1157.3 2011.67,1153.42 2007.64,1151.37 2003.61,1149.31 1999.57,1147.24 1995.54,1145.18 1991.5,1143.11
   		1987.46,1141.05 1983.43,1138.98 1979.39,1136.9 1975.36,1134.83 1971.32,1132.75 1967.29,1130.67 1963.25,1128.59
@@ -1814,12 +1771,12 @@ function mapSvg() {
   		2003.09,1190.16 2003.16,1189.53 2002.86,1187.63 2003.5,1186.84 2004.3,1186.18 2005.47,1186.23 2007.28,1186.08 2008.51,1185.81
   		2009.38,1185.82 2011.39,1186.17 2011.55,1186.09 2011.6,1186.02 2011.7,1185.51 	"/>
   </g>
-  <g class="country" id="TC">
+  <g class="country" id="TCA">
   	<path class="st0" d="M1201.44,1133.33l-0.96-0.48l-0.08,0.49l0.06,0.33l0.29,0.02l0.93-0.13l0.08-0.09l0.31-0.11l-0.05-0.1
   		L1201.44,1133.33z M1206.07,1133.01l-1.16-0.16l-0.35,0.08l0.15,0.46l0.92,0l0.47,0.34l0.03-0.12l0.21-0.2L1206.07,1133.01z
   		 M1203.86,1131.97l-0.67,0.01l-0.07,0.28l0.29,0.22l0.17,0.01l0.07,0.24l0.49,0.3l0.15-0.09l-0.17-0.19L1203.86,1131.97z"/>
   </g>
-  <g class="country" id="SZ">
+  <g class="country" id="SWZ">
   	<polygon class="st1" points="2080.11,1545.91 2079.88,1545.28 2079.63,1544.36 2079.57,1543.77 2079.73,1543.17 2079.8,1542.23
   		2079.73,1541.41 2078.96,1540.99 2078.79,1540.86 2078.56,1540.96 2078.14,1541.08 2076.19,1540.05 2074.29,1538.97
   		2074.02,1538.94 2073.62,1539.05 2072.54,1539.84 2071.54,1541.07 2071.08,1542.12 2070.34,1543.2 2069.14,1544.95
@@ -1827,7 +1784,7 @@ function mapSvg() {
   		2073.11,1552.38 2074.75,1552.9 2077.05,1553.03 2078.87,1552.99 2078.77,1551.8 2078.94,1549.88 2079.18,1548.59 2079.43,1548.53
   		2079.91,1548.65 2080.17,1548.79 	"/>
   </g>
-  <g class="country" id="SY">
+  <g class="country" id="SYR">
   	<polygon class="st1" points="2166.47,992.89 2166.08,991.72 2165.71,991.26 2165.53,991.21 2165.15,991.06 2164.86,991.15
   		2163.95,991.95 2162.49,992.43 2161.29,992.72 2159.37,993.08 2157.88,993.25 2157.25,993.27 2155.88,993.11 2154.68,992.88
   		2153.47,992.89 2152.54,992.99 2150.39,993.85 2146.74,995.61 2143.96,996.46 2142.4,996.81 2141.18,997.01 2139.09,997.02
@@ -1854,7 +1811,7 @@ function mapSvg() {
   <g class="country" id="SX">
   	<polygon class="st1" points="1278.05,1165.8 1278.03,1165.84 1278.32,1166.04 1278.89,1166.23 1278.98,1166.01 1278.99,1165.8 	"/>
   </g>
-  <g class="country" id="SV">
+  <g class="country" id="SLV">
   	<polygon class="st1" points="1070.36,1204.83 1070.42,1204.32 1070.56,1203.73 1070.92,1202.34 1070.78,1202.1 1070.19,1201.68
   		1069.43,1201.64 1068.6,1201.77 1068.2,1201.56 1067.84,1201.08 1067.25,1200.85 1066.2,1201.23 1065.08,1201.81 1064.74,1202.02
   		1064.46,1201.99 1064.33,1201.56 1064.27,1201.05 1064.21,1200.93 1063.61,1200.74 1062.92,1200.61 1062.56,1200.47
@@ -1866,7 +1823,7 @@ function mapSvg() {
   		1063.62,1207.18 1063,1207.06 1062.75,1206.87 1063.54,1206.87 1065.01,1207.45 1067,1207.87 1068.32,1207.83 1069.1,1207.73
   		1069.55,1207.36 1070.03,1206.84 1069.88,1205.98 1070.09,1205.87 1070.74,1205.42 1070.78,1205.15 1070.57,1204.96 	"/>
   </g>
-  <g class="country" id="ST">
+  <g class="country" id="ST" style="display: none;">
   	<path class="st0" d="M1866.02,1315.26l-0.51,0.04l-0.86,0.5l-0.39,0.5l-0.08,0.44l0.24,0.92l0.19,0.43l0.31,0.16l0.87-0.61
   		l0.76-1.03l0-0.69L1866.02,1315.26z M1872.45,1304.74l-0.11-0.18l-0.19-0.13l-0.23,0.16l-0.48,0.64l0.1,0.33l0.37,0.18l0.31-0.22
   		l0.24-0.53L1872.45,1304.74z"/>
@@ -1917,7 +1874,7 @@ function mapSvg() {
   		2091.76,1287.22 2092.19,1286.95 2092.43,1286.74 2093.89,1285.29 2095.86,1283.32 2097.56,1281.65 2099.27,1279.96
   		2101.45,1277.82 2103.46,1275.86 2105.2,1274.16 2106.75,1272.65 	"/>
   </g>
-  <g class="country" id="SR">
+  <g class="country" id="SUR">
   	<polygon class="st1" points="1354.84,1288.34 1354.6,1288.27 1354.2,1287.63 1353.94,1287.1 1353.22,1286.55 1352.73,1285.99
   		1351.93,1284.71 1352.01,1283.99 1351.78,1283.73 1351.53,1283.47 1351.55,1283.14 1351.38,1282.33 1351.18,1281.58 1351.1,1281.1
   		1351.3,1280.28 1351.18,1279.36 1350.92,1278.88 1350.85,1278.15 1350.9,1277.5 1351.12,1277.13 1351.08,1276.67 1352.09,1275.21
@@ -1944,7 +1901,7 @@ function mapSvg() {
   		1352.72,1295.94 1353.24,1295.06 1353.3,1294.59 1353.45,1293.59 1353.18,1292.38 1353.3,1292.04 1354.35,1290.58 1354.81,1289.78
   		1354.84,1289.1 1354.97,1288.6 	"/>
   </g>
-  <g class="country" id="SO">
+  <g class="country" id="SOM">
   	<polygon class="st1" points="2242.36,1230.69 2241.74,1230.49 2240.87,1230.01 2240.81,1230.22 2240.83,1230.65 2239.78,1231.03
   		2239.52,1230.94 2239.68,1230.71 2240.04,1230.57 2240.13,1230.17 2240.35,1229.66 2240.43,1229.15 2240.28,1225.59
   		2239.96,1223.4 2240.4,1221.96 2241.09,1220.67 2241.2,1219.93 2241.39,1219.2 2240.86,1219.11 2237.5,1217.9 2236.18,1218.24
@@ -1972,7 +1929,7 @@ function mapSvg() {
   		2233.53,1246.35 2234.45,1244.45 2236.2,1242.22 2236.6,1241.11 2237.77,1239.53 2237.84,1237.15 2238.18,1235.34 2238.39,1232.56
   		2238.66,1231.87 2239.55,1231.45 2241.01,1231.06 2241.51,1231.3 2242.49,1231.44 2242.53,1231.13 	"/>
   </g>
-  <g class="country" id="SN">
+  <g class="country" id="SEN">
   	<polygon class="st1" points="1713.27,1213.25 1713.26,1213.03 1713.31,1212.43 1713.56,1211.18 1713.54,1210.7 1713.77,1209.76
   		1713.4,1209.34 1713.31,1209.03 1712.9,1208.53 1712.43,1207.82 1712.32,1207.25 1712.16,1206.8 1711.71,1206.12 1711.37,1206.01
   		1710.67,1205.91 1710.55,1206.14 1710.29,1206.48 1710.05,1206.58 1709.66,1206.16 1709.51,1205.81 1709.52,1205.48
@@ -2007,10 +1964,10 @@ function mapSvg() {
   		1704.78,1214.55 1705.27,1214.88 1706.18,1214.98 1707.35,1214.57 1708.27,1214.39 1709.57,1214.34 1710.25,1214.48
   		1712.22,1214.15 1713.21,1214.22 1713.77,1214.33 1713.83,1213.7 	"/>
   </g>
-  <g class="country" id="SM">
+  <g class="country" id="SMR">
   	<polygon class="st1" points="1915.01,924.36 1914.49,924.43 1914.11,924.92 1914.36,925.34 1914.86,925.26 1915.11,924.73 	"/>
   </g>
-  <g class="country" id="SL">
+  <g class="country" id="SLE">
   	<polygon class="st1" points="1948.72,897.97 1947.99,897.07 1947.67,896.74 1947.7,896.29 1947.55,896.04 1947.29,895.86
   		1947.14,895.22 1947.06,894.74 1946.85,894.43 1945.24,894.36 1944.77,894.56 1944.27,895.02 1944.3,896.03 1944.23,896.12
   		1944.1,896.33 1942.5,895.97 1942.44,895.98 1941.37,896.11 1940.63,896.57 1939.74,896.83 1937.87,896.69 1936.04,896.87
@@ -2029,7 +1986,7 @@ function mapSvg() {
   		1943.18,900.76 1943.9,900.55 1944.47,900.26 1945.02,899.56 1945.36,899.45 1946.38,899.55 1946.59,899.37 1946.45,898.38
   		1946.64,898.12 1947,897.98 1947.17,897.84 1948.06,897.95 1948.81,898.21 	"/>
   </g>
-  <g class="country" id="SK">
+  <g class="country" id="SVK">
   	<polygon class="st1" points="1998.98,870.56 1996.7,869.78 1995.17,869.17 1995.01,868.77 1994.72,868.19 1994.07,867.71
   		1992.57,867.29 1991.96,866.96 1989.53,866.78 1988.47,866.77 1987.72,866.91 1987.24,866.9 1986.58,867.75 1986.13,868
   		1985.47,868.02 1984.88,867.87 1984.29,867.42 1983.34,867.19 1982.65,867.3 1982.15,867.2 1981.71,867.18 1981.56,867.27
@@ -2050,7 +2007,7 @@ function mapSvg() {
   		1995.93,878.01 1996.11,877.88 1996.2,876.12 1997.48,874.85 1997.8,874.21 1998.28,872.82 1998.63,872.17 1999.07,871.63
   		1999.41,871.11 1999.53,870.66 	"/>
   </g>
-  <g class="country" id="SI">
+  <g class="country" id="SI" style="display: none;">
   	<path class="st0" d="M1704.05,1254.88l-0.6-0.25l-2.01,0.13l-0.82,0.43l2.9,0.81l0.56,0.54l0.12-0.22l0.21-0.83l-0.1-0.4
   		L1704.05,1254.88z M1722.44,1247.4l-0.29,0.12l-0.86,1l-0.52,0.39l-0.39-0.03l-0.41-0.09l-0.29,0.07l-0.21-0.11l0.08-0.24
   		l0.21-0.31l0.41-1.09l1.06-1.1l0.02-0.23l-0.43-0.64l-0.45-0.88l0-0.94l-0.09-0.68l-0.93-0.19l-0.17-0.11l-0.02-0.23l0.24-0.61
@@ -2064,15 +2021,15 @@ function mapSvg() {
   		l0.68-0.71l0.72-0.54l1.03-0.63l1.57-1.67l0.37-0.19l0.25-1.15l0.39-1.47l0.46-0.46l1.07-0.27l0.25-0.26l0.38-1.04l0.24-1.21
   		l0.02-0.26L1722.44,1247.4z"/>
   </g>
-  <g class="country" id="SH">
+  <g class="country" id="SHN">
   	<path class="st0" d="M1688.75,1384.76l-0.2-0.03l-0.13,0.19l-0.14,0.32l0.05,0.2l0.08,0.07l0.29-0.01l0.4-0.15l0.12-0.17
   		l-0.22-0.19L1688.75,1384.76z M1762.01,1452.91l-0.38-0.06l-0.57,0.43l-0.06,0.41l0.76-0.05l0.27-0.23L1762.01,1452.91z"/>
   </g>
-  <g class="country" id="SG">
+  <g class="country" id="SGP">
   	<polygon class="st1" points="2685.31,1307 2684.87,1306.8 2684.11,1306.54 2683.16,1306.74 2682.69,1307.56 2684.12,1308.06
   		2685.39,1307.51 2685.61,1307.22 	"/>
   </g>
-  <g class="country" id="SE">
+  <g class="country" id="SWE">
   	<path class="st0" d="M1968.89,769.03l-0.5,0.19l-0.3,0.82l-0.7-0.37l-1.55,0.4l-1.11,0.9l-1.03,1.24l-0.66,0.54l-0.58,0.66
   		l-0.06,1.3l0.19,1.33l-0.39,0.81l0.5,0.73l0.38,0.95l0.64,0.6l-0.66,0.88l-0.51,1.08l0.86-0.13l0.77-0.56l0.4-1.32l0.76-0.91
   		l0.51-0.41l1.36-0.55l0.36-0.98l0.35-0.45l0.5-0.31l0.54-0.14l-0.99-1.03l0.19-2.71l0.54-0.29l0.56-0.14l0.41-0.86l0.7-0.29
@@ -2125,7 +2082,7 @@ function mapSvg() {
   		l2.23-0.32L2012.25,663.85z M1966.54,748.86l-0.41,0.27l-0.14,0.5l-0.08,0.1l0.21,0.51l0.21-0.41l0.24-0.27l0.62-0.41l0-0.13
   		L1966.54,748.86z M1970.86,768.22l-0.81,0.86l0.4,0.56l0.44,0.06l0.15-0.76l1.47-0.49l-0.42-0.18L1970.86,768.22z"/>
   </g>
-  <g class="country" id="SD">
+  <g class="country" id="SDN">
   	<polygon class="st1" points="2134.59,1165.77 2132.56,1164.51 2132.14,1163.92 2131.88,1164.11 2131.46,1164.24 2130.84,1163.52
   		2130.38,1162.85 2129.1,1161.59 2127.48,1160.39 2126.38,1160.19 2125.81,1159.88 2125.3,1159.3 2124.38,1156.94 2123.43,1152.68
   		2123.55,1150.86 2122.96,1147.99 2122.92,1145.6 2123.25,1144.19 2122.79,1142.66 2122.65,1141.23 2122.52,1140.47 2122.6,1139.4
@@ -2186,7 +2143,7 @@ function mapSvg() {
   		2131.6,1170.17 2131.89,1169.99 2132.01,1169.71 2132.2,1169.54 2132.68,1169.13 2132.9,1168.84 2133,1168.55 2133.1,1168.31
   		2133.31,1167.92 2134.16,1166.93 2134.89,1166.36 	"/>
   </g>
-  <g class="country" id="SB">
+  <g class="country" id="SLB">
   	<path class="st0" d="M3134.08,1380.27l0.6-0.1l0.02,0.15l0.19,0.28l0.86,0.27l0.65-0.51l-0.27-0.3l-0.3-0.14l-0.34-0.04l-0.64-0.24
   		l-1.2-1.01l-0.38-0.39l-0.39-1.32l-0.61-0.55l-2.23-1.07l-1.36-1.03l-1.05-0.27l-0.23,0.25l0.04,0.65l0.32,0.39l1.69,1.25
   		l1.76,2.27l1.66,1.2L3134.08,1380.27z M3133.26,1384.73l-0.36-0.23l-0.66,0.1l-0.55,0.59l-0.01,0.64l0.7,0.87l0.92,0.05l0.18-0.13
@@ -2219,7 +2176,7 @@ function mapSvg() {
   		 M3154.67,1390l-0.35-0.48l-0.04-0.3l-0.4-0.29l-0.35,0.17l-0.12,0.44l0.26,0.28l0.6,0.31L3154.67,1390z M3142.22,1391.43
   		l-0.46,0.91l0.2,0.34l0.19-0.03l0.44-0.21l-0.14-0.27L3142.22,1391.43z"/>
   </g>
-  <g class="country" id="SA">
+  <g class="country" id="SAU">
   	<path class="st0" d="M2119.21,1100l-1.34-0.55l-0.29-0.23l-0.17-0.39l-0.25,0.39l0.22,0.39l1.62,0.6l0.35,0.3l0.35,0.45l0.59,0.6
   		h0.22l0.45-0.28l-0.26-0.1L2119.21,1100z M2117.51,1097.74l-0.02,0.69l0.36,0.31l0.08-0.12l0-0.2l-0.13-0.54l0.02-0.54
   		L2117.51,1097.74z M2277.8,1130.67l-0.72-1.15l-0.75-1.21l-0.7-1.14l-0.51-0.83l-0.62-1l-0.56,0.71l-0.13,0.02l-0.67-0.09
@@ -2259,7 +2216,7 @@ function mapSvg() {
   		l-0.05-1.12l-0.26-0.49l-0.48-0.08l0.21,0.48l-0.23,0.46l-0.35,0.28l-0.34,0.11l0.21,0.59l0.81,0.81l0.56,0.27l0.91-0.16l0.26,0.24
   		l0.05,0.22l0.16,0.2l0.25,0.21l0.08-0.22l0.03-0.97l-0.93-0.82L2163.67,1177.12z"/>
   </g>
-  <g class="country" id="RW">
+  <g class="country" id="RWA">
   	<polygon class="st1" points="2069.66,1335.75 2069.28,1335.11 2069.17,1334.13 2069.35,1332.82 2069.22,1331.72 2068.8,1330.85
   		2068.36,1330.33 2067.7,1330.09 2066.66,1328.75 2066.34,1328.11 2066.39,1327.71 2066.67,1327.58 2066.33,1327.56
   		2065.85,1327.54 2065.41,1327.64 2065.08,1327.96 2064.73,1328.51 2064.12,1329.14 2063.64,1329.7 2063.23,1330.1 2062.3,1330.75
@@ -2273,7 +2230,7 @@ function mapSvg() {
   		2064.34,1338.28 2064.66,1338.29 2065.82,1338 2066.44,1338.53 2066.83,1338.69 2067.04,1338.73 2067.37,1338.7 2067.91,1338.51
   		2068.4,1338.42 2068.8,1338.49 2069.09,1338.42 2069.36,1338.21 2069.58,1337.6 2069.76,1336.58 	"/>
   </g>
-  <g class="country" id="RU">
+  <g class="country" id="RUS">
   	<g>
   		<polygon class="st0" points="2523.17,535.93 2523.58,534.94 2524.54,534 2522.92,534.05 2521.74,534.42 2520.47,535.02
   			2520.8,535.42 		"/>
@@ -3259,7 +3216,7 @@ function mapSvg() {
   			3342.07,589.76 3344.1,589.36 3346.61,587.83 3346.82,587.02 		"/>
   	</g>
   </g>
-  <g class="country" id="RS">
+  <g class="country" id="SRB">
   	<polygon class="st1" points="2002.24,931.91 2001.9,931.42 2001.46,930.87 2000.87,930.49 1999.67,929.85 1999.2,929.19
   		1998.99,928.33 1998.67,927.69 1998.32,927.26 1998.25,926.92 1998.11,926.5 1998.07,925.67 1998.36,924.56 1998.54,924.17
   		1998.95,924.07 2000.03,923.48 2000.08,922.72 2000.27,922.25 2000.62,921.98 2000.93,921.8 2000.79,921.69 2000.75,921.3
@@ -3295,7 +3252,7 @@ function mapSvg() {
   		1998.92,937.02 1998.7,936.6 1998.93,936.09 1999.4,935.8 1999.7,935.72 2000.94,935.67 2001.73,934.63 2002.21,934.3
   		2002.7,933.71 2002.93,933.5 2003.15,933.04 2003.22,932.57 	"/>
   </g>
-  <g class="country" id="RO">
+  <g class="country" id="ROM">
   	<polygon class="st1" points="2059.44,910.65 2058.73,910.05 2057.35,909.54 2055.84,909.72 2054.18,910.58 2053.06,910.9
   		2052.47,910.68 2052.12,910.69 2051.99,910.93 2052.01,911.14 2052.2,911.29 2052.17,911.41 2051.94,911.48 2049.33,910.87
   		2048.21,910.3 2047.32,909.22 2046.9,908.56 2046.47,907.98 2046.16,907.67 2046.29,907.53 2046.63,907.36 2046.88,907.17
@@ -3332,19 +3289,19 @@ function mapSvg() {
   		2054.76,914.17 2054.36,914.68 2054.54,915.25 2054.64,916 2054.36,916.43 2058.65,915.54 2059.05,914.79 2059.3,914.12
   		2059.67,912.34 2059.76,911.9 2059.9,911.21 	"/>
   </g>
-  <g class="country" id="RE">
+  <g class="country" id="ARE">
   	<polygon class="st0" points="2279.16,1497.17 2278.51,1496.16 2277.96,1495.93 2276.73,1495.8 2275.56,1496.14 2275.04,1497
   		2274.9,1497.49 2275.55,1498.88 2275.99,1499.37 2277.63,1500.12 2278.46,1500.21 2279.65,1499.95 2279.87,1499.41
   		2280.01,1498.19 	"/>
   </g>
-  <g class="country" id="QA">
+  <g class="country" id="QAT">
   	<polygon class="st1" points="2244.32,1103.67 2243.98,1102.45 2243.62,1101.51 2243.55,1100.95 2243.34,1100.3 2243.69,1098.9
   		2244.07,1098.01 2243.82,1096.92 2242.53,1095.95 2241.46,1094.67 2240.16,1095.33 2239.27,1096.22 2238.44,1098.52
   		2238.14,1099.52 2237.59,1100.55 2237.25,1101.02 2237.18,1101.43 2237.37,1103.41 2237.96,1105.98 2237.87,1106.32
   		2237.6,1106.87 2238.03,1107.84 2238.64,1108.6 2238.96,1108.79 2239.44,1108.86 2240.03,1108.87 2240.75,1108.67 2241.51,1108.49
   		2242.59,1108.15 2242.85,1107.95 2243.74,1105.96 2244.19,1105.3 2244.38,1104.52 	"/>
   </g>
-  <g class="country" id="PY">
+  <g class="country" id="PRY">
   	<polygon class="st1" points="1352.85,1523.83 1351.76,1523.15 1351.18,1522.54 1350.43,1522.09 1349.62,1521.74 1349.23,1521.89
   		1348.81,1522.09 1348,1522.42 1347.08,1522.97 1346.61,1523.18 1345.77,1523.39 1344.83,1523.56 1344.05,1523.44 1343.38,1523.33
   		1342.96,1522.97 1342.74,1522.21 1342.74,1521.57 1342.6,1520.63 1342.1,1520.1 1341.93,1519.69 1341.9,1519.19 1341.96,1518.64
@@ -3381,12 +3338,12 @@ function mapSvg() {
   		1349.7,1537.45 1349.74,1536.16 1350.9,1534.27 1351.21,1533.38 1351.06,1532.88 1351.41,1531.12 1352.25,1528.1 1352.52,1526.12
   		1352.21,1525.19 1352.21,1524.54 1352.64,1523.99 	"/>
   </g>
-  <g class="country" id="PW">
+  <g class="country" id="PLW">
   	<path class="st0" d="M2914.32,1293.09l-0.12,0.12l-0.01,0.12l0.12,0.03l0.19-0.04l0.12-0.13l0.01-0.11l-0.13-0.04L2914.32,1293.09z
   		 M2943.8,1254l-0.36,0.74l-0.08,0.07l-0.37,0.18l-0.34,0.57l-0.08,0.75l0.24,0.64l0.51-0.18l0.02-0.47l0.29-0.53l0.23-1.36
   		L2943.8,1254z"/>
   </g>
-  <g class="country" id="PT">
+  <g class="country" id="PRT">
   	<path class="st0" d="M1580.11,976.4l-0.77,0.13l-0.29,0.23l0.2,0.67l0.5,0.36l1.75,0.26l0.17-0.09l0.28-0.35l0-0.61l-0.72-0.48
   		L1580.11,976.4z M1570.48,978.84l-0.91,0l-0.32,0.34l0.15,0.55l0.65,0.53l1.03-0.04l0.85,0.28l0.35-0.19l1.05-0.08l-0.69-0.39
   		L1570.48,978.84z M1568.35,978.25l-0.36-0.24l-1.22,0.39l0.83,0.74l0.86-0.03l0.3-0.25l-0.16-0.35L1568.35,978.25z M1546.92,969.34
@@ -3412,14 +3369,14 @@ function mapSvg() {
   		l-0.14-0.39L1598.44,993.7z M1597.61,985.82l-0.71-0.1l-2.69,0.14l-0.53-0.07l-1.14-0.68l-0.52,0.17l-0.02,0.21l0.12,0.45
   		l0.84,0.61l2.49,0.46l1.58-0.19l0.51-0.29L1597.61,985.82z"/>
   </g>
-  <g class="country" id="PS">
+  <g class="country" id="PSE">
   	<path class="st0" d="M2100.09,1045.15l-0.76,0.94l-1.59,1.49l0.12,0.28l0.28,0.78l0.87-0.78l0.02-0.65l1.48-1.51l-0.01-0.15
   		L2100.09,1045.15z M2108.99,1040.34l0.31-1.26l-0.17-1.47l-0.57-0.06l-0.69-0.46l-0.13-0.4l-0.21-0.13l-0.49-0.05l-0.93-0.2
   		l-1.08,0.69l-0.46,1.14l-0.09,0.53l-0.37,1.12l0.13,0.69l0.06,0.89l0.09,0.73l-0.1,0.44l-0.21,0.23l0.06,0.17l0.18,0.06l0.59-0.2
   		l0.62,0.2l0.6,0.38l0.05,0.24l-0.42,0.14l-1,0.57l-0.71,0.66l-0.18,0.61l-0.48,1.29l0.06,0.27l0.23,0.16l1.63-0.14l1.48-0.52
   		l1.11-0.56l0.35,0.03l0.13-0.77l0.29-1.02l0.5-0.87l-0.23-2.04L2108.99,1040.34z"/>
   </g>
-  <g class="country" id="PR">
+  <g class="country" id="PRI">
   	<path class="st0" d="M1238.19,1165.35l-0.05-0.01l-0.49,0.01l-0.1,0.05l-0.05,0.13l0.06,0.12l0.24,0.13l0.05,0.08l0.04,0.02
   		l0.08,0.01l0.08-0.01l0.04-0.03l0.01-0.07l0.03-0.04l0.04-0.04l0.09-0.15l0.05-0.06l0-0.06L1238.19,1165.35z M1255.88,1162.93
   		l-1.04-0.37l-1.61-0.22h-0.19l0.2,0.35l-0.25,0.02l-0.26-0.17l-0.2-0.22l-0.3-0.04l-5.26-0.15l-2.08-0.26l-0.45,0.06l-0.38,0.14
@@ -3428,16 +3385,16 @@ function mapSvg() {
   		l0.54-0.5l0.82-0.48l-0.07-1.2L1255.88,1162.93z M1259.69,1165.15l-0.54-0.14l-0.93-0.03l-0.8,0.24l0.14,0.26l0.43,0.07l0.66-0.05
   		l1.1-0.24L1259.69,1165.15z"/>
   </g>
-  <g class="country" id="PN">
+  <g class="country" id="PCN">
   	<polygon class="st1" points="729.17,1526.64 729.07,1526.37 728.84,1526.28 728.67,1526.43 728.74,1526.7 728.92,1526.96
   		729.1,1527.07 729.18,1526.94 	"/>
   </g>
-  <g class="country" id="PM">
+  <g class="country" id="SPM">
   	<path class="st0" d="M1336.76,894.91l-0.27,0.04l-0.2,0.1l-0.29,0.33l0.6,0.15l0.18-0.1l0.1-0.17l0.02-0.24L1336.76,894.91z
   		 M1335.39,893.4l0.31-0.86l-0.08-0.38l-0.65-0.3l-0.11,0.1l-0.08,0.23l0.45,1.4l0.01,0.21l-0.38,0.72l-0.06,0.3l0.26,0.26
   		l0.73-0.46l0.1-0.24l-0.29-0.41L1335.39,893.4z"/>
   </g>
-  <g class="country" id="PL">
+  <g class="country" id="POL">
   	<polygon class="st1" points="2011.9,852.14 2011.66,851.86 2011.82,851.6 2012.06,851.52 2012.36,851.48 2012.73,851.2
   		2012.65,850.89 2011.72,850.14 2011.32,849.56 2010.69,848.07 2009.42,846.53 2009.01,846.03 2008.96,845.55 2009.14,845.08
   		2008.97,844.47 2008.52,843.7 2007.96,842.57 2008.01,841.55 2008.31,840.96 2008.69,840.44 2008.53,839.65 2008.9,838.6
@@ -3479,7 +3436,7 @@ function mapSvg() {
   		2003.02,862.43 2003.72,861.64 2005.65,859.73 2006.86,858.62 2007.68,858 2008.88,856.93 2009.41,856.37 2011.61,856.01
   		2011.88,855.5 2012.28,854.93 2012.6,854.68 2012.64,853.73 2012.23,852.56 	"/>
   </g>
-  <g class="country" id="PK">
+  <g class="country" id="PAK">
   	<polygon class="st1" points="2458.27,1011.23 2458.06,1010.75 2457.62,1009.79 2457.24,1008.95 2456.66,1007.65 2456.27,1006.79
   		2455.94,1006.63 2455.13,1006.14 2454.56,1005.72 2454.45,1004.63 2454.04,1004.72 2453.06,1005.11 2451.93,1005.36
   		2451.31,1005.37 2451.06,1005.19 2450.68,1004.04 2450.41,1003.72 2449.9,1003.59 2449.35,1003.38 2449.07,1003.08 2449.01,1002.7
@@ -3558,7 +3515,7 @@ function mapSvg() {
   		2454.82,1015.6 2455.67,1015.12 2456.12,1014.54 2456.19,1014.25 2456.4,1014.04 2457.32,1013.68 2458.24,1013.17 2458.49,1012.5
   		2458.64,1012.05 	"/>
   </g>
-  <g class="country" id="PH">
+  <g class="country" id="PHL">
   	<path class="st0" d="M2852.23,1214.66l-0.03-0.74l-0.56-1.33l-0.73-0.55l-0.29,0.35l0.28,0.53l1.02,1.46L2852.23,1214.66z
   		 M2851.63,1224.14l0.25,0.82l0.66,0.01l-0.49-1.12l-0.13,0.04L2851.63,1224.14z M2847.4,1210.07l-1.37-1.77l-0.22-0.02l-0.5,0.08
   		l-0.07,0.41l0.21,0.2l0.68,0.35l0.94,1l0.91,0.6l0.78,0.89l-0.72-1.3L2847.4,1210.07z M2850.38,1213.99l-0.81-0.48l-1.06-0.35
@@ -3671,7 +3628,7 @@ function mapSvg() {
   		l0.23-0.46l0.44-0.28l0.96-0.37l2.05-0.57l0.23-0.33l0.11-0.44l0.45-0.84l0.71-0.64l0.45-0.23l0.99-0.21l0.46-0.24l0.77-0.79
   		l-0.02-0.43L2817.17,1228.72z"/>
   </g>
-  <g class="country" id="PG">
+  <g class="country" id="PNG">
   	<path class="st0" d="M3044.21,1337.14l0.53-0.31l0.54,0.08l0.41-0.28l1.5,0.34l1.16-0.02l0.66-0.17l0.54,0.13l0.8-0.77l0.3-0.2
   		l0.41,0.04l0.44-0.1l0.05-0.4l-0.17-0.14l-0.05,0.05l0.03,0.19l-0.19,0.01l-2.8-0.54l-1.77-0.1l-0.82,0.24l-0.87-0.03l-0.51,0.36
   		l0.09,0.72l-0.63,0.2l-0.01,0.23l0.13,0.46L3044.21,1337.14z M3054.92,1338.19l0.27-0.44l-0.35-0.3l-0.2,0.13l-0.19,0.36
@@ -3740,7 +3697,7 @@ function mapSvg() {
   		L3079.81,1407.27z M3083.13,1402.13l-0.6,0.63l-0.36,0l-0.31-0.31l0.06-0.37l-1.59-1.15l-0.38-0.56l-0.34-0.23l0.11,0.55l0.6,0.86
   		l0.29,0.78l0.47,0.26l0.06,0.8l1.82,0.56l0.47,0.3l0.55-2.01l-0.34-0.29L3083.13,1402.13z"/>
   </g>
-  <g class="country" id="PF">
+  <g class="country" id="PYF">
   	<path class="st0" d="M599.64,1458.65h-0.31l0.82,0.51l0.33-0.05l-0.37-0.14L599.64,1458.65z M601.37,1458.94l-0.43-0.01l-0.3,0.08
   		l0.78,0.12l0.61,0.29l-0.46-0.42L601.37,1458.94z M623.03,1471.93l-0.27-0.32l-0.41-0.21l0.13,0.22l0.53,0.54l0.3,0.44l0.31,0.16
   		l-0.06-0.24L623.03,1471.93z M587.09,1451.58l0.19,0.27l0.52,0.6l0.16,0.37l0.05-0.39l-0.69-0.81L587.09,1451.58z M609.25,1454.58
@@ -3760,7 +3717,7 @@ function mapSvg() {
   		l-0.04-0.16l-0.17-0.06l-0.03-0.09l0.15-0.3l0.33-0.43l1.05-0.61l0.12-0.04l-0.1-0.07L624.77,1468.16z M634.06,1392.96l-0.23,0.1
   		l-0.17,0.22l0.09,0.42l0.55-0.06l0.39-0.21l0.01-0.16l-0.22-0.18L634.06,1392.96z"/>
   </g>
-  <g class="country" id="PE">
+  <g class="country" id="PER">
   	<polygon class="st1" points="1231.2,1423.79 1230.08,1421.82 1229.09,1420.09 1228.16,1418.47 1227.09,1416.59 1226.38,1415.36
   		1225.5,1413.82 1224.73,1412.48 1223.68,1410.64 1222.87,1410.66 1221.48,1410.48 1220.46,1410.45 1219.57,1410.9 1218.27,1411.45
   		1217.68,1411.59 1217.25,1411.61 1216.82,1411.54 1216.33,1411.26 1215.64,1410.6 1215.1,1410.85 1214.72,1411.13 1214.72,1409.7
@@ -3850,7 +3807,7 @@ function mapSvg() {
   		1228.69,1432.25 1228.78,1431.28 1228.71,1427.71 1228.73,1427 1229.11,1426.51 1229.66,1425.94 1230.13,1425.72 1230.58,1425.36
   		1230.55,1424.69 1230.84,1424.29 	"/>
   </g>
-  <g class="country" id="PA">
+  <g class="country" id="PAN">
   	<path class="st0" d="M1117.09,1239.93l-0.22-0.42l-0.14-0.01l-0.39,0.12l0.65,0.71L1117.09,1239.93z M1121.63,1256.41l-0.13-0.51
   		l0.33-0.32l-0.48-0.82l-0.2,0l-0.5,0.25l-0.38,0.71l-0.01,0.23l0.05,0.23l0.69,0.7l0.94,0.36l0.46-0.04l-0.09-0.4L1121.63,1256.41z
   		 M1143.51,1249.09l-0.26,0.37l0.14,0.35l0.38-0.37l-0.17-0.35L1143.51,1249.09z M1159.38,1251.29l-0.59-1.29l-0.53-0.69l-0.34-0.69
@@ -3874,7 +3831,7 @@ function mapSvg() {
   		l0.56-0.21l0.17-0.34L1159.38,1251.29z M1145.31,1247.7l-0.28,0.02l-0.38,0.19l0.03,0.72l-0.06,0.2l0.39,0.79l0.17-0.36l0.38-0.24
   		l0.12-0.38l-0.14-0.85L1145.31,1247.7z"/>
   </g>
-  <g class="country" id="OM">
+  <g class="country" id="OMN">
   	<path class="st0" d="M2283.33,1102.28l-0.15,0.33l-0.05,0.48l0.25,0.04l0.35-0.24l0.05-0.38l-0.09-0.2L2283.33,1102.28z
   		 M2282.77,1095.62l0.04,0.92l-0.16,0.87l-0.02,0.92l-0.06,0.5l0.33,0.41l0.56,0.17l0.24-0.02l0.16-0.21l0.08-0.52l0.19-0.38
   		l0.37-0.47l0.36-2.73l0.01-0.89l0.1-1.07l-0.14-0.22l-0.29-0.05l-0.27,0.38l-0.34,0.7l-0.65,0.14l-0.26-0.08l-0.28,0.2l-0.71,1.3
@@ -3898,7 +3855,7 @@ function mapSvg() {
   		l0.21-0.75l0.11-1.02L2313.56,1127.07z M2304.84,1144.71l-1.24,1.39l0,1.1l0.15,0.06l0.53-0.13l0.42-0.42l0.53-1.37l0.97-0.81
   		l-0.56-1.44L2304.84,1144.71z"/>
   </g>
-  <g class="country" id="NZ">
+  <g class="country" id="NZL">
   	<path class="st0" d="M3209.73,1782.61l-1.04,0.09l0.01,0.38l-0.25,1.17l-1.33,0.93l-0.22,0.49l0.13,0.15l0.57-0.02l0.35-0.46
   		l0.21,0.1l0.3,0.4l0.97,0.26l0.46,0l-0.18-0.93l-0.17-0.12l-0.18-0.4l0.34-0.22l-0.11-0.46l0.02-0.45l0.42-0.38l0.07-0.21
   		l-0.11-0.16L3209.73,1782.61z M3212.82,1730.7l0.43,0.24l0.44,0.06l0.29,0l0.1-0.26l0.04-0.51l-0.12-0.18l-0.39-0.25l-1,0.31
@@ -3968,15 +3925,15 @@ function mapSvg() {
   		l0.39-2.34l0.45-1.03l0.58-0.94l0.17-0.64l-0.51-0.31L3311.94,1649.34z M3274.86,1680.5l0.05-0.74l-0.52,0.33l-0.25,0.03
   		l-0.51,0.44l-0.22,0.88l-0.05,0.4l1.13-0.58L3274.86,1680.5z"/>
   </g>
-  <g class="country" id="NU">
+  <g class="country" id="NIU">
   	<polygon class="st1" points="3411.37,1479.26 3411.14,1479.28 3410.74,1479.47 3410.41,1480.19 3410.78,1480.75 3411.63,1480.27
   		3411.71,1479.92 	"/>
   </g>
-  <g class="country" id="NR">
+  <g class="country" id="NRU">
   	<polygon class="st1" points="3215.88,1322.8 3215.74,1322.74 3215.53,1322.82 3215.47,1323.03 3215.55,1323.22 3215.74,1323.25
   		3215.91,1322.97 	"/>
   </g>
-  <g class="country" id="NP">
+  <g class="country" id="NPL">
   	<polygon class="st1" points="2552.2,1088.79 2551.82,1087.7 2550.82,1086.28 2550.75,1085.85 2551.08,1083.37 2551.45,1081.94
   		2551.77,1081.26 2552.12,1080.29 2552.18,1079.84 2552.15,1079.44 2551.8,1079.19 2551.08,1079.07 2550.32,1079.01
   		2549.71,1079.05 2548.21,1079.64 2547.7,1079.69 2547.13,1079.63 2546.37,1079.61 2544.91,1079.63 2543.65,1079.48
@@ -4006,7 +3963,7 @@ function mapSvg() {
   		2547.79,1092.47 2548.76,1092.2 2549.61,1092.13 2550.84,1092.62 2551.11,1092.5 2551.34,1092.19 2551.82,1090.78 2552.24,1089.54
   			"/>
   </g>
-  <g class="country" id="NO">
+  <g class="country" id="NOR">
   	<path class="st0" d="M1900.28,441.6l0.47,0.94l-0.62,1.13l-0.1,0.5l0.11,0.67l0.81,1.09l0.45,0.9l0.32,1.24l0.42,0.86l1.11,1.36
   		l0.85,1.95l1.1,0.39l1.54-0.79l0.8-1.02l-0.31-1.48l0.84-0.15l2.52-0.03l0.89,0.48l-0.57,1.03l-1.04,1.15l0.08,0.76l0.2,0.65
   		l0.47,0.98l0.54,0.79l0.35,0.15l1.4,0l1.03,0.17l0.24,0.25l-0.67,0.73l-0.41,0.18l-6.13-1.47l-0.77,0.19l-0.76,0.42l2.07,1.26
@@ -4179,7 +4136,7 @@ function mapSvg() {
   		l1.8,0.93l1.43,1.09l1.76,1.92l1.27-0.14l-0.51-1.34l-1.07-1.28l-0.37-0.64l-0.5-0.49l-1.76-0.72l-1.62-1.36l-1.37,0.13l-0.1-1.28
   		l-0.8-0.55l-0.65-0.84l0.63-0.72l-0.24-0.54l-1.37-1.74l-1.58-0.77l-1.81-0.29l0,1.22l0.6,1.56L1900.57,460.53z"/>
   </g>
-  <g class="country" id="NL">
+  <g class="country" id="NLD">
   	<path class="st0" d="M1850.02,826.97l0.83-0.81l0-1.29l-1.23,1.05l-0.26,0.63l0.15,0.19L1850.02,826.97z M1852.73,823.45
   		l-0.69-0.03l-1,0.73l0.13,0.13L1852.73,823.45z M1857.98,821.91l1.66-0.19l-0.01-0.07l-0.44-0.12l-1.42,0.02l-0.45,0.08l0.09,0.13
   		L1857.98,821.91z M1854.56,822.56l2.16-0.6l-0.21-0.06l-1.2,0.14l-1.89,0.45l0.36,0.16L1854.56,822.56z M1866.98,819.81h-0.39
@@ -4207,11 +4164,7 @@ function mapSvg() {
   		l0.28-0.41l-0.04-0.38L1858.53,831.92z M1841.13,841.91l0.73-0.18l1.11,0.75l1.05-0.24l-0.06-0.21l-0.18-0.2l-0.82-0.61l-1.35-0.08
   		l-0.76,0.19l0,0.22L1841.13,841.91z"/>
   </g>
-  <g class="country" id="Nl_-_SB">
-  	<path class="st0" d="M1277.05,1169.41l-0.09,0.06l-0.02,0.14l0.11,0.08l0.08-0.03l0.05-0.1l-0.06-0.11L1277.05,1169.41z
-  		 M1279.38,1170.64l-0.05-0.06l-0.06-0.04l-0.17-0.08l0.02,0.29l0.12,0.17l0.18,0.02l0.2-0.18L1279.38,1170.64z"/>
-  </g>
-  <g class="country" id="NI">
+  <g class="country" id="NIC">
   	<path class="st1" d="M1107.73,1193.04l0.32,0.1l0.04,0.76l0.19-0.09l0.54-1.02l0.26-0.21l0.23-0.31l-2.17-0.13l-1.02,0.27
   		l-0.45,0.59l-0.39,0.27l-0.32-0.06l-0.65,0.23l-0.98,0.53l-0.88,0.2l-0.79-0.13l-0.23,0.13l-0.06,0.17l-0.12,0.17l-0.31,0.09
   		l-0.35-0.05l-0.39-0.19l-0.21,0.08l-0.02,0.34l-0.21,0.09l-0.4-0.16l-0.45,0.12l-0.5,0.41l-0.71,0.09l-0.91-0.24l-0.71-0.45
@@ -4235,7 +4188,7 @@ function mapSvg() {
   		l0.19-0.53l0.31-0.09l0.31,0.02l0.39,0.11l0.64,0.25l0.74,0.41l0.63,0.49l0.61,0.48l0.67,0.39l0.86,0.61l1.07,1.02l1.04,1.16
   		l0.78,0.95l0.5,0.72l0.36,0.58l0.19,0.46l0.09,0.42l0.1,0.33L1095.45,1225.69z"/>
   </g>
-  <g class="country" id="NG">
+  <g class="country" id="NGA">
   	<path class="st0" d="M1870.57,1280.74l-0.73,1.11l0.53,0.06l0.82-0.26l0.23-0.58l-0.48-0.1L1870.57,1280.74z M1932.84,1216.48
   		l-0.28-0.5l-0.05-0.11l-0.52-0.65l-0.87-0.39l-1.2-0.11l-0.63-0.23l-0.11-0.54l-0.06-0.31l-0.06-0.34l-0.09-0.75l-0.81-3.96
   		l-1.11-1.53l-1.42-1.97l-1.32-1.83l-1.51,0.02l-0.87,0.26l-1.09,0.83l-1.22,0.33l-1.49,0.73l-0.94,0.58l-0.89,0.46l-1.22,1.13
@@ -4269,13 +4222,13 @@ function mapSvg() {
   		l1.39-2.27l1.62-2.26l0.75-0.61l0.63-0.28l0.73-0.03l0.5-0.17l1.74-1.13l0.73-0.38l0.54-0.39l0.13-0.34l0.05-0.5l-0.17-1.17
   		l0.3-0.86l0.18-1.33l0.08-1.04L1932.84,1216.48z"/>
   </g>
-  <g class="country" id="NF">
+  <g class="country" id="NFK">
   	<polygon class="st1" points="3224.5,1568.68 3224.34,1568.63 3224.17,1568.53 3224.01,1568.49 3223.89,1568.62 3223.99,1568.6
   		3224.04,1568.63 3224.04,1568.69 3223.98,1568.78 3223.94,1568.85 3223.96,1568.93 3223.99,1569.02 3224.01,1569.12
   		3224.06,1569.12 3224.12,1569.03 3224.21,1569.03 3224.3,1569.12 3224.35,1569.25 3224.35,1569.21 3224.36,1569.18
   		3224.38,1569.15 3224.41,1569.12 3224.5,1569.06 3224.58,1568.91 3224.6,1568.75 	"/>
   </g>
-  <g class="country" id="NE">
+  <g class="country" id="NER">
   	<polygon class="st1" points="1943.87,1145.56 1941.67,1143.18 1940.98,1142.64 1940.59,1141.41 1941.15,1140.71 1938.51,1136.71
   		1937.86,1136.22 1937.57,1135.73 1937.54,1135.01 1937.49,1132.23 1936.79,1127.86 1935.86,1122.77 1935.86,1122.77
   		1932.3,1124.65 1929.56,1126.1 1929.43,1126.09 1929.31,1126.05 1926.46,1123.6 1924.24,1121.68 1923.25,1121.14 1919.06,1120.16
@@ -4312,7 +4265,7 @@ function mapSvg() {
   		1940.77,1166.94 1941.05,1163.48 1941.41,1159.38 1941.71,1155.94 1941.92,1153.44 1942.23,1149.88 1942.49,1149.2 1944.03,1146.4
   		1944.15,1146.02 	"/>
   </g>
-  <g class="country" id="NC">
+  <g class="country" id="NCL">
   	<path class="st0" d="M3156.7,1481.07l0.07,1.38l0.13-0.19l0.2-0.64l-0.13-1.07L3156.7,1481.07z M3225.17,1500.91l-0.4-0.16
   		l-0.14-0.2l-0.08-0.33l0.03-0.28l-0.53,0.31l-0.93,0.17l0.54,1.15l-0.03,0.51l0.55,0.21l0.21,0.31l0.33,0.01l0.96-0.24l0.15-1.5
   		L3225.17,1500.91z M3214.74,1505.9l-1.1-0.56l-0.86-0.7l-0.8-0.79l-1.6-1.28l-2.07-1.34l-0.91-0.36l-0.54-0.47l-0.53-0.22
@@ -4326,7 +4279,7 @@ function mapSvg() {
   		 M3219.88,1497.46l-0.59-0.99l-0.57-0.44l0.04-1.39l-0.24-0.28l-0.55-0.24l-1.25,0.41l-0.09,0.34l0.77,0.06l0.45,0.33l-0.65,0.88
   		l-0.67,0.16l0.34,0.65l0.52,0.55l1.17,0.32l0.61,0.63l0.46-0.07l0.25-0.64L3219.88,1497.46z"/>
   </g>
-  <g class="country" id="NA">
+  <g class="country" id="NAM">
   	<polygon class="st1" points="2021.04,1467.73 2020.28,1467.16 2019.69,1466.95 2018.01,1466.73 2014.16,1466.41 2013.75,1466.48
   		2012.15,1466.75 2010.15,1467.09 2008.43,1467.43 2006.62,1467.79 2003.99,1468.29 2000.25,1469 1997.73,1469.49 1994.67,1470.07
   		1992.62,1470.44 1990.08,1470.9 1989.68,1470.89 1989,1470.57 1987.53,1470.51 1985.8,1470.94 1984.43,1471.06 1983.42,1470.86
@@ -4360,7 +4313,7 @@ function mapSvg() {
   		2009.32,1474.56 2010.7,1473.22 2010.98,1472.87 2011.86,1472.22 2012.93,1471.56 2013.9,1471.09 2014.86,1470.7 2015.31,1470.8
   		2015.84,1471.14 2016.31,1471.35 2018.51,1469.72 2019.5,1469.35 2022.08,1469.06 2022.44,1469.11 	"/>
   </g>
-  <g class="country" id="MZ">
+  <g class="country" id="MOZ">
   	<polygon class="st1" points="2153.51,1441.97 2153.57,1441.4 2153.44,1441.12 2153.49,1440.54 2153.13,1440.14 2152.72,1440.14
   		2152.04,1441.15 2151.95,1440.4 2151.99,1439.88 2152.61,1439.03 2152.63,1438.38 2152.07,1438.24 2151.68,1437.97
   		2151.62,1437.59 2151.57,1435.22 2151.32,1433.31 2151.3,1432.55 2151.19,1431.97 2151.51,1431.21 2151.25,1430.52 2151.4,1429.93
@@ -4423,7 +4376,7 @@ function mapSvg() {
   		2151.31,1449.15 2152.08,1447.32 2152.1,1446.74 2151.8,1446.08 2152.01,1445.8 2152.45,1445.65 2152.39,1445.19 2152.5,1444.49
   		2153.14,1443.74 2153.64,1443.31 2153.71,1442.68 	"/>
   </g>
-  <g class="country" id="MY">
+  <g class="country" id="MSY">
   	<path class="st0" d="M2747.62,1298.54l0.26-0.11l-0.07-0.36l-0.04-0.98l0.02-1.11l-0.2-0.46l-0.18-0.03l-0.28,0.23l0.09,2.54
   		L2747.62,1298.54z M2687.1,1295.87l0.41-0.09l0.01-0.36l-0.32-0.82l-0.13,0.12l-0.34,0.75l0.15,0.33L2687.1,1295.87z
   		 M2796.32,1258.57l0.82-0.14l0.23-0.3l0.12-0.59l-0.14-0.51l-0.99,0.12l-0.7,0.64l-0.03,0.69l0.17,0.53L2796.32,1258.57z
@@ -4470,7 +4423,7 @@ function mapSvg() {
   		 M2801.1,1282.96l-0.39,0.1l0.04,0.39l-0.15,0.29l0.81,0.02l1.17-0.16l-1.04-0.55L2801.1,1282.96z M2663.14,1293.14l-0.14-0.17
   		l-0.31,0.29l-0.07,0.3l0.02,0.22l0.43-0.15L2663.14,1293.14z"/>
   </g>
-  <g class="country" id="MX">
+  <g class="country" id="MEX">
   	<path class="st0" d="M865.32,1108.07l-0.03-0.67l-0.28-0.62l-0.26-0.37l-0.03-0.4l0.56-3.02l-0.23-0.55l-0.53,2.99l-0.63,1.44
   		l0.73,0.24l0.29,0.3l0.11,0.71l0.72,1.03l0.17-0.1l-0.09-0.34L865.32,1108.07z M866.88,1108.99l-0.61,0.16l2.53,1.66l0.11-0.42
   		l-1.33-1.28L866.88,1108.99z M912.4,1134.39l-0.51-0.31l-0.35,0.13l0.04,0.74l0.23,0.45l0.64,0.29l0.25-0.72l-0.18-0.36
@@ -4560,7 +4513,7 @@ function mapSvg() {
   		L884.07,1110.95z M873.63,1095.42l-0.37,0.26l-0.35,1.84l0.17-0.12l0.58-1.34l0.34,0.22l0.06-0.09l-0.11-0.32l0.08-0.49
   		L873.63,1095.42z"/>
   </g>
-  <g class="country" id="MW">
+  <g class="country" id="MWI">
   	<path class="st0" d="M2104.14,1415.95L2104.14,1415.95l-0.05-0.26L2104.14,1415.95L2104.14,1415.95z M2102.12,1420.46l0.22-0.19
   		l0.09-0.25l0-0.24l-0.14-0.15l-0.2-0.09l-0.3,0.05l-0.1,0.33l-0.05,0.45l0.19,0.15L2102.12,1420.46z M2112.01,1444.16l-0.22-0.24
   		l-0.16-1.65l-1.32-1.76l-1.7-2.26l-0.95-1.22l-1.08-1.38l-1.97-2.16l-0.9-0.78l-0.39-0.25l-0.01,0.8l0.07,0.73l0.17,0.13l1.19,0.11
@@ -4589,25 +4542,25 @@ function mapSvg() {
   		l0.3-0.86l0.24-2.39l0.09-2.24l-0.21-1.31l0.29-1.98L2112.01,1444.16z M2101.3,1420.09l0.17-0.45l-0.15-0.25l-0.28-0.12l-0.31,0.09
   		l-0.1,0.31l0.33,0.4L2101.3,1420.09z"/>
   </g>
-  <g class="country" id="MV">
+  <g class="country" id="MDV">
   	<path class="st0" d="M2427.92,1291.12l-0.14,0.15l-0.02,0.21l0.11,0.14l0.18-0.02l0.15-0.16l0.07-0.2l-0.13-0.13L2427.92,1291.12z
   		 M2428.9,1283.09l-0.11,0.11l-0.08,0.2l-0.11,0.19l-0.07,0.15l0.05,0.1l0.14,0.03l0.15-0.08l0.06-0.19l0.03-0.2l0.04-0.16
   		l0.01-0.11L2428.9,1283.09z"/>
   </g>
-  <g class="country" id="MU">
+  <g class="country" id="MSU">
   	<polygon class="st1" points="2295.99,1489.11 2295.31,1488.16 2294.63,1488.22 2294.12,1488.74 2293.88,1489.5 2293.29,1489.85
   		2293.03,1490.24 2292.83,1491.19 2292.86,1491.79 2292.46,1491.98 2292.55,1492.17 2293.01,1492.64 2294.2,1492.72
   		2295.27,1492.48 2295.73,1492.04 2295.89,1491.46 2296.36,1491.1 2296.45,1490.1 	"/>
   </g>
-  <g class="country" id="MT">
+  <g class="country" id="MLT">
   	<path class="st0" d="M1929.83,1002.83l-0.7,0.15l0.12,0.17l0.5,0.29l0.5-0.15l0.06-0.08l-0.14-0.25L1929.83,1002.83z
   		 M1932.14,1004.64l-0.75-0.68l-0.82-0.2l0.01,1.02l0.71,0.48l0.81,0.01l0.28-0.31L1932.14,1004.64z"/>
   </g>
-  <g class="country" id="MS">
+  <g class="country" id="MSR">
   	<polygon class="st1" points="1286.03,1176.67 1285.9,1176.71 1285.63,1177.17 1285.64,1177.62 1286.21,1177.77 1286.26,1177.26
   		"/>
   </g>
-  <g class="country" id="MR">
+  <g class="country" id="MRT">
   	<path class="st0" d="M1759.5,1105.04l2.69,0l3.94,0l2.95,0l-1.91-1.25l-1.9-1.24l-2.04-1.33l-1.33-0.83l-1.58-0.99l-1.58-0.99
   		l-1.58-0.99l-1.58-0.99l-1.58-0.99l-1.58-0.99l-1.58-0.99l-1.58-0.99l-1.58-0.99l-1.58-0.99l-1.58-1l-1.58-1l-1.58-1l-1.58-1
   		l-1.58-1l-1.58-1l0,1.5l0,1.78l0,1.78l0,2.03l0,2.02v1.47l0,1.02h-1.71h-1.57h-1.57h-1.57h-1.57l-1.57,0h-1.57h-1.57h-1.57h-1.57
@@ -4634,23 +4587,23 @@ function mapSvg() {
   		l-0.24-2.2l-0.24-2.2l-0.24-2.21l-0.24-2.21l-0.24-2.21l-0.22-2.03l2.58,0L1759.5,1105.04z M1671.26,1152.45l0.54-0.85l0.25-1.39
   		l-0.42,0.15l-0.23,0.41l-0.48,0.8l0.09,0.56L1671.26,1152.45z"/>
   </g>
-  <g class="country" id="MQ">
+  <g class="country" id="MTQ">
   	<polygon class="st0" points="1296.86,1195.24 1296.49,1194.88 1296.61,1194.46 1296.54,1194.29 1296.33,1194.29 1295.7,1193.69
   		1294.86,1193.27 1294.41,1193.3 1294.13,1193.5 1294.08,1193.87 1294.74,1195.17 1295.05,1195.44 1295.83,1195.6 1295.17,1196.22
   		1295.18,1196.39 1295.39,1196.76 1296.78,1196.7 1297.09,1197.11 1297.31,1197.01 1297.39,1196.52 1297.02,1195.5 	"/>
   </g>
-  <g class="country" id="MP">
+  <g class="country" id="MNP">
   	<path class="st0" d="M3036.67,1160.12l0.25-0.32l-0.01-0.24l-0.14-0.1l-0.38-0.04l0.06,0.47L3036.67,1160.12z M3036.51,1180.74
   		l0.27,0.03l0.18-0.06l0.06-0.18l-0.2-0.17l-0.54,0.01l0.04,0.23L3036.51,1180.74z M3038,1165.22l-0.24-0.31l-0.15,0.15l-0.51,0.85
   		l0.41-0.19L3038,1165.22z M3032.24,1199.35l0.04,0.23l0.19,0.14l0.3,0.08l0.42-0.4l0-0.19l-0.28-0.08L3032.24,1199.35z
   		 M3036.97,1190.36l-0.24,0.77l0.12,0.1l0.43,0.05l0.02-0.22l0.26-0.36l0.05-0.41l0.28-0.37l-0.3,0.07L3036.97,1190.36z
   		 M3036.22,1191.69l-0.32,0.25l0.04,0.27l0.25,0.68l0.35-0.44l-0.13-0.76L3036.22,1191.69z"/>
   </g>
-  <g class="country" id="MO">
+  <g class="country" id="MOZ">
   	<polygon class="st1" points="2765.88,1129.38 2765.6,1129.42 2765.49,1129.63 2765.48,1129.82 2765.52,1129.81 2765.64,1129.77
   		2766.04,1129.6 2766.06,1129.59 	"/>
   </g>
-  <g class="country" id="MN">
+  <g class="country" id="MNG">
   	<polygon class="st1" points="2819.54,894.42 2819.24,893.9 2818.62,893.14 2818.38,892.63 2818.36,891.96 2817.97,891.32
   		2817.03,890.55 2816.42,890.19 2815.15,888.86 2814.72,888.55 2814.58,888.33 2814.43,887.88 2813.96,887.67 2813.35,887.32
   		2813.01,886.97 2812.8,886.35 2812.67,885.94 2812.13,885.61 2811.58,885.42 2810.97,885.19 2809.96,884.84 2809.37,884.15
@@ -4745,7 +4698,7 @@ function mapSvg() {
   		2813.34,896.74 2814.77,897 2815.97,896.87 2817.2,897.11 2817.93,897.08 2818.27,896.86 2819.28,896.39 2819.52,895.74
   		2819.42,895.12 	"/>
   </g>
-  <g class="country" id="MM">
+  <g class="country" id="MMR">
   	<path class="st0" d="M2635.74,1220.38l0.04-0.35l-0.18-0.2l-0.41-0.88l0.09,1.39l0.53,0.5L2635.74,1220.38z M2636.14,1215.4
   		l-0.15-0.08l-0.28-0.03l-0.12,0.1l-0.17,0.4l0.32,0.58l0.28,0.14l0.14,0.03l0.1-0.05l-0.14-0.35l-0.01-0.27l0.08-0.32
   		L2636.14,1215.4z M2635.66,1214.46l-0.05-0.07l-0.12,0.09l-0.46-0.06l-0.43,0.41l0.11,0.2l0.43,0.37l0.49-0.63L2635.66,1214.46z
@@ -4821,7 +4774,7 @@ function mapSvg() {
   		l-0.1,0.2L2639.1,1218.62z M2638.97,1213.74l0.07-0.83l-0.27,0.01l-0.19-0.23l-0.15-0.42l-0.71-0.26l-0.08,0.57l0.24,0.85
   		l-0.15,1.49l0.17,0l0.39-0.15L2638.97,1213.74z"/>
   </g>
-  <g class="country" id="ML">
+  <g class="country" id="MLI">
   	<polygon class="st1" points="1845.36,1172.54 1845.35,1170.01 1845.34,1167.86 1845.34,1165.19 1845.33,1162.85 1845.32,1160.3
   		1845.31,1158.02 1845.31,1156.5 1842.63,1157.01 1840.73,1157.38 1838.66,1157.77 1838.34,1157.84 1837.97,1157.85
   		1837.69,1157.84 1837.12,1157.62 1836.44,1157.11 1835.98,1156.84 1835.86,1156.44 1836.13,1155.9 1836.46,1155.41
@@ -4887,7 +4840,7 @@ function mapSvg() {
   		1842.35,1185.73 1842.53,1185.02 1842.61,1184.51 1842.95,1184.1 1843.19,1183.32 1843.52,1181.97 1844.41,1180.56
   		1844.93,1178.63 1845,1176.77 1845.1,1175.35 1845.37,1175.06 	"/>
   </g>
-  <g class="country" id="MK">
+  <g class="country" id="MKD">
   	<polygon class="st1" points="2003.45,947.24 2003.35,947.07 2002.95,946.89 2002.65,946.28 2002.04,944.68 2001.7,944.36
   		2000.74,944.02 1999.9,943.56 1999.19,942.95 1997.89,941.45 1997.67,941.37 1997.33,941.08 1997.02,941 1996.23,941.34
   		1995.43,941.54 1994.81,941.39 1994.19,941.37 1993.76,941.5 1993.43,941.56 1992.8,941.92 1991.78,942.17 1991.31,942.12
@@ -4900,14 +4853,14 @@ function mapSvg() {
   		1999.15,953.47 2000.08,953.26 2001.1,952.87 2001.36,951.53 2001.6,951.34 2002.23,951.28 2002.71,951.29 2002.83,951.09
   		2003.01,948.59 2003.47,947.47 	"/>
   </g>
-  <g class="country" id="MH">
+  <g class="country" id="MHL">
   	<path class="st0" d="M3230.4,1257.16l-0.04,0.12l0.37,0.16l0.81,0.08l0.12-0.13l-0.63-0.11L3230.4,1257.16z M3215.07,1224.84
   		l-0.12,0.11l0.17,0.06l0.22-0.06l0.08-0.1l-0.1-0.03L3215.07,1224.84z M3238.59,1268.85l-0.2,0.75l-0.13,0.26l-0.18,0.19l0.21,0.02
   		l0.17-0.25l0.32-0.88l0.45-0.34l0.07-0.32l-0.29,0.31L3238.59,1268.85z M3255.74,1259.75l-0.62,0.01l-0.31-0.18l0.13,0.27
   		l0.18,0.08l0.38-0.02l0.29,0.08l0.31,0.2l0.22,0.03L3255.74,1259.75z M3250.81,1258.82l-0.43-0.28l-0.12,0.13l0.5,0.39l0.9,0.3
   		l0.28,0.04h0.24l0.35-0.1l0.52-0.12l0.23-0.13l-1.4,0.2L3250.81,1258.82z"/>
   </g>
-  <g class="country" id="MG">
+  <g class="country" id="MDG">
   	<path class="st0" d="M2229.61,1461.69l-0.27,1.32l0.95-1.58l0.73-1.79l-0.31,0.15L2229.61,1461.69z M2216.87,1431.43l-0.01-0.31
   		l0.07-0.46l-0.36-0.95l-0.33,0.05l-0.12,0.44l-0.54,0.03l0.17,1.07L2216.87,1431.43z M2234.54,1446.37l-1.08-1.82l-0.66-1.75
   		l-0.26-1.86l-0.26-4.05l-0.85-3.94l-0.89-2.62l-0.25-1.69l-0.51-0.84l-0.6-0.79l-1.41-2.06l-0.45-0.85l-0.39-0.89l-0.49-0.71
@@ -4933,10 +4886,10 @@ function mapSvg() {
   		l-0.14-1.1l0.12-0.39l0.67-0.62l0.92-0.09l0.33,0.16l0.29,0.99l0.79,1.96l0.62,0.83l0.76,0.51l0.2,0.02l0.45-0.51l0.25-0.37
   		l0.95-1.97l0.66-2.09L2234.54,1446.37z"/>
   </g>
-  <g class="country" id="MF">
+  <g class="country" id="MF" style="display: none;">
   	<polygon class="st1" points="1278.88,1165.42 1278.55,1165.4 1278.12,1165.62 1278.05,1165.8 1278.99,1165.8 1279,1165.5 	"/>
   </g>
-  <g class="country" id="ME">
+  <g class="country" id="MEX">
   	<polygon class="st1" points="1981.01,935.57 1980.41,935.14 1979.56,934.8 1977.68,933.65 1976.96,933.5 1976.31,933.37
   		1975.38,932.81 1974.9,932.72 1974.37,932.32 1973.22,930.99 1972.24,930.26 1971.57,929.89 1971.38,929.53 1971.34,929.16
   		1971.37,929.04 1971.11,929.02 1970.68,929.1 1970.4,929.2 1969.97,929.05 1969.51,928.95 1969.31,929.11 1969.23,929.41
@@ -4950,7 +4903,7 @@ function mapSvg() {
   		1976.08,939.6 1976.37,939.81 1976.97,939.7 1977.64,939.5 1978.54,939.06 1978.69,939.08 1978.74,938.99 1978.9,938.23
   		1978.7,937.68 1978.4,937.21 1978.61,936.93 1979.25,936.93 1979.77,936.98 1979.96,936.53 1981.05,936.24 1981.08,935.98 	"/>
   </g>
-  <g class="country" id="MD">
+  <g class="country" id="MDA">
   	<polygon class="st1" points="2061.74,897.79 2061.83,896.88 2061.89,895.84 2061.69,895.22 2061.35,894.73 2060.02,894.15
   		2058.99,893.56 2058.77,893.29 2058.74,892.95 2058.7,892.41 2058.29,891.94 2058.26,891.55 2058.52,890.94 2058.58,890.29
   		2058.49,890.03 2058.25,889.82 2057.79,889.8 2057.18,889.42 2056.76,888.92 2055.64,888.18 2055.3,888.06 2055.09,887.7
@@ -4971,10 +4924,10 @@ function mapSvg() {
   		2057.26,898.87 2057.6,898.67 2057.82,898.69 2058.09,898.89 2058.63,899.18 2059.13,899.27 2059.55,899.08 2059.91,898.75
   		2060.29,898.86 2061.01,899.78 2061.35,899.68 2063.01,899.49 2063.28,899.24 2063.48,899.02 	"/>
   </g>
-  <g class="country" id="MC">
+  <g class="country" id="MCO">
   	<polygon class="st1" points="1872.34,926.7 1872.15,926.6 1871.99,926.66 1871.86,926.79 1871.84,927.01 1872.35,926.81 	"/>
   </g>
-  <g class="country" id="MA">
+  <g class="country" id="MAR">
   	<polygon class="st1" points="1799.91,1037.58 1800.73,1036.93 1800.34,1036.15 1799.69,1035.62 1798.78,1035 1798.31,1034.74
   		1797.49,1033.98 1796.98,1033.11 1796.64,1031.27 1796.01,1030.24 1795.56,1028.97 1795.96,1026.64 1795.36,1025.23
   		1795.26,1024.62 1795.26,1023.9 1795.44,1022.65 1795.32,1020.9 1794.61,1019.09 1794.95,1018.47 1795.1,1018.15 1795.05,1017.87
@@ -5026,7 +4979,7 @@ function mapSvg() {
   		1788.45,1040.13 1789.08,1040.09 1790.91,1040.17 1792.24,1040.22 1794.4,1040.32 1795.93,1040.37 1797.26,1040.41
   		1798.96,1040.47 1799.38,1040.3 1799.38,1039.76 1799.07,1038.77 1799.25,1038.15 	"/>
   </g>
-  <g class="country" id="LY">
+  <g class="country" id="LBY">
   	<polygon class="st1" points="2021.23,1043.97 2020.47,1042.38 2019.85,1041.73 2019.24,1041.44 2017.6,1041.15 2015.88,1041.33
   		2012.93,1041.21 2012.17,1040.95 2010.99,1040.11 2010.14,1039.82 2005.83,1039.3 2004.31,1038.21 2004.35,1037.59
   		2004.51,1037.12 2004.18,1035.53 2002.72,1034.89 2001.35,1034.39 1999.4,1033.89 1997.86,1033.09 1996.57,1032.73
@@ -5063,7 +5016,7 @@ function mapSvg() {
   		2019.67,1051.24 2019.23,1050 2019.08,1048.72 2019.02,1047.47 2019.67,1046.61 2020.45,1045.81 2020.75,1045.31 2021.21,1044.76
   		2021.53,1044.5 	"/>
   </g>
-  <g class="country" id="LV">
+  <g class="country" id="LVA">
   	<polygon class="st1" points="2047.15,788.32 2046.96,787.47 2046.46,785.99 2046.4,785.57 2045.59,784.93 2045.46,784.38
   		2045.04,783.68 2044.62,783.23 2044.53,782.24 2044.26,781.89 2043.9,781.72 2042.63,782.01 2042.49,781.98 2043.1,780.39
   		2043.15,779.46 2043.53,778.49 2043.97,778.11 2044.1,777.78 2044.17,777.13 2044.09,776.58 2043.82,776.3 2042.77,775.68
@@ -5083,7 +5036,7 @@ function mapSvg() {
   		2039.71,794.4 2040.71,794.38 2040.98,794.41 2041.97,794.46 2042.07,794.34 2042.52,793.12 2042.96,792.77 2044.66,791.17
   		2045.8,790.49 2046.52,790.34 2046.78,790.38 2046.99,789.81 2047.23,788.98 	"/>
   </g>
-  <g class="country" id="LU">
+  <g class="country" id="LUX">
   	<polygon class="st1" points="1864.34,862.74 1863.95,862.66 1862.97,862.31 1862.39,861.93 1861.96,861.46 1861.4,860.81
   		1861.16,860.15 1861.15,859.49 1861.22,859.2 1861.16,859.17 1860.99,858.83 1860.7,858.83 1860.04,858.69 1859.11,859.62
   		1858.7,860.39 1858.45,860.95 1858.08,861.41 1858.01,861.89 1858.05,862.1 1857.93,862.36 1857.92,862.63 1858.45,863.17
@@ -5091,7 +5044,7 @@ function mapSvg() {
   		1859.64,866.25 1859.89,866.5 1860.33,866.6 1860.86,866.5 1861.25,866.17 1861.76,866.02 1862.28,866.07 1862.57,866.25
   		1863.14,866.52 1863.17,865.86 1863.42,864.92 1863.66,864.42 1863.98,864.01 1864.32,863.73 1864.39,863.22 	"/>
   </g>
-  <g class="country" id="LT">
+  <g class="country" id="LTU">
   	<path class="st0" d="M1987.31,797.01l-0.25,1.25l-0.37,0.88l-0.96,1.36l0.49,0.09l0.62-0.84l0.61-1.62l0.1-0.95l-0.01-0.57
   		L1987.31,797.01z M2035.09,800.42l-0.66-0.15l-1.57-0.14l-0.32-0.29l0.1-0.35l0.42-0.9l0.4-1.16l0.2-0.9l0.02-0.53l-0.43-0.06
   		l-1.19-0.37l-1.01-0.55l-0.6-0.73l-1.04-1l-0.69-0.51l-1.08-0.64l-1.8-1.31l-0.65-0.3l-3.19-0.57l-1.15-0.26l-1.06-1.49l-0.34-0.87
@@ -5107,7 +5060,7 @@ function mapSvg() {
   		l0.49-1.35l0.66-1.01l0.89-0.33l1.08-0.18l0.69-0.48l0.34-0.55l0.13-0.47l0.16-0.4l0.35-0.18l2.61,0.11l0.4-0.87l0.22-0.24
   		l0.5-0.26l0.35-0.31L2035.09,800.42z"/>
   </g>
-  <g class="country" id="LS">
+  <g class="country" id="LSO">
   	<polygon class="st1" points="2057.08,1570.36 2056.78,1569.86 2056.49,1569.19 2056.14,1569.08 2055.45,1568.7 2054.44,1567.95
   		2053.56,1567.29 2052.74,1566.33 2052.41,1566.17 2051.61,1565.52 2051.27,1565.15 2051.03,1564.7 2050.8,1564.56 2050.44,1564.67
   		2049.51,1564.87 2047.49,1565.65 2046.24,1566.36 2045.19,1567.21 2044.1,1567.54 2043.3,1567.82 2042.67,1568.8 2042.08,1569.7
@@ -5120,7 +5073,7 @@ function mapSvg() {
   		2054.2,1577.22 2054.78,1576.78 2054.98,1575.69 2055.15,1574.78 2055.6,1574.32 2056.05,1574.02 2056.43,1573.55 2056.89,1572.41
   		2057.21,1571.29 2057.24,1570.83 	"/>
   </g>
-  <g class="country" id="LR">
+  <g class="country" id="LBR">
   	<polygon class="st1" points="1747.17,1271.32 1746.92,1269.72 1746.79,1269.62 1746.68,1269.69 1746.42,1269.71 1745.39,1269.16
   		1744.59,1269.07 1744.04,1268.6 1744,1268.06 1743.73,1267.75 1743.54,1267.13 1743.26,1266.42 1742.48,1265.99 1741.74,1265.88
   		1741.22,1265.97 1740.6,1265.95 1739.9,1265.71 1739.42,1265.44 1738.96,1264.92 1738.53,1264.5 1738.19,1264.56 1737.78,1264.46
@@ -5141,7 +5094,7 @@ function mapSvg() {
   		1745.82,1277.48 1745.95,1276.73 1745.95,1276.1 1746.45,1275.87 1746.58,1275.61 1746.66,1274.8 1747.12,1274.06 1747.13,1272.77
   		1747.27,1272.5 1747.38,1272.16 	"/>
   </g>
-  <g class="country" id="LK">
+  <g class="country" id="LKA">
   	<path class="st0" d="M2481.99,1242.92l0.7,0.44l-0.24-0.64l-0.12-0.13l-0.95-0.33l0.16,0.29L2481.99,1242.92z M2482.72,1237.92
   		l0.53-0.09l-0.49-0.41l-0.2-0.52l-0.14-0.03l-0.11,0.08l-0.11,0.17l0.1,0.24L2482.72,1237.92z M2499.29,1257.56l-0.35-1.18
   		l-0.3-0.31l-0.58-1.35l-0.37-0.5l-0.06-0.22l0.02-0.26l-0.11-0.34l-1.93-2.83l-0.12-0.24v-0.57l-0.42-1.82l-0.33-0.34l-0.5-0.1
@@ -5152,15 +5105,15 @@ function mapSvg() {
   		l0.74,2.06l0.51,1.85l0.74,1.77l1.45,1.2l1.92,0.51l1.92-0.25l2.08-0.92l2.82-0.97l0.62-0.31l2.17-1.55l0.63-0.73l0.46-0.86
   		l0.43-1.19l0.36-1.22l0.13-1L2499.29,1257.56z"/>
   </g>
-  <g class="country" id="LI">
+  <g class="country" id="LIE">
   	<polygon class="st1" points="1890.57,891.51 1890.32,891.23 1890.18,890.94 1890.15,890.66 1890.07,890.42 1890.02,890.21
   		1889.95,890.03 1889.58,891.08 1889.54,891.88 1889.61,892.25 1889.73,892.25 1890.39,892.3 1890.52,892.11 1890.65,891.77 	"/>
   </g>
-  <g class="country" id="LC">
+  <g class="country" id="LCA">
   	<polygon class="st1" points="1296.7,1199.95 1296.4,1200.12 1295.96,1200.65 1295.39,1201.47 1295.31,1201.89 1295.42,1202.6
   		1296.34,1203.15 1296.81,1202.26 1296.88,1200.65 	"/>
   </g>
-  <g class="country" id="LB">
+  <g class="country" id="LBN">
   	<polygon class="st1" points="2117.16,1018.48 2116.75,1018.16 2116.08,1017.88 2115.69,1017.84 2115.66,1017.71 2116.18,1017.2
   		2116.56,1016.76 2116.14,1016.34 2115.41,1016.14 2115.13,1016.58 2114.18,1016.62 2112.71,1016.61 2112.72,1017.39
   		2112.25,1017.9 2111.26,1018.43 2109.95,1020.22 2109.64,1022.26 2108.79,1023.7 2107.32,1027.24 2106.61,1028.28 2106.2,1029.53
@@ -5171,7 +5124,7 @@ function mapSvg() {
   		2115.97,1023.93 2115.29,1023.56 2115.25,1023.27 2115.42,1022.95 2115.9,1022.46 2116.47,1022.09 2116.76,1022.03
   		2117.42,1021.29 2117.84,1020.47 	"/>
   </g>
-  <g class="country" id="LA">
+  <g class="country" id="LAO">
   	<polygon class="st1" points="2716.14,1189.55 2715.66,1188.85 2714.78,1188.21 2713.76,1187.4 2713.26,1186.9 2712.87,1186.39
   		2712.5,1185.8 2712.3,1185.32 2712.5,1185.01 2713.94,1184.3 2714.21,1184.04 2714.36,1183.65 2714.25,1183.26 2713.86,1183.05
   		2713.4,1182.91 2712.74,1182.46 2711.49,1181.22 2710.92,1180.95 2710.32,1180.6 2710,1180.22 2709.65,1179.2 2709.5,1179.11
@@ -5226,7 +5179,7 @@ function mapSvg() {
   		2715.23,1193.76 2715.33,1193.3 2715.16,1192.92 2714.95,1192.37 2715.09,1192.02 2715.58,1191.71 2715.87,1191.19
   		2716.24,1190.57 2716.41,1190.02 	"/>
   </g>
-  <g class="country" id="KZ">
+  <g class="country" id="KAZ">
   	<path class="st0" d="M2253.42,909.62l0.09-0.51l-0.28-0.6l-0.43-0.1l-0.46,0.56l0.37,0.48l0.56,0.28L2253.42,909.62z
   		 M2231.15,914.44l0.05-0.63l0.6-0.5l-0.06-0.25l-0.43,0.16l-0.31,0.23l-0.24,1.12l0.84,1.1l0.45,0.04l0.3-0.29l-0.73-0.28
   		L2231.15,914.44z M2310.04,909.81l-0.14-0.82l0.03-0.69l-0.12-0.34l-0.26,0.01l-0.16-0.2l-0.05-0.42l-0.2-0.29l-0.36-0.17
@@ -5340,13 +5293,13 @@ function mapSvg() {
   		l0.68-0.25l1.91-0.17l1.76-0.33l0.9-0.34l0.93-0.21l0.56-0.25l0.96-1.15l0.46-0.67l0.34-1.77l-0.25-0.85l0.21-0.75l0.47-0.44
   		l0.65-0.44l0.44-0.08l0.93-0.13l1.53,0.04l0.78,0.22L2544.96,869.84z"/>
   </g>
-  <g class="country" id="KY">
+  <g class="country" id="KY" style="display: none;">
   	<path class="st0" d="M1137.87,1151.08l-0.16,0l-0.15,0.07l-0.18,0.12l-0.69,0.36l0.3,0.05l0.39-0.13l0.68-0.34v-0.05
   		L1137.87,1151.08z M1125.08,1154.59l-0.1,0.18l-0.34,0.1l-0.27-0.17l-0.18-0.31l-0.24,0.09l0.12,0.84l0.85,0.06l0.22-0.05
   		l0.44-0.23l0.99-0.01l-0.2-0.36L1125.08,1154.59z M1135.77,1151.5l-0.43,0.07l-0.14,0.03l-0.15,0.09l-0.13,0.12l-0.08,0.12
   		l0.27,0.02l0.62-0.36l0.27,0.04l0.08-0.05l0.03-0.02l-0.14-0.08L1135.77,1151.5z"/>
   </g>
-  <g class="country" id="KW">
+  <g class="country" id="KWT">
   	<path class="st0" d="M2217.26,1072.28l-0.15-0.55l-0.27-0.65l-0.73-1.26l-0.58-0.71l-0.7-2.11l-0.12-0.59l-0.29-0.73l-0.45-0.28
   		l-0.53,0.17l-0.76,0.01l-1.03-0.25l0.02-0.22l0.78-0.64l1.28-1.18l0.66,0.18l0.35,0.17l0.45,0.06l-0.06-0.42l-0.49-0.89l-0.6-1.1
   		l-0.27-1.01l0.04-0.34l-1.89-0.86l-0.68-0.17l-0.24-0.02l-1.09,0.01l-1.55,0.15l-0.91,0.35l-0.63,0.37l-0.29,0.36l-0.1,0.2
@@ -5355,7 +5308,7 @@ function mapSvg() {
   		l0.55-0.65l0.06-0.23l0.01-0.57l-1.02-1.41l-0.36-0.39l-0.22,0.18l-0.17,0.58l-0.16,0.09l-0.06,0.15l0.01,0.2l-0.28,0.46
   		L2215.18,1062.84z"/>
   </g>
-  <g class="country" id="KR">
+  <g class="country" id="KOR">
   	<path class="st0" d="M2877.33,1026.77l-0.54,0.04l-3.01,0.84l-1.17,0.87l-0.28,0.53l0.11,0.28l0.42,0.54l0.09,0.1l0.35,0.12
   		l0.38-0.21l2.15-0.14l1.07-0.31l1.38-0.65l0.27-0.39l0.22-0.58l-0.25-0.67L2877.33,1026.77z M2877.28,1019.31l-0.45-0.49
   		l-0.41,0.05l-0.05,0.37l0.36,0.43l0.68,0.09L2877.28,1019.31z M2874.5,987.9l0.32,0.13l0.46,0.06l0.04-1.28l-0.23-0.44l-0.69-0.39
@@ -5381,7 +5334,7 @@ function mapSvg() {
   		l0.33-0.51l0.45-0.3l1.11-0.18l1.29,0.24l1.55-0.07l0.81-0.2l1.16-0.56l0.97-1.44l0.76-1.57l0.56-1.81l0.64-2.49l0.09-0.99
   		l-0.53,0.12L2900.06,1003.49z"/>
   </g>
-  <g class="country" id="KP">
+  <g class="country" id="PRK">
   	<path class="st0" d="M2910.17,941.31l-0.05-0.45l-0.28-0.44l-0.54-0.6l-0.23-0.62l-0.24-0.36l-0.4-0.11l-0.75-0.5l-0.55-0.55
   		l-0.41-0.61l0.02-1.3l-0.07-0.2l-0.75-0.27l-0.22-0.39l-0.36-0.18l-0.51,0.12l-0.38-0.12l-0.3-0.21l-0.36-0.03l-0.31,0.34
   		l-0.16,0.72l-0.52,1.2l-0.05,0.72l-0.23,1.03l-0.22,1.31l-0.18,0.27l-0.59,0.04l-0.2,0.09l-0.31,0.44l-0.37,0.08l-0.33-0.26
@@ -5405,18 +5358,18 @@ function mapSvg() {
   		l-0.06-0.88l-0.65-1.03l0.03-1.01l0.59-1.18l1.01-0.94l0.44-0.92l0.67-0.95l0.51-0.55l0.94-0.52l0.47-0.87l0.67-0.31l1.2-0.89
   		l0.94,0.1l0.57,0.17l0.43-0.28L2910.17,941.31z M2861.96,968.48l-0.38,0.06l-0.37,0.43l0.02,0.51l0.47-0.28L2861.96,968.48z"/>
   </g>
-  <g class="country" id="KN">
+  <g class="country" id="KNA">
   	<path class="st0" d="M1281.82,1172.52l-0.32-0.54l-0.68-0.42l-0.27,0.14l-0.1,0.18l-0.01,0.16l0.01,0.07l0.53,0.31l0.62,0.14
   		l0.38,0.53l0.22-0.13l-0.08-0.19L1281.82,1172.52z M1283.01,1173.56l-0.34-0.27l-0.34,0.02l-0.08,0.6l0.36,0.25l0.42-0.18
   		L1283.01,1173.56z"/>
   </g>
-  <g class="country" id="KM">
+  <g class="country" id="TKM">
   	<path class="st0" d="M2175.06,1416.25l0.11-1.74l-0.43-0.34l-0.36,0.05l-0.15,0.14l-0.21,0.35l-0.25,2.71l0.65,0.78l0.44,0.11
   		l0.77,0.48l0.16-0.11l0.22-0.33l-0.37-0.93L2175.06,1416.25z M2177.8,1421.7l-0.61-0.08l0.01,0.34l0.26,0.47l1.65,0.22l-0.59-0.52
   		L2177.8,1421.7z M2184.3,1420.22l-0.21-0.09l-0.33,0.18l-0.05,0.23l-0.24,0.39l-0.38,0.06l-0.36-0.07l-0.61,0.06l1.33,0.69l0.7,0.7
   		l0.38,0.18l0.18-0.28l0-0.88L2184.3,1420.22z"/>
   </g>
-  <g class="country" id="KI">
+  <g class="country" id="KIR">
   	<path class="st0" d="M531.14,1414.37l-0.09-0.01l-0.05,0.15l0.03,0.19l0.08,0.17l0.13,0.05l0.07-0.13l-0.07-0.23L531.14,1414.37z
   		 M504.33,1352.45l-0.24,0.08l0,0.06l0.17,0.14l0.2,0.12l0.1,0.07l0.02-0.05l0.05-0.27l0.06-0.12l-0.07-0.09L504.33,1352.45z
   		 M3266.47,1292.34l0-0.05l-0.64,0.4l0.16,0.04l0.53-0.28L3266.47,1292.34z M3264.92,1293.26l-0.23,0.01l0.17,0.17l0.62-0.32
@@ -5438,7 +5391,7 @@ function mapSvg() {
   		l-0.15,0.17l0.23-0.03l0.2-0.04l0.38-0.09l0.48,0l0.07-0.05l0-0.1l-0.16-0.1L3268,1307.09z M3281.67,1328.58l-0.19-0.33l-0.23-0.11
   		l0.2,0.43l0.06,0.43l0.06,0.17l0.19,0.06l-0.05-0.43L3281.67,1328.58z"/>
   </g>
-  <g class="country" id="KH">
+  <g class="country" id="KHM">
   	<path class="st0" d="M2677.28,1223l-0.11,0.3l-0.01,0.49l0.14,0.12l0.14,0l0.15-0.08l-0.07-0.89L2677.28,1223z M2679.1,1228.28
   		l0.49,0.68l0.31-0.33l-0.79-0.54L2679.1,1228.28z M2715.22,1210.66l-0.25-0.83l-0.05-0.83l0.59-1.66l0.51-1.81l-0.1-0.71
   		l-0.55-1.13l-0.56-1.38l-0.61-1.51l-0.23-0.23l-0.16-0.42l-0.09-0.49l0.24-1.55l0.03-0.52l0.71-0.71l0.38-0.81l0.35-0.89
@@ -5460,7 +5413,7 @@ function mapSvg() {
   		l0.54-0.62l1.4-0.21l1.01-0.84l0.91-0.86l0.45-0.23l0.57-0.15l0.42,0.02l0.53,0.5l0.44-0.3l0.51-0.59l0.27-0.57l0.15-0.92
   		l-0.1-1.41L2715.22,1210.66z"/>
   </g>
-  <g class="country" id="KG">
+  <g class="country" id="KGZ">
   	<path class="st1" d="M2485.43,943.31l-0.17-0.61l-1.16-1.14l-1.26-1.11l-0.99-0.26l-1.73-0.18l-0.91-0.01l-0.52-0.26l-0.51-0.65
   		l-0.61-0.58l-0.78-0.62l-0.32-0.94l-0.32-0.17l-0.56,0.12l-0.94-0.03l-0.53-0.08l-0.79-0.16l-1.26-0.39l-0.99-0.37l-1.25-0.07
   		l-0.72,0.07l-2.25,0.07l-1.87-0.38l-1.51-0.07l-0.93,0.02l-0.45-0.05l-0.76,0l-1.12-0.08l-1.5-0.59l-0.58-0.03l-0.37,0.02
@@ -5496,7 +5449,7 @@ function mapSvg() {
   		l0.13-0.45l0.25-0.19l0.16,0.03l0.47,0.69l0.42,0.2l0.83,0.11l-0.42,0.68L2409.51,965.53z M2414.26,965.1l-0.23,0.43l-0.4-0.1
   		l-0.31-0.28l0.1-0.22l0.47-0.12l0.24-0.12l0.21-0.02L2414.26,965.1z"/>
   </g>
-  <g class="country" id="KE">
+  <g class="country" id="KEN">
   	<path class="st0" d="M2155.75,1335.69l-0.92,0.61l-0.16,0.48l0.31-0.07l1.04-0.49l0.16-0.13l0.02-0.13l-0.07-0.14L2155.75,1335.69z
   		 M2161.24,1285.34l-2.15,0.13l-0.92,0.14l-0.45,0.03l-0.83,0l-0.68-0.16l-0.45-0.24l-0.56-0.55l-1.25-1.11l-0.9-0.69l-1.99,0.8
   		l-1.79,0.8l-2.54,1.13l-1.45,0.81l-0.44,0.81l-1.12,1.48l-1,0.91l-0.37,0.11l-2.27-0.19l-0.82-0.19l-1.35-0.17l-1.81-0.32
@@ -5521,7 +5474,7 @@ function mapSvg() {
   		l-0.03-7.05l-0.03-7.05l-0.03-7.05l-0.01-3.53l-0.01-1.44l0.12-0.23l1.32-1.29l1.74-1.71l2.29-3.26l1.24-1.77l1.04-1.48
   		L2161.24,1285.34z"/>
   </g>
-  <g class="country" id="JP">
+  <g class="country" id="JPN">
   	<path class="st0" d="M2898.56,1021.4l0.47-1.01l0.02-0.51l-1.03-0.34l-0.24,1.66l0.24,0.59L2898.56,1021.4z M2865.33,1106.73
   		l-0.17-0.43l-0.26-0.17l-0.12,1.24l0.76,0.14l0.71-0.23l-0.36-0.3L2865.33,1106.73z M2897.49,1031.93l-0.25-0.6l-0.12-0.61
   		l-0.63,1.53l-0.32,0.16l0.19,0.3l0.27,0.84l0.21-0.1l0.29-0.83l0.35-0.16l0.24-0.44L2897.49,1031.93z M2852.02,1110.41l-0.01,0.38
@@ -5621,7 +5574,7 @@ function mapSvg() {
   		l0.58-0.05l0.93,0.3l0.74,0.05l1.03-2.47l0.13-1l-0.13-0.98l0.38-1.1l0.21-1.07l0.28-0.99l0.38-0.95l0.42-1.31l0.6-1.19l2.06-2.35
   		l0.22-0.36l0.05-0.34l-0.83-0.51L2920.94,1031.87z"/>
   </g>
-  <g class="country" id="JO">
+  <g class="country" id="JOR">
   	<polygon class="st1" points="2140.26,1038.03 2139.36,1038.21 2138.53,1038.45 2138.02,1036.89 2138.67,1036.7 2138.07,1034.67
   		2137.46,1032.57 2136.87,1030.55 2136.27,1028.47 2134.1,1029.74 2131.9,1031.03 2130.23,1032.01 2127.68,1033.55 2126.2,1034.46
   		2124.01,1035.79 2122.08,1036.96 2119.8,1038.34 2116.95,1037.93 2116.04,1037.69 2115.3,1037.03 2114.76,1036.68 2113.41,1036.32
@@ -5636,7 +5589,7 @@ function mapSvg() {
   		2120.98,1046.02 2123.15,1045.42 2125.49,1044.77 2127.85,1044.12 2130.69,1043.33 2132.92,1042.71 2136.24,1041.79
   		2137.86,1041.34 2138.15,1041.23 2139.4,1040.14 2140.64,1039.02 	"/>
   </g>
-  <g class="country" id="JM">
+  <g class="country" id="JAM">
   	<polygon class="st1" points="1167.63,1166.66 1166.65,1165.09 1163.69,1164.18 1162.91,1163.77 1161.94,1163.02 1161.51,1162.92
   		1161.05,1162.91 1159.99,1162.75 1158.97,1162.44 1158.19,1162.36 1157.37,1162.36 1153.81,1161.88 1153.36,1162.07
   		1152.93,1162.35 1151.95,1162.55 1150.92,1162.52 1150.62,1162.71 1150,1163.37 1149.89,1163.92 1150.27,1164.51 1152.13,1164.75
@@ -5645,7 +5598,7 @@ function mapSvg() {
   		1162.04,1167.23 1162.41,1166.63 1162.9,1166.6 1163.29,1166.7 1163.07,1166.91 1163.95,1167.03 1164.32,1167.26 1165.17,1167.56
   		1166.09,1167.54 1167.05,1167.44 1167.82,1167.15 	"/>
   </g>
-  <g class="country" id="IT">
+  <g class="country" id="ITA">
   	<path class="st0" d="M1879.49,954.26l0.28-0.23l0.21-0.39l-0.2-0.2l-0.44,0.23l-0.37,0.68l-0.15,0.34l0.4,0.03L1879.49,954.26z
   		 M1891.25,956.48l-0.42-0.64l-0.49-0.33l-0.17-0.17l0.3-0.6l0.27-0.12l-0.05-0.12l-0.33-0.13l-0.31-0.23l-0.32-0.53l-0.38-0.44
   		l-0.88-0.46l-0.57-0.06l-0.46-0.56l-0.39,0.15l-0.16,0.57l-0.47,0.42l-0.92,0.33l-1.49,1.6l-1.03,0.55l-1.07,0.45l-0.87,0.16
@@ -5700,7 +5653,7 @@ function mapSvg() {
   		l-0.44-0.4l-0.52-0.68l0.47-0.34l-0.31-0.37l-0.4-0.24l-0.24-0.26l-0.1-0.39l-0.05-0.8l0.27-0.71l0.28-0.56l0.21-0.59l0.14-0.68
   		l0.23-0.62l2.03-2.71l0.28-0.43l0.57-1.11l0.49-0.46l-0.56-0.28L1940.24,981.41z"/>
   </g>
-  <g class="country" id="IS">
+  <g class="country" id="ISL">
   	<polygon class="st1" points="1695.5,675.83 1695.32,675.58 1693.85,674.89 1694.25,674.58 1694.55,674.48 1694.74,674.28
   		1694.82,674 1694.81,673.76 1694.71,673.56 1694.12,673.54 1693.71,673.11 1693.43,672.66 1693.61,672.46 1694.25,672.29
   		1694.58,672.05 1694.7,671.47 1695.02,670.83 1695.01,670.39 1694.56,669.97 1694.27,669.96 1693.59,670.2 1693.13,669.47
@@ -5759,7 +5712,7 @@ function mapSvg() {
   		1688.54,681.02 1689.29,681.31 1690.65,681.44 1691.41,681.07 1692.19,680.5 1693.03,679.42 1693.22,678.71 1693.24,678.11
   		1693.02,677.64 1693.66,677.35 1694.72,677.31 1695.16,677.04 1695.41,676.6 1695.53,676.2 	"/>
   </g>
-  <g class="country" id="IR">
+  <g class="country" id="IRN">
   	<path class="st0" d="M2281.99,1087.21l-1.41,0.66l-1.26-0.34l-0.09,0.15l0.31,0.66l-0.19,0.41l-1.94,0.92l-1.56,0.56l-0.43-0.09
   		l-0.01,0.17l0.14,0.42l0.24,0.06l0.7,0.02l1.01-0.31l1.11-0.61l0.61-0.06l0.85-0.35l0.39-0.01l0.51,0.28l1.18-0.9l0.78-1.08
   		l0.77-0.28l-0.55-0.46L2281.99,1087.21z M2342.36,1086.36l0.53-0.42l-0.03-0.24l-0.38-0.51l-0.51-0.33l-0.25-0.08l-2.12,0.31
@@ -5813,7 +5766,7 @@ function mapSvg() {
   		l0.96,0.11l0.09-0.11l0.08-0.52l0.44-0.57l0.61-0.47l0.46-0.17l1.66-0.29l0.97-0.41l0.3-0.04l2.58,0.1l0.55-0.16l0.09-0.14
   		l0.15-1.55l0.47-0.24l0.07-0.13l-0.16-1.07L2342.36,1086.36z"/>
   </g>
-  <g class="country" id="IQ">
+  <g class="country" id="IRQ">
   	<polygon class="st1" points="2218.01,1059.74 2217.64,1059.43 2217.34,1058.77 2217.25,1058.31 2217.36,1058.04 2217.2,1057.66
   		2216.77,1057.15 2216.33,1056.87 2215.89,1056.82 2215.52,1056.51 2215.22,1055.94 2214.54,1055.57 2214.11,1055.49
   		2214.09,1053.73 2214.08,1052.19 2214.07,1050.66 2212.6,1050.6 2211.28,1050.54 2211.28,1049.26 2211.28,1046.86 2211.91,1045
@@ -5846,153 +5799,12 @@ function mapSvg() {
   		2207.44,1059.39 2208.35,1059.04 2209.89,1058.89 2210.98,1058.88 2211.22,1058.9 2211.91,1059.07 2213.8,1059.93 2213.83,1059.67
   		2214.59,1059.38 2215.17,1059.4 2216.97,1060.17 2217.81,1060.34 2218.58,1060.12 	"/>
   </g>
-  <g class="country" id="IO">
+  <g class="country" id="IOT">
   	<polygon class="st1" points="2420.28,1379.51 2419.87,1379.16 2419.79,1379.24 2420.04,1379.64 2420.11,1379.91 2420.01,1380.15
   		2420.06,1380.4 2419.89,1380.63 2419.72,1379.83 2419.26,1379.52 2419.07,1379.52 2419.55,1380.12 2419.73,1380.97
   		2420.07,1380.81 2420.26,1380.48 2420.32,1379.78 	"/>
   </g>
-  <g class="country" id="IN_-_Disputed" class="st2">
-  	<path class="st3" d="M2054.45,1067.22l-0.04,0.02l-0.05,0.05l0.01,0.07l0.05,0.06l0.08-0.01l0.04-0.07l-0.04-0.12L2054.45,1067.22z
-  		 M2054.32,1063.2l-0.09-0.08l-0.01,0.15l-0.07,0.07l0.09,0.05l0.09-0.04l-0.01-0.05L2054.32,1063.2z M2054.86,1061.24l-0.05-0.57
-  		l-0.14-0.17l0.04-0.06l0.07-0.16l0.1-0.05l0.07-0.12l0.04-0.12l0.01-0.06l-0.1-0.15l0.11-0.12l-0.02-0.07l-0.01-0.2l-0.06,0
-  		l-0.19,0.11l-0.12,0.23l0.01,0.23l-0.09,0.35l0.04,0.07l-0.04,0.23l-0.1,0.11l-0.02,0.08l0.03,0.2l-0.05,0.1l-0.02,0.14l0,0.34
-  		l0.03,0.04l0.08,0.06l0.02,0.14l-0.03,0.02l-0.13,0l-0.03,0.04l-0.06,0.15l-0.02,0.18l-0.04,0.12l-0.07,0.03l-0.06,0.1l0.05,0.07
-  		l0.03,0.21l0.17,0.33l0.06,0.05l0.04-0.04l0.08-0.19l0-0.23l0.06-0.2l0-0.08l-0.06-0.04l-0.03-0.1l0.07-0.08l0.02-0.08l0.12-0.19
-  		l0.02-0.08l-0.03-0.38l0.12-0.03L2054.86,1061.24z M2018.37,1063.6l-0.02,0.05l0,0.03l0.01-0.01l0.01-0.02l0.01-0.05l0.01-0.03
-  		l-0.01,0L2018.37,1063.6z M2054.39,1060.5l-0.04-0.02l-0.03,0.01l-0.03,0.03l0.01,0.25l0.06-0.12L2054.39,1060.5z M2018.9,1068.92
-  		l-0.03,0.06l-0.03,0.02l-0.02-0.02l0,0.02l0.01,0.02l0.02,0l0.03-0.01l0.03-0.02l0.02-0.04l0.01-0.03l-0.01-0.01L2018.9,1068.92z
-  		 M2054,1064.23l-0.11,0.06l-0.14,0.13l-0.03,0.08l0.04,0.18l-0.01,0.19l0.19,0.05l0.05-0.06l0.13-0.27l-0.04-0.17L2054,1064.23z
-  		 M2054.87,1062.17l-0.07,0.05l0.05,0.08l0.15,0.11l-0.08-0.25L2054.87,1062.17z M2055.84,1069.09l-0.07-0.02l-0.07,0.1l0.01,0.11
-  		l0.02,0.06l0,0.04l0.01,0.05l0.02,0.01l0.08-0.07l-0.05-0.19L2055.84,1069.09z M2056.13,1070.54l-0.07,0.06l-0.07,0.04l-0.03,0.07
-  		l0.07,0.1l0.17-0.17L2056.13,1070.54z M2062.72,1032.2l-0.07-0.11l0.01-0.13l0.02-0.12l-0.06-0.04l-0.26-0.2l-0.13-0.06l-0.17,0.06
-  		l-0.27-0.05l-0.1-0.01l-0.22-0.16l-0.09-0.02l-0.32,0.11l-0.07,0.07l-0.04,0l-0.08-0.04l-0.07-0.05l0-0.03l0.09-0.08l0.01-0.06
-  		l0-0.06l0.12-0.16l0.33-0.31l-0.06-0.13l-0.13-0.25l-0.02-0.12l-0.06-0.06l-0.16,0.05l-0.33,0.23l-0.05-0.03l0.01-0.08l-0.03-0.23
-  		l0.11-0.07l0.16-0.09l0.12-0.1l0.03-0.08l-0.03-0.02l-0.18,0.03l-0.07-0.05l-0.12-0.21l-0.09-0.08l-0.08-0.05l-0.27,0.11
-  		l-0.32,0.15l-0.35,0.21l0,0.11l-0.04,0.03l-0.07,0.07l-0.07,0.09l-0.06,0.03l-0.07,0l-0.13-0.03l-0.24-0.11l-0.26-0.09l-0.06,0.01
-  		l-0.36-0.06l-0.01-0.05l-0.05-0.1l-0.1-0.09l-0.1-0.03l-0.28,0.19l-0.32,0.14l-0.18,0.17l-0.15,0.16l-0.17,0.03l-0.01,0.1
-  		l-0.07,0.09l-0.13,0.11l-0.26,0.14l-0.17,0.08l-0.55,0.07l-0.2,0.05l-0.08,0.08l-0.09,0.19l-0.07,0.18l-0.15,0.15l-0.28,0.19
-  		l-0.33,0.16l-0.09,0.1l-0.02,0.06l0.04,0.02l0.04,0.05l0,0.07l-0.04,0.08l-0.21,0.14l-0.12,0.06l-0.12,0.04l-0.13,0.01l-0.13-0.02
-  		l-0.04-0.02l-0.05,0.03l-0.12,0.03l-0.1,0.01l-0.22,0.15l-0.12,0l-0.15-0.03l-0.2-0.03l-0.15,0l-0.01,0.04l-0.05,0.12l-0.03,0.13
-  		l0.03,0.1l0.11,0.12l0.15,0.1l0.2,0.01l0.18-0.04l0.07,0.02l0.1,0.17l0.07,0.14l-0.09,0.15l-0.05,0.13l-0.02,0.09l0.01,0.04
-  		l0.06,0.07l0.07,0.13l0.01,0.12l-0.04,0.08l-0.09,0.04l-0.1-0.01l-0.08,0l-0.1,0.01l-0.16,0.04l-0.15,0.06l-0.28-0.01l-0.11-0.11
-  		l-0.05,0l-0.25,0.15l-0.28-0.03l-0.5,0.05l-0.21,0.01l-0.22-0.02l-0.11-0.03l-0.2-0.1l-0.18-0.08l-0.19,0.07l-0.07,0.01l-0.15,0.18
-  		l-0.32,0.06l-0.32,0.04l-0.1-0.02l-0.18-0.01l-0.01-0.04l0.01-0.04l-0.04-0.03l-0.07-0.03l-0.13-0.01l-0.16-0.04l-0.09-0.04
-  		l-0.33,0.06l-0.19-0.09l-0.22-0.13l-0.11-0.06l-0.04-0.2l-0.04-0.06l-0.09-0.07l-0.05-0.08l0.04-0.08l0.22-0.15l0.02-0.04
-  		l-0.11-0.09l-0.12-0.13l-0.03-0.18l0.15-0.48l0.03-0.2l-0.04-0.08l-0.04-0.19l-0.09-0.06l-0.24-0.1l-0.08,0l-0.08,0.07l-0.08,0.04
-  		l-0.11,0.04l-0.27,0.08l-0.24,0.04l-0.06,0.03l-0.02,0.06l0.02,0.07l0.07,0.05l0.01,0.09l-0.01,0.1l-0.07,0.21l-0.07,0.15
-  		l-0.08,0.31l-0.07,0.53l0.02,0.09l0.21,0.3l0.08,0.23l0.01,0.16l-0.09,0.27l-0.1,0.3l-0.05,0.07l-0.06,0.02l-0.26-0.1l-0.18,0.01
-  		l-0.21,0.06l-0.22-0.01l-0.18-0.03l-0.23,0.12l-0.22-0.07l-0.14-0.08l-0.09-0.21l-0.04-0.03l-0.46,0.22l-0.11,0.01l-0.28-0.12
-  		l-0.23-0.12l-0.09-0.03l-0.22-0.05l-0.2-0.03l-0.22-0.07l-0.27,0.09l-0.11-0.01l-0.1-0.07l-0.05-0.14l-0.01-0.13l-0.09-0.09
-  		l-0.14-0.02l-0.2,0.08l-0.3,0.11l-0.1-0.02l-0.09-0.03l-0.03-0.03l-0.04-0.13l-0.05-0.03l-0.07,0l-0.12-0.03l-0.15-0.09l-0.45-0.22
-  		l-0.06-0.1l0-0.22l-0.03-0.09l-0.06-0.09l-0.23-0.1l-0.45-0.15l-0.25-0.12l-0.12,0.06l-0.23,0.05l-0.12,0.11l-0.15-0.04l-0.35-0.12
-  		l-0.19-0.02l-0.11,0.04l-0.03,0.07l-0.14,0.08l-0.14-0.06l-0.27-0.08l-0.24-0.04l-0.36-0.1l-0.04-0.15l-0.06-0.15l-0.09-0.03
-  		l-0.32,0.03l-0.3-0.16l-0.32-0.21l-0.14-0.07l-0.09-0.03l-0.08,0.03l-0.09,0.05l-0.08,0.01l-0.17-0.09l-0.22-0.13l-0.27-0.16
-  		l-0.32-0.22l-0.13-0.13l-0.06-0.09l-0.07-0.09l-0.28-0.15l-0.22-0.11l-0.26-0.14l-0.04-0.03l-0.1-0.08l-0.15-0.1l-0.12-0.03
-  		l-0.04,0.06l-0.03,0.06l-0.11-0.01l-0.17-0.11l-0.18-0.11l-0.14-0.1l-0.14-0.11l-0.03-0.08l0.06-0.24l0.08-0.21l0.07-0.05
-  		l0.11-0.14l0.04-0.24l0-0.21l0.11-0.29l0.15-0.31l0.27-0.33l0.12-0.11l0.13-0.08l0.25-0.25l0.05-0.04l0.11-0.06l0.11-0.02
-  		l0.08,0.03l-0.04-0.14l-0.2-0.11l-0.23-0.14l-0.12-0.11l-0.13-0.07l-0.12-0.03l-0.24-0.09l-0.27-0.1l-0.13-0.01l-0.01-0.07
-  		l0.04-0.16l-0.02-0.15l-0.08-0.06h0l-0.12,0.02l-0.08-0.06l-0.15-0.11l-0.06-0.04l-0.01,0l0,0l0-0.01l-0.08-0.06l-0.14-0.09
-  		l-0.24,0.01l-0.18,0.03l-0.13-0.09l-0.19-0.14l-0.03-0.03l-0.02-0.01l-0.04-0.04l-0.1-0.13l-0.1-0.14l-0.23-0.32l-0.11-0.05h0
-  		l-0.03,0.01l-0.03,0.01l-0.07,0.17l-0.05-0.02h0l-0.01,0l-0.07,0.01l-0.05,0.03l-0.05,0.03l-0.1,0.02l-0.06-0.02l-0.03-0.04
-  		l0.03-0.22l-0.06-0.07l0.05-0.16l0.09-0.13l-0.09-0.1l-0.11-0.14l-0.01-0.13l0.06-0.16l0.02-0.08l0.01-0.06l-0.02-0.05l-0.09-0.08
-  		l-0.33-0.38l-0.02-0.04l-0.06-0.13l-0.03-0.19l-0.04-0.14l-0.05-0.11l0,0l0-0.05l0.04-0.03l0.21-0.03l0.19-0.02l0.13-0.04
-  		l0.06,0.08l0.03,0.12l0.03,0.06l0.12,0.11l0.15,0.11l0.08-0.01l0.06-0.01l0.03-0.01l0.09-0.03l0.11-0.18l0.06-0.03l0.02-0.01
-  		l0.01,0l0.08-0.01l0.13-0.01l0.17-0.13l0.15-0.15l0.04-0.09l0.01-0.08l-0.11-0.21l-0.18-0.28l0.01-0.12l0.06-0.23l-0.04-0.05
-  		l-0.44-0.11l-0.08-0.05l-0.1-0.08l-0.12-0.11l-0.06-0.08l-0.02-0.01l-0.08-0.07l0.09,0.09l-0.01-0.13l-0.02-0.22l0.08-0.1
-  		l0.09-0.09l0.02-0.04l-0.02-0.1l-0.13-0.28l-0.04-0.13l0.01-0.07l0.03-0.05l0.04-0.02l0.31-0.03l0.31-0.01l0.29-0.07l0.09-0.11
-  		l0.02-0.08l0.09-0.18l-0.05-0.34l0.04-0.03l0.25,0.01l0.07-0.02l0.02-0.03l0.01-0.15l0.02-0.05l0.07-0.05l0.1-0.11l0.06-0.08
-  		l0.27-0.01l0.16-0.3l0.08-0.11l0.03-0.25l0.08-0.32l0.08-0.14l0-0.12l0.01-0.12l0.16-0.2l0.01-0.08l-0.02-0.05l-0.16-0.07
-  		l-0.16-0.03l-0.11,0.2l-0.05,0.05l-0.03,0.01l-0.05-0.01l-0.05-0.04l-0.1-0.18l-0.15-0.14l-0.14-0.03l-0.14-0.05l-0.13-0.11
-  		l-0.1-0.23l-0.08-0.07l-0.12-0.04l-0.08-0.01l-0.1-0.22l-0.07-0.02l-0.34,0.07l-0.48,0.09l-0.12-0.02l-0.14-0.02l-0.09,0.03
-  		l-0.06,0.07l-0.12,0.11l-0.09,0.06l-0.38,0.14l-0.27,0.18l-0.11,0.11l-0.16,0.07l-0.19,0.02l-0.26,0.08l0,0l0,0l-0.14,0.03
-  		l-0.27,0.02l-0.09,0l-0.04-0.25l-0.03-0.06l-0.17-0.11l-0.08-0.07l-0.33-0.02l-0.16-0.09l-0.09-0.08l-0.35-0.14l-0.05-0.05
-  		l-0.03-0.06l-0.02-0.17l-0.04-0.2l-0.07-0.1l-0.2-0.07l-0.22-0.06l-0.12-0.1l-0.09-0.09l-0.2-0.04l-0.26-0.19l-0.29-0.07
-  		l-0.03-0.13l-0.09-0.16l-0.08-0.1l-0.12-0.09l-0.19-0.1l-0.17-0.04l-0.2,0.07l-0.07-0.03l-0.09-0.3l-0.05-0.06l-0.36-0.12
-  		l-0.16-0.03l-0.19,0.04l-0.11,0.03l-0.09-0.06l-0.14-0.07l-0.13-0.05l-0.17,0l-0.11,0.03l-0.2,0.08l-0.43,0.18l-0.28,0.15
-  		l-0.07,0.01l-0.17-0.06l-0.25-0.07l-0.07,0l0.02,0.07l0.1,0.08l0.08,0.1l-0.07,0.07l-0.27,0.02l-0.3-0.03l-0.22,0.01l-0.42,0.05
-  		l-0.07,0.05l-0.03,0.13l-0.05,0.15l-0.29,0.28l-0.2,0.17l-0.35,0.2l-0.05,0.16l0.01,0.39l0.02,0.14l0.14,0.07l0.17,0.04l0.15-0.02
-  		l0.11-0.03l0.16,0.01l0.19,0.03l0.08,0.05l0.02,0.08l0.01,0.09l0.05,0.09l0.18,0.14l0.15,0.1l0.05,0.03l0.13,0.04l0.05,0.05
-  		l0.31,0.01l0.17,0.03l0.05,0.04l0.02,0.06l-0.14,0.22l-0.01,0.08l0.04,0.07l0.09,0.08l0.24,0.1l0.26,0.11l0.1,0.08l-0.03,0.18
-  		l-0.11,0.24l-0.37,0.21l-0.23,0.18l-0.05,0.12l-0.05,0.1l-0.26,0.06l-0.05,0.06l-0.04,0.1l-0.02,0.12l0,0.12l0.11,0.31l0.03,0.29
-  		l0.08,0.25l0.05,0.21l0.01,0.16l0.01,0.12l-0.01,0.09l0.02,0.14l0.04,0.14l-0.01,0.19l0.01,0.39l0.05,0.27l0.13,0.07l0.25,0.08
-  		l0.19,0.07l0.35,0.19l0.28,0.18l0.04,0.04l0.05,0.04l0,0l0.23,0l0.07,0.01l0.12,0.02l0.08-0.03l0,0l0.06,0.03l-0.02,0.2l-0.01,0.1
-  		l0.01,0.08l0.01,0.1l0.03,0.03l0.03,0.03l0.19,0.07h0l0.36-0.01l0.05,0.02l0.16,0.07l0.23,0.1l0.12,0.11l0.06,0.08l-0.02,0.13
-  		l-0.13,0.15l-0.21,0.07l-0.12,0.03l-0.6,0.28l-0.19,0.12l-0.14,0.14l-0.05,0.11l-0.03,0.1l0.13,0.38l0.02,0.12l-0.11,0.41
-  		l-0.03,0.15l0.04,0.1l0.13,0.04l0.03,0.09l0.01,0.07l-0.22,0.15l-0.23,0.13l-0.07,0l-0.22,0.25l-0.37,0.49l-0.2,0.17l-0.01,0.08
-  		l-0.02,0.08l0.08,0.14l0.02,0.12l-0.08,0.12l-0.14,0.14l-0.27,0.12l-0.34,0.12l-0.16,0.07l-0.12,0.32l-0.11,0.32l-0.05,0.12
-  		l-0.19,0.37l-0.32,0.54l-0.08,0.12l-0.5,0.26l-0.51,0.28l-0.09,0.11l-0.1,0.26l-0.1,0.28l-0.09,0.15l-0.33,0.33l-0.11,0.25
-  		l-0.03,0.17l-0.28,0.09l-0.31,0.09l-0.46,0.03l-0.19,0.05l-0.56,0.23l-0.14,0.01l-0.11-0.04l-0.08-0.08l-0.08-0.13l-0.04-0.2
-  		l-0.11-0.09l-0.15-0.08l-0.15,0l-0.15,0.08l-0.13,0.09l-0.09,0.08l-0.09,0.09l-0.17,0.3l-0.28,0.43l-0.31,0.31l-0.11,0.09
-  		l-0.07,0.07l-0.1,0.1l-0.06,0.1l-0.08,0.33l-0.04,0.29l0.02,0.06l0.05,0.05l0.17,0.08l0.24,0.14l0.32,0.08l0.27,0.01l0.1,0.06
-  		l0.06,0.08l0.02,0.07l-0.01,0.24l-0.03,0.26l-0.1,0.27l0,0.16l0.04,0.15l0.3,0.39l0.11,0.04l0.22,0.01l0.1-0.01l0.11-0.04
-  		l0.08,0.03l0.06,0.05l0.02,0.08l-0.01,0.39l0.09,0.18l0.18,0.24l0.14,0.27l0.13,0.33l0.13,0.26l0.05,0.13l-0.08,0.06l-0.05,0.07
-  		l-0.01,0.09l0.02,0.09l-0.01,0.07l0.06,0.08l0.07,0.03l0,0.06l-0.11,0.07l-0.1,0l-0.08,0.04l-0.15,0.16l-0.07,0.03l-0.09,0.01
-  		l-0.1-0.02l-0.14-0.06l-0.04-0.1l0.02-0.1l-0.03-0.06l-0.1,0.01l-0.36,0.11l-0.34,0.13l-0.06,0.09l-0.08,0.09l-0.16,0.04
-  		l-0.23,0.01l-0.16-0.01l-0.15-0.1l-0.14-0.09l-0.21,0l-0.38,0.01l-0.21,0l-0.12-0.03l-0.12,0.03l-0.15-0.04l-0.07,0.05l-0.06,0
-  		l-0.05-0.09l-0.03-0.01l-0.04,0.01l-0.03,0.03l-0.02,0.05l-0.01,0.57l-0.25,0l-0.18,0l-0.19,0.03l-0.18,0.04l-0.09,0.05l-0.12,0.08
-  		l0.05,0.24l0.08,0.25l0.2-0.04l0.15-0.17l0.13-0.08l0.26-0.11l0.24-0.08l-0.27,0.19l-0.31,0.24l-0.07,0.11l0.2,0.39l0.2,0.33
-  		l0.32,0.26l0.76,0.39l0.77,0.17l0.14-0.03l0.2-0.15l0.48-0.17l0.13-0.04l0.11-0.01l0.16,0.06l0.05-0.06l0.05-0.11l0.07-0.09
-  		l0.1-0.02l0.04,0.09l0.01,0.07l-0.13,0.06l-0.2,0.29l-0.27,0.46l-0.17,0.04l-0.14,0.01l-0.34,0.18l-0.17-0.03l-0.13,0.12
-  		l-0.19-0.01l-0.49,0.23l-0.07-0.03l-0.08-0.07l-0.11-0.15l-0.14-0.04l-0.12,0.1l-0.02,0.18l0.07,0.18l0.33,0.39l0.35,0.29l0.28,0.3
-  		l0.37,0.33l0.52,0.61l0.17,0.16l0.65,0.48l0.42,0.19l0.29,0.05l0.26-0.05l0.67-0.25l0.32-0.19l0.8-0.35l0.11-0.13l0.32-0.58l0-0.24
-  		l-0.08-0.13l-0.07-0.09l-0.12-0.04l-0.12-0.05l0.07-0.08l0.03-0.11l0.12-0.12l0.15-0.08l0.05-0.12l0.06-0.19l-0.12-0.11l-0.11-0.05
-  		l0.27,0l0.22,0.04l0.24-0.06l0.2,0.03l0.19,0.06l-0.18,0.05l-0.15,0.01l-0.14,0.07l-0.06,0.35l0.17,0.03l0.15-0.02l-0.1,0.06
-  		l-0.09,0.11l-0.09,0.34l0.54,0.02l0.25-0.03l0.24-0.09l-0.16,0.1l-0.38,0.15l-0.17,0.13l-0.19,0.17l0.1,0.01l0.12-0.03l-0.09,0.07
-  		l-0.11,0.12l0.12,0.36l0.11,0.09l0.11,0.02l0.02,0.06l0.03,0.25l0.07,0.23l0.03,0.29l-0.02,0.21l-0.31,0.91l-0.07,0.46l0.01,0.06
-  		l0.04,0.08l0.05,0.33l0.13,0.11l-0.08,0.13l0.01,0.07l0.04,0.09l0.36,0.16l-0.32-0.04l-0.03,0.09l0.01,0.06l0,0.26l0.06,0.19
-  		l0.12-0.07l0.13-0.26l0.06,0.25l-0.05,0.17l-0.14,0.28l-0.05,0.18l0.01,0.07l0.08,0.12l0.05,0.39l0.05,0.2l0.04,0.3l0.1,0.35
-  		l0.2,0.53l-0.01,0.17l0.16,0.61l0.18,1.36l0.21,0.57l0.04,0.18l0.24,0.34l0.13,0.3l0.1,0.1l0.18,0l-0.11,0.16l0.08,0.06l0.07,0.1
-  		l0.14,0.16h-0.24l0.15,0.17l0.12,0.43l0.17,0.23l0.09,0.09l0.24,0.35l0.1,0.11l0.1,0.14l0.09,0.15l0.03,0.16l0.13,0.35l0,0.09
-  		l0.06,0.22l0.2,0.36l0.11,0.33l0.02,0.15l0,0.14l0.16,0.78l0.06,0.18l0.12,0.24l0.14,0.51l0.45,0.92l0.06,0.06l0.15,0.12l0.2,0.27
-  		l0.18,0.2l0.22,0.43l0.14,0.19l0.22,0.55l0.14,0.5l0.31,0.69l0.05,0.14l0.14,0.23l-0.02,0.07l0.01,0.14l0.05,0.11l0.05,0.01
-  		l0.18,0.17l0.2,0.7l-0.07,0.03l-0.08-0.04l-0.01-0.3l-0.05-0.22l-0.11-0.15l-0.08-0.03l0.09,0.45l0.06,0.41l0.14,0.39l0.03,0.05
-  		l0.06,0.03l0.04,0.05l0.02,0.13l0.13,0.34l0.12,0.1l0.63,0.79l0.18,0.17l0.43,0.31l0.39,0.12l0.13-0.09l0.33-0.11l0.52-0.35
-  		l0.12-0.23l0.02-0.27l0.1-0.41l0.15-0.18l0.27-0.21l1.01-0.3l0.42,0.02l0.36,0.12l-0.1-0.11l-0.15-0.06l-0.3-0.04l-0.16-0.04
-  		l-0.12-0.11l-0.06-0.11l0.04-0.2l0.1-0.21l0.47-0.64l-0.01-0.25l0.11-0.15l0.14-0.09l0.25-0.04l0.1,0.03l0.14,0.02l0.16-0.01
-  		l0.15-0.03l0.02-0.81l0-0.78l-0.02-0.13l-0.07-0.13l-0.19,0.05l0.1-0.11l0.08-0.14l-0.07-0.23l0.03-0.21l0.16-0.54l0.22-0.45
-  		l0.1-0.11l0.19-0.28l0.16-0.43l0.2-1.22l-0.09-0.14l-0.32-0.17l-0.09-0.14l0.17-0.2l0.14,0.2l0.06,0.15l0.07,0.07l-0.11-0.37
-  		l0-0.16l-0.04-0.15l-0.15-0.37l-0.06-0.28l0.04-0.14l0.06-0.12l0.02-0.24l-0.02-0.18l-0.12-0.4l-0.08-0.51l0.09-0.46l0.35-0.71
-  		l0.17-0.15l0.47-0.19l0.11,0.01l0.13,0.04l0.08,0.19l0.07-0.03l0.1,0.04l0.11,0l0.03-0.09l0.07-0.13l0.18-0.15l0.19-0.56l0.09-0.13
-  		l0.21-0.05l0.56,0.06l0.09,0.01l0.69-0.29l0.21-0.14l0.12-0.19l0.02-0.08l0.04-0.14l-0.02-0.08l-0.08-0.1l-0.05-0.11l0.01-0.08
-  		l0.13-0.22l0.42-0.33l0.69-0.35l0.4-0.27l0.34-0.33l0.33-0.4l0.15-0.12l0.81-0.41l0.14-0.2l0.51-0.54l0.26-0.36l0.15-0.15
-  		l0.11-0.16l0.04-0.14l0.82-0.71l0.39-0.22l-0.01-0.06l-0.12-0.04l-0.26,0.14l-0.09,0.01l-0.03-0.05l0.16-0.26l0.38-0.26l0.08,0.02
-  		l0.09,0.04l0.01,0.21l-0.09,0.05l-0.03,0.06l0.14,0.01l0.5-0.18l0.66-0.19l0.11-0.04l0.04-0.05l0.02-0.08l-0.12-0.12l0.09,0
-  		l0.15,0.09l0.12-0.15l0.1-0.15l0.45-0.26l0.03-0.08l-0.01-0.12l0.13-0.22l0.16-0.16l0.09-0.15l-0.07-0.08l-0.08-0.41l-0.1-0.26
-  		l0.03-0.24l0.17-0.24l0.26-0.25l0.18-0.08l0.86-0.2l0.26-0.14l0.23-0.18l0.18-0.33l0.1-0.09l0.1-0.14l-0.14-0.11l-0.13-0.06
-  		l-0.09-0.08l-0.04-0.23l0.1,0.21l0.17,0.09l0.2,0.15l-0.03,0.2l-0.15,0.45l-0.08,0.19l0.12,0.11l0.24,0.03l0.05-0.14l0.02-0.12
-  		l0.03,0.07l0.25,0.21l0.25-0.09l0.03-0.1l-0.06-0.22l0.14-0.55l0.03,0.1l0.09,0.02l0.04,0.04l0.02,0.06l-0.09,0.51l0.01,0.13
-  		l0.03,0.08l0.06,0.07l0.16-0.14l0.04-0.16l0.09,0.17l0.11,0.02l0.15-0.02l-0.02-0.2l-0.04-0.14l-0.13-0.2l0.14,0l0.04-0.29
-  		l0.01-0.18l-0.01-0.17l-0.14-0.45l-0.09-0.23l0.01-0.07l-0.01-0.03l-0.04-0.29l-0.06-0.18l-0.03-0.19l0.14-0.28l-0.06-0.04
-  		l-0.16-0.04l-0.15-0.05l-0.04-0.07l0.07-0.27l-0.08-0.11l-0.11-0.11l-0.03-0.04l-0.04-0.06l-0.05-0.14l0.1-0.29l0.14-0.33
-  		l0.03-0.13l0.02-0.22l0.01-0.09l-0.02-0.08l-0.15-0.1l-0.26-0.04l-0.18-0.08l-0.11-0.12l-0.09-0.05l-0.11,0.04l-0.14-0.05
-  		l-0.12-0.12l-0.1-0.15l0.01-0.07l0.03-0.09l0.19-0.39l0.07-0.01l0.16,0.07l0.06,0l0.11-0.15l0.15-0.43l0.21,0l0.19,0.01l0.13,0.02
-  		l0.13-0.01l0.13-0.03l0.07-0.05l0.04-0.07l-0.01-0.06l-0.16-0.08l-0.06-0.06l-0.04-0.17l-0.05-0.07l-0.32-0.01l-0.16-0.08
-  		l-0.09-0.07l-0.16-0.24l-0.2-0.18l-0.19-0.04l-0.07-0.06l-0.04-0.09l0.02-0.13l0.06-0.12l0.04-0.13l0.15-0.17l0.18-0.15l0.08-0.1
-  		l0.11-0.11l0.01-0.06l-0.02-0.07l-0.09-0.07l-0.06-0.02l-0.01-0.04l0.04-0.11l0.09-0.01l0.18,0.1l0.18,0.17l0.11,0.15l0,0.12
-  		l0.07,0.02l0.07,0l0.12,0.05l0.12-0.02l0.08,0.03l0.05-0.01l0.02-0.07l-0.06-0.1l-0.04-0.07l0.05-0.07l0.06-0.01l0.06,0.02
-  		l0.09,0.06l0.06,0.13l0.01,0.2l0.14,0.19l0.19,0.13l0.15,0.06l0.18,0.04l0.15-0.04l0.07-0.13l-0.03-0.12l0.02-0.1l0.06-0.06l0.09,0
-  		l0.07,0.08l0.2,0.44l-0.04,0.2l0.05,0.54l-0.05,0.35l0.01,0.08l0.02,0.06l0.03,0.02l0.06,0l0.25,0.07l0.21,0.07l0.24,0.07
-  		l0.34,0.05l0.21-0.02l0.1,0l0.21,0.02l0.56-0.03l0.46-0.01l0.19,0.05l0.15,0.02l0.51-0.04l0.52-0.02l0.28,0.11l0.3,0.18l0.17,0.14
-  		l0.03,0.08l-0.02,0.07l-0.06,0.04l-0.1,0l-0.24-0.09l-0.04,0.03l0,0.18l-0.01,0.03l-0.05,0.16l-0.15,0.37l-0.03,0.16l-0.03,0.04
-  		l-0.04,0.02l-0.11,0.01l-0.09,0.03l-0.04,0.06l-0.06,0.12l-0.04,0.12l-0.06,0.04l-0.13-0.07l-0.08,0.01l-0.1,0.03l-0.1,0.07
-  		l-0.07,0.09l-0.08,0.03l-0.24-0.02l-0.05,0.01l-0.03,0.06l-0.02,0.08l-0.19,0.19l-0.07,0.3l-0.06,0.19l0.01,0.15l0.16,0.39
-  		l0.11,0.51l0.04,0.05l0.04,0.02l0.02-0.01l0-0.11l0.01-0.13l0.05-0.03l0.07,0.03l0.06,0.11l0.07,0.2l0.08,0.08l0.12,0.02l0.14-0.05
-  		l0.1-0.09l0.04-0.1l-0.03-0.2l-0.01-0.15l0.06-0.14l0.23-0.21l0.03-0.06l-0.02-0.18v-0.17l0.09-0.01l0.12,0.03l0.15-0.08l0.05,0
-  		l0.06,0.09l0.11-0.02l0.08,0.36l0.08,0.32l0,0.15l0.01,0.33l0.04,0.27l0.06,0.06l0.07,0.14l0.06,0.17l0.05,0.09l0.03,0.3l0.04,0.22
-  		l0.05,0.68l0.02,0.13l0.1-0.06l0.04-0.07l0.04-0.11l0.03-0.05l0.06,0l0.09,0.05l0.15,0.18l0.1,0.04l0.1-0.03l0.1-0.27l0.04-0.07
-  		l0.05-0.05l0.09,0.01l0.05-0.05l0.02-0.12l0-0.13l-0.1-0.35l-0.03-0.16l-0.02-0.16l0.06-0.17l0.09-0.19l-0.02-0.17l0.02-0.07
-  		l0.07-0.01l0.09,0.04l0.1-0.03l0.07-0.1l0.03-0.09l0.05-0.39l0.03-0.36l0.01-0.29l-0.08-0.17l-0.12-0.47l0.03-0.08l0.05-0.02
-  		l0.17,0.17l0.07,0.03l0.13-0.03l0.13-0.04l0.09,0l0.13,0.06l0.18,0.06l0.28,0.08l0.12,0.06l0.1-0.01l0.08-0.18l0.09-0.27l0.13-0.4
-  		l0.15-0.29l0.04-0.08l0.17-0.24l0.16-0.25l0.14-0.31l0.08-0.22l-0.01-0.09l-0.05-0.08l-0.11-0.05l-0.09-0.05l-0.02-0.05l0-0.05
-  		l0.05-0.15l0.08-0.17l0.08-0.09l0.21-0.12l0.14-0.15l0.15-0.2l0.08-0.13l0.04-0.27l0.05-0.05l0.09-0.09l0.07-0.1l-0.01-0.06
-  		l-0.04-0.04l-0.07-0.19l-0.03-0.3l0.02-0.24l0.05-0.1l0.07-0.14l0.13-0.09l0.19-0.06l0.29-0.16l0.5-0.38l0.18-0.12l0.12-0.06
-  		l0.12-0.16l0.16-0.17l0.23-0.09l0.15-0.03l0.71-0.12l0.12,0.02l0.12,0.07l0.15,0.23l0.13,0.09l0.15,0.06l0.12-0.03l0-0.09
-  		l-0.36-0.53l-0.03-0.15l-0.01-0.14l0.04-0.11l0.11-0.11l0.16-0.12l0.2-0.15l0.12-0.1l0.14-0.03l0.05-0.06l0.02-0.09L2062.72,1032.2
-  		z M2029.09,1024.61L2029.09,1024.61l-0.11-0.15L2029.09,1024.61z M2056.37,1070.85l-0.25,0.1l-0.05,0.09l0,0.22l0.09,0.03
-  		l0.22,0.45l0.11-0.15l0.07-0.26l-0.13-0.42L2056.37,1070.85z M2055.56,1069.44l-0.07,0.02l-0.05,0.08l0.06,0.08l0.04,0.08l0.14,0
-  		l0.01-0.04l-0.02-0.09L2055.56,1069.44z M2055.06,1068.84l-0.04,0.04l-0.02,0.1l0.09,0.1l0.1,0.01l-0.05-0.07L2055.06,1068.84z"/>
-  </g>
-  <g class="country" id="IN">
+  <g class="country" id="IND">
   	<path class="st0" d="M2590.99,1241.09l-0.2,0.11l-0.21,0.22l0.03,0.34l0.23,0.29l0.37-0.05l0.18-0.31l-0.2-0.57L2590.99,1241.09z
   		 M2590.38,1222.32l-0.42-0.39l-0.05,0.7l-0.32,0.34l0.41,0.21l0.41-0.17l-0.05-0.26L2590.38,1222.32z M2592.91,1213.19l-0.21-2.65
   		l-0.66-0.78l0.2-0.28l0.35-0.74l0.45-0.23l0.32-0.56l0.19-0.57l0.07-0.26l-0.49-0.72l0.51-0.55l-0.08-0.31l-0.04-0.93l-0.28,0.01
@@ -6125,7 +5937,7 @@ function mapSvg() {
   		l0.19,0.36l0.65-0.01l0.04-0.18l-0.12-0.41L2596.16,1251.42z M2597.47,1249.77l-0.32-0.09l-0.32,0.44l0.04,0.53l0.07,0.3l0.02,0.17
   		l0.05,0.24l0.1,0.04l0.4-0.31l-0.21-0.87L2597.47,1249.77z"/>
   </g>
-  <g class="country" id="IL">
+  <g class="country" id="IL" style="display: none;">
   	<polygon class="st1" points="2111.92,1031.98 2111.83,1031.59 2111.8,1031.13 2112.12,1030.69 2111.97,1030.16 2111.72,1029.62
   		2111.54,1029.35 2111.54,1028.86 2111.66,1028.49 2111.81,1027.91 2111.57,1028.06 2111.12,1028.49 2110.67,1028.84
   		2109.77,1029.38 2109.57,1029.71 2109.37,1029.42 2108.97,1029.61 2108.64,1030.84 2107.95,1031.25 2107.09,1031.22
@@ -6142,7 +5954,7 @@ function mapSvg() {
   		2109.31,1035.32 2109.5,1035.07 2109.64,1034.94 2110.67,1034.5 2111.12,1034.44 2111.24,1034 2111.71,1033.25 2112.18,1032.43
   		"/>
   </g>
-  <g class="country" id="IE">
+  <g class="country" id="LIE">
   	<path class="st0" d="M1758.79,825.93l-0.23-0.86l-0.53-1.54l-0.14-0.75l0.19-0.28l-0.08-0.8l0.07-0.44l-0.09-0.9l-0.45-0.73
   		l-0.29-1.21l-0.35-1.09l-0.43-0.48l-0.22-0.68l0.02-0.53l0.32-0.28l0.65,0.09l0.62-0.16l-0.16-0.42l-0.36-0.41l-0.72-0.07
   		l-0.51,0.21l-0.33,0.19l-0.32-0.03l-0.91,0.07l-0.86-0.02l-0.12-0.3l0.15-0.91l-0.19-0.25l-0.82-0.13l-0.3-0.22l-0.47-0.63
@@ -6172,7 +5984,7 @@ function mapSvg() {
   		L1758.79,825.93z M1725.25,816.41l0.62,0.41l0.04-0.33l-0.07-0.85l-0.34-0.19l-1.21-0.02l-0.35-0.13l-0.71,0.45l1.71,0.21
   		L1725.25,816.41z"/>
   </g>
-  <g class="country" id="ID">
+  <g class="country" id="IDN">
   	<path class="st0" d="M2720.08,1286.4l1.3,0.35l-0.06,0.22l-0.17,0.1l-0.25,0.04l-0.72,0.53l0.67,0.43l1.15-0.31l0.65-1.23
   		l0.04-0.33l-0.05-0.92l-1.16-1.39l-0.06-0.55l-0.39,0.14l-1.67,1.32l-0.01,0.5l0.36,0.79L2720.08,1286.4z M2715.83,1343.26
   		l0.06,0.3l0.03,0.69l0.35,0.56l-0.19,0.71l0.38-0.03l1.37-0.38l0.13-0.54l0.18-0.09l0.7,0.36l0.22,0.31l0.08,0.46l0.66,0.04
@@ -6504,7 +6316,7 @@ function mapSvg() {
   		l0.92-0.73l0.24-1.08l-0.19-0.49l-0.04-0.66l-0.6-0.05l-0.65,0.05l0.2-0.34l0.27-0.27l1.23-0.67l0.33-0.29l0.23-0.38l0.08-0.66
   		l0.48-0.38l0.87-0.44l0.32-0.41l0.15-0.51L2793.1,1328.74z"/>
   </g>
-  <g class="country" id="HU">
+  <g class="country" id="HUN">
   	<polygon class="st1" points="2002.21,882.67 2002.13,882.27 2002.22,881.92 2002.04,881.59 2001.58,881.22 2001.47,881.06
   		2000.9,881.09 2000.75,881.13 2000.69,881.12 1999.9,880.8 1999.38,880.03 1998.57,879.63 1997.95,879.49 1997.66,879.16
   		1997.48,878.72 1997.29,878.39 1997.27,878.36 1997.13,877.86 1996.94,877.81 1996.91,877.79 1996.11,877.88 1995.93,878.01
@@ -6533,7 +6345,7 @@ function mapSvg() {
   		1994.96,888.7 1994.99,887.54 1995.32,887.2 1995.94,886.82 1996.55,886.21 1997.06,885.49 1997.44,885.16 1997.96,885.07
   		1998.51,884.78 1999.13,884.68 1999.74,884.82 2000.12,884.74 2000.7,884.39 2002.17,883.07 2002.38,882.81 	"/>
   </g>
-  <g class="country" id="HT">
+  <g class="country" id="HTI">
   	<path class="st0" d="M1195.88,1148.8l0.29-0.07l0.88,0.28l0.85,0.15l0.13-0.25l-0.34-0.2l-1.07-0.47l-0.51-0.02l-0.47,0.07
   		l-0.45,0.21l0.51,0.27L1195.88,1148.8z M1206.17,1156.6l0.1-0.28l-0.02-0.28l-0.84-0.78l-0.06-0.34l0.39-0.85l-0.04-0.56
   		l-0.39-1.75l-0.18-0.26l-0.47,0.19l-1.01-0.22l-2.24-0.2l-1.77-0.6l-1.74-0.76l-2.02-0.24l-2.03,0.21l-0.84,0.18l-0.82,0.25
@@ -6546,7 +6358,7 @@ function mapSvg() {
   		l-0.17-0.58l0.55-0.51L1206.17,1156.6z M1196.51,1159.67l-0.97-0.73l-1.26-0.61l-0.85-0.31l-0.89,0.11l-0.07,0.5l1.75,0.92
   		l2.15,0.73L1196.51,1159.67z"/>
   </g>
-  <g class="country" id="HR">
+  <g class="country" id="HRV">
   	<path class="st0" d="M1935.64,923.04l-0.74-0.52l0.22,0.44l2.06,2.25l0.12-0.05l0.44,0.14l0.01-0.1l-0.12-0.15L1935.64,923.04z
   		 M1938.31,924.14l0.32,0.51l0.55,0.47l0.53,0.16l-0.55-0.76L1938.31,924.14z M1935.3,919.24l0.7,0.53l0.36,0.43l0.5,0.36l0.54,0.51
   		l0.22-0.27l0.21-0.12l0.22-0.03l-1.07-0.88l-0.9-1.02l-0.91-0.79l-0.36-0.08l-0.43-0.31l-0.52-0.5l0.16,0.34l1.05,1.24
@@ -6582,7 +6394,7 @@ function mapSvg() {
   		z M1953.67,934.85l-1.03-0.17l-1.14,0.13l-1.56-0.28l0.13,0.37l0.25,0.27l0.36,0.21l0.94,0.18l1.07-0.33l0.94,0.13l0.83-0.02
   		l-0.16-0.16L1953.67,934.85z"/>
   </g>
-  <g class="country" id="HN">
+  <g class="country" id="HND">
   	<path class="st0" d="M1081.83,1180.38l1.38-0.43l-0.69-0.09l-0.85,0.22l-1,0.44l-0.62,0.52l0.42,0.01L1081.83,1180.38z
   		 M1086.45,1179.66l0.22-0.23l0.09-0.2l-0.37-0.03l-0.39,0.26l-0.31,0.46l0.12,0.22L1086.45,1179.66z M1108.73,1191.84l-0.55-0.31
   		l-0.66-1.38l-2.33-1.1l-0.25,0.03l1.05,0.61l0.45,0.62l-0.32,0.02l-0.45-0.4l-0.7,0.04l-0.37,0.36l-0.38-0.01l-0.35-0.59
@@ -6603,18 +6415,18 @@ function mapSvg() {
   		l0.31-0.09l0.12-0.17l0.06-0.17l0.23-0.13l0.79,0.13l0.88-0.2l0.98-0.53l0.65-0.23l0.32,0.06l0.39-0.27l0.45-0.59l1.02-0.27
   		l2.17,0.13L1108.73,1191.84z"/>
   </g>
-  <g class="country" id="HM">
+  <g class="country" id="HMD">
   	<polygon class="st1" points="2430.7,1811.36 2429.48,1810.63 2427.81,1810.32 2427.11,1809.94 2426.66,1810.05 2426.68,1810.2
   		2426.95,1810.57 2427.38,1810.66 2428.02,1812 2428.46,1812.43 2429.49,1812.43 2430.5,1811.89 2431.24,1811.81 2431.6,1811.61
   		"/>
   </g>
-  <g class="country" id="HK">
+  <g class="country" id="HKG">
   	<path class="st0" d="M2771,1128.97l0.04,0.21l0.58,0.64l0.21-0.14l0.1-0.2l0.03-0.26l-0.5-0.29L2771,1128.97z M2768.51,1129.42
   		l0.11,0.19l0.22,0.09l1.01,0l0.05-0.59l0.34-0.49l-1.37,0.47L2768.51,1129.42z M2772.6,1127.7l-0.34-0.18l0.06-0.37l-0.18-0.33
   		l-0.03-0.04l-0.32-0.11l-0.34-0.1h-0.55l-0.21,0.12l-0.4,0.07l-0.27,0.25l-0.02,0.02l-0.07,0.25l-0.93,0.49l0.05,0.28l0.29,0.27
   		l0.81-0.1l0.89,0.24l1.09,0.47l0.17-0.26l0.02-0.43l0.38-0.2L2772.6,1127.7z"/>
   </g>
-  <g class="country" id="GY">
+  <g class="country" id="GYM">
   	<polygon class="st1" points="1333.64,1302.12 1333.3,1301.87 1332.76,1301.78 1332.11,1301.61 1331.63,1300.95 1331.14,1300.01
   		1330.96,1299.59 1330.58,1299.18 1330.2,1298.6 1330.08,1298.09 1329.79,1297.62 1329.64,1297.46 1329.42,1296.81 1329.38,1296.57
   		1329.27,1296.54 1329.11,1296.34 1328.8,1295.65 1328.73,1295.48 1328.6,1295.42 1328.24,1294.94 1327.96,1294.77 1327.85,1294.52
@@ -6654,7 +6466,7 @@ function mapSvg() {
   		1326.95,1302.22 1327.3,1302.25 1328.02,1302.07 1328.62,1301.79 1328.84,1301.86 1329.3,1302.44 1329.53,1302.57 1329.88,1302.61
   		1330.99,1302.91 1331.59,1302.81 1332.23,1302.63 1332.85,1302.56 1333.3,1302.69 1333.62,1302.52 1333.98,1302.4 	"/>
   </g>
-  <g class="country" id="GW">
+  <g class="country" id="GNB">
   	<path class="st0" d="M1675.77,1222.3l-0.11-1.05l-0.41-0.08l-0.46,0.6l-0.03,0.43l0.22,0.24l0.41,0.12L1675.77,1222.3z
   		 M1674.2,1224.56l-0.15,0.07l-0.33,0.2l-0.27,0.31l-0.16,0.01l-0.35,0.14l0.05,0.16l0.31,0.42l0.67-0.13l0.36-0.21l0.16-0.28
   		l-0.12-0.67L1674.2,1224.56z M1675.71,1224.88l-0.24-0.27l-0.07,0.11l-0.14,0.72l0.11,0.07l-0.11,0.24l0.49,0.04l0.08-0.23
@@ -6671,11 +6483,11 @@ function mapSvg() {
   		l0.32-0.16l0.17-0.2l0.07-0.24l-0.11-0.08L1677.32,1223.69z M1678.15,1221.72l0.48,0.17l0.08-0.2l0.23-0.14l0.35-0.12l0.02-0.55
   		l-0.46,0.12L1678.15,1221.72z"/>
   </g>
-  <g class="country" id="GU">
+  <g class="country" id="GUM">
   	<polygon class="st1" points="3030.2,1204.17 3029.91,1204.03 3029.59,1203.97 3029.2,1204.78 3028.01,1205.62 3028.01,1206.6
   		3028.12,1206.79 3028.43,1207.07 3028.79,1207.06 3029.11,1205.77 3030.46,1204.41 	"/>
   </g>
-  <g class="country" id="GT">
+  <g class="country" id="GTM">
   	<polygon class="st1" points="1063.52,1184.06 1063.49,1184.25 1063.71,1184.48 1064.01,1184.92 1063.44,1185.65 1062.55,1185.29
   		1061.8,1184.81 1061.45,1184.75 1060.99,1184.57 1060.63,1184.57 1059.14,1184.48 1058.14,1184.58 1058.1,1184.53 1058.18,1182.4
   		1058.31,1179.1 1058.4,1176.67 1058.5,1174.3 1058.57,1172.52 1058.66,1170.09 1058.74,1168 1056.97,1168 1053.96,1168
@@ -6693,7 +6505,7 @@ function mapSvg() {
   		1058.23,1193.35 1058.36,1193.05 1058.67,1191.86 1058.9,1191.58 1060.3,1190.98 1060.43,1190.9 1061.53,1190.05 1062.76,1189.11
   		1064.03,1188.08 1065.45,1186.92 1066.24,1186.25 1066.6,1185.95 	"/>
   </g>
-  <g class="country" id="GS">
+  <g class="country" id="SGS">
   	<path class="st0" d="M1507.15,1829.19l0.22-0.96l-0.58,0.15l-0.58,0l-0.34-0.16l-0.37-1.11l-0.47-0.88l-0.53-0.25l-0.42-0.83
   		l-0.35-0.43l-0.5,0.32l-0.18,0.28l-0.35,0.06l-0.78-0.7l-0.9,0.17l0.34-0.84l-0.82-0.95l-0.47,0l-0.38-0.07l-0.37-0.19l-0.67-0.05
   		l-0.65,0.38l-0.82-0.56l-1.09-0.06l-1.15-0.59l-0.11-0.29l-1.29,0.11l-3.45,0.02l-0.61,0.14l0.88,0.24l2.48,0.15l-0.59,0.4
@@ -6701,7 +6513,7 @@ function mapSvg() {
   		l0.29,0.27l0.22,0.42l1.13,1.43l0.5,1l1.08,0.85l0.32,0.16l1.23-0.38l0.61-0.49l0.58-0.34l-0.97-0.61L1507.15,1829.19z
   		 M1588.49,1874.63l-0.13-0.41l-0.2-0.24l-0.82,0.01l-0.42,0.4l0.3,0.3l1.31,0.65L1588.49,1874.63z"/>
   </g>
-  <g class="country" id="GR">
+  <g class="country" id="GRC">
   	<path class="st0" d="M2022.9,989.2l-0.05,0.74l0.81-0.06l0.46-0.27l0.05-0.23l-0.97-0.37L2022.9,989.2z M2026.97,995.8l-0.45,0.17
   		l0.24,0.07l0.74-0.08l1.06-0.86l0.67-0.22l-0.54-0.33l-0.49,0.49l-0.75,0.38l-0.15,0.21L2026.97,995.8z M2020.23,987.38l0.17,0.3
   		l0.3,0.31l0.88,0.67l0.53,0.1l0.31-0.63l-0.26-0.3l-1.13-0.17l-0.44-0.32L2020.23,987.38z M2023.19,964.76l-0.52,0.28l-0.43-0.49
@@ -6785,7 +6597,7 @@ function mapSvg() {
   		l0.48,0.02l0.25,0.11l0.23,0.24l0.25,0.1l0.29-0.1l0.35-0.39L2016.8,983.04z M2011.33,972.5l0.26-0.66l-0.7,0.41l-0.4,0.78
   		l0.39-0.12L2011.33,972.5z M2009.61,973.68l0.38-0.33l-1.57-0.93l0.61,1.11L2009.61,973.68z"/>
   </g>
-  <g class="country" id="GQ">
+  <g class="country" id="GNQ">
   	<path class="st0" d="M1883.49,1287.22l-0.21-0.03l-0.5,0.19l-0.32,0.56l-0.13,0.74l-0.38,0.82l-0.23,0.12l-0.72,0.14l-0.11,0.23
   		l-0.15,0.76l0.09,0.33l0.25,0.24l1.49,0.4l0.44-0.05l0.5-0.68l0.24-0.8l1.3-1.9l0.04-0.65l-0.34-0.44L1883.49,1287.22z
   		 M1905.17,1309.27l-0.01-1.56l-0.01-1.85l-0.01-1.77l-0.01-1.64l-0.01-1.94l-1.96,0l-2.57,0l-2.43,0l-1.64,0l-2.76,0l-0.92-0.38
@@ -6793,13 +6605,13 @@ function mapSvg() {
   		l-0.51,1.16l-0.41,1.31l0.5,0.16l0.54,0.05l0.75,0.5l-0.07,0.19l0.38-0.12l0.34-0.23l0.24-0.04l0.47,0.04l0.24,0.41l0.13,0.23
   		l0.48,0.1l0.39,0.22l0.34-0.06l0.28-0.26l0.41-0.05l1.27,0l1.15,0l2.29,0.01l2.29,0.01l2.29,0.01l1.72,0.01L1905.17,1309.27z"/>
   </g>
-  <g class="country" id="GP">
+  <g class="country" id="GLP">
   	<path class="st0" d="M1290.9,1181.12l-0.37-0.29l-0.9-0.25l-0.16,0.13l-0.23,0.34l0.29,2.05l0.41,0.74l0.34,0.12l0.68-0.39
   		l0.22-0.35l-0.09-1.54l0.19-0.38L1290.9,1181.12z M1293.82,1183.57l-0.21,0.09l-0.36,0.36l0.06,0.52l0.21,0.07l0.47-0.03l0.23-0.27
   		l-0.08-0.33L1293.82,1183.57z M1292.94,1180.51l-0.34-0.43l-0.09-0.47l-0.55-0.33l-0.33,0.25l-0.15,0.38l0.24,0.63l-0.33,0.52
   		l0.15,0.62l0.65,0.07l0.99-0.1l1.3-0.22L1292.94,1180.51z"/>
   </g>
-  <g class="country" id="GN">
+  <g class="country" id="GIN">
   	<polygon class="st1" points="1744.92,1246.83 1744.68,1246.16 1744.14,1245.5 1742.73,1244.94 1742.7,1244.16 1742.84,1243.32
   		1743.15,1243 1744.19,1242.46 1744.01,1242.18 1743.67,1241.87 1743.01,1241.56 1743.16,1240.54 1743.2,1239.64 1742.64,1239.74
   		1742.06,1239.79 1741.57,1239.51 1741.17,1238.96 1741.09,1237.45 1741.09,1235.7 1741.01,1234.93 1741.17,1234.52
@@ -6848,7 +6660,7 @@ function mapSvg() {
   		1740.16,1249.44 1740.26,1248.14 1740.33,1247.73 1740.55,1247.5 1740.91,1247.44 1741.91,1247.4 1742.72,1247.55 1743.43,1247.63
   		1743.81,1247.63 1744.11,1248.02 1744.52,1248.41 1744.88,1248.41 1745.01,1248.12 	"/>
   </g>
-  <g class="country" id="GM">
+  <g class="country" id="GMB">
   	<polygon class="st1" points="1693.03,1205.19 1691.98,1204.64 1690.55,1204.7 1690.11,1204.85 1689.44,1205.03 1689.04,1205.11
   		1688.37,1204.98 1687.52,1204.5 1686.98,1204.02 1686.23,1203.79 1685.33,1203.57 1683.9,1202.58 1683.16,1202.4 1682.45,1202.35
   		1681.09,1202.54 1679.77,1203.07 1679.07,1204.27 1677.74,1204.26 1674.93,1204.22 1672.34,1204.18 1670.21,1204.27
@@ -6860,7 +6672,7 @@ function mapSvg() {
   		1682.09,1204.53 1682.55,1204.67 1683.16,1204.9 1683.78,1205.24 1684.5,1205.56 1684.98,1205.77 1686.13,1206.27 1688.09,1206.98
   		1689.71,1207.26 1691.66,1206.74 1693.07,1206.41 1693.25,1205.79 	"/>
   </g>
-  <g class="country" id="GL">
+  <g class="country" id="GRL">
   	<path class="st0" d="M1415.61,733.3l0.02,0.27l1.03-0.1l0.95,0.32l0.48,0.69l0.97,0.34l0.97-1.54l0.1-0.77l0.3-0.61l0.11-0.69
   		l-1.59,0.44L1415.61,733.3z M1496.19,667.95l-0.13,1.19l0.43,1.09l1.31-0.01l0.37-0.6l0.29-1.22l-0.8-0.82L1496.19,667.95z
   		 M1356.96,616.76l1.48,0.05l4.84-1.28l1.96-0.32l5.54-1.87l1.05-0.91l0.74-0.82l-0.06-0.48l-0.62-0.41l-0.22-0.33l0.19-0.26
@@ -7053,7 +6865,7 @@ function mapSvg() {
   		l5.92-2.31l0.83-0.66l0.04-0.48L1712.36,406.01z M1657.79,441.2l3.57-2.2l1.78-2.2l-0.59-1.7l-4.31-0.51l-4.75,0.85l-3.79,1.36
   		l-1.19,1.7l0.89,1.52l3.12,1.01L1657.79,441.2z"/>
   </g>
-  <g class="country" id="GH">
+  <g class="country" id="GHA">
   	<polygon class="st1" points="1819.68,1267.17 1819.3,1267.09 1818.84,1266.93 1818.54,1266.69 1818.14,1266.13 1818,1265.7
   		1817.38,1265.63 1816.63,1265.14 1815.91,1264.59 1815.66,1264.03 1815.73,1263.77 1815.62,1263.51 1815.37,1263.41
   		1814.72,1262.15 1814.32,1261.65 1814.13,1261.24 1814.19,1260.93 1814.11,1260.5 1814.23,1260.16 1814.58,1259.95 1814.69,1259.7
@@ -7084,7 +6896,7 @@ function mapSvg() {
   		1808.64,1272.01 1811.89,1270.43 1815.36,1270.41 1816.01,1270.4 1817.7,1269.98 1818.19,1269.17 1818.55,1268.44 1819.01,1267.96
   		1819.7,1267.64 	"/>
   </g>
-  <g class="country" id="GF">
+  <g class="country" id="GUF">
   	<polygon class="st0" points="1374.65,1284 1374.55,1283.25 1374.27,1282.76 1373.54,1280.38 1373.18,1279.83 1372.74,1279.85
   		1372.41,1280.77 1372.34,1281.51 1372.11,1281.82 1371.71,1282.21 1371.72,1281.93 1371.91,1281.56 1372.05,1280.85
   		1371.63,1279.75 1371.24,1279.15 1369.88,1277.93 1369,1278.7 1369.3,1277.82 1369.28,1277.26 1367.91,1276.6 1365.29,1274.49
@@ -7103,7 +6915,7 @@ function mapSvg() {
   		1370.36,1290.49 1370.75,1289.75 1371.74,1288.12 1371.81,1287.66 1372.2,1287.38 1372.33,1287.03 1372.75,1286.6 1373.18,1286.26
   		1373.37,1285.75 1373.69,1285.22 1374.4,1284.83 1374.66,1284.65 1374.61,1284.34 	"/>
   </g>
-  <g class="country" id="GE">
+  <g class="country" id="GEO">
   	<polygon class="st1" points="2202.35,951.22 2201.42,950.6 2200.38,950.05 2199.71,949.57 2199.28,948.63 2198.85,948.52
   		2198.74,948.4 2198.67,948.07 2198.69,947.62 2198.84,947.27 2199.26,947.12 2199.68,947.07 2200.07,946.73 2200.55,946.08
   		2200.76,945.72 2200.6,945.58 2199.39,945.02 2198.93,944.72 2198.48,944.7 2197.54,944.53 2196.75,944.26 2196.38,943.91
@@ -7126,11 +6938,11 @@ function mapSvg() {
   		2195.39,952.41 2196.48,952.79 2197.4,952.99 2197.86,952.82 2198.57,952.68 2199.49,953.11 2200.34,953.67 2200.77,953.89
   		2200.99,953.96 2201.64,953.77 2202.41,953.06 2202.71,952.2 2202.8,951.79 	"/>
   </g>
-  <g class="country" id="GD">
+  <g class="country" id="GRD">
   	<polygon class="st1" points="1290.37,1215.75 1289.91,1216.19 1289.61,1216.85 1289.56,1217.38 1289.34,1217.69 1289.9,1217.66
   		1290.65,1217.31 1290.82,1215.87 	"/>
   </g>
-  <g class="country" id="GA">
+  <g class="country" id="GAB">
   	<polygon class="st1" points="1931.19,1327.88 1931.07,1326.78 1931.36,1325.33 1931.66,1323.82 1931.61,1323.44 1931.19,1322.98
   		1930.68,1322.57 1929.36,1322.22 1928.87,1321.67 1928.48,1321.09 1928.2,1320.91 1926.76,1320.67 1926.44,1320.35
   		1926.57,1319.41 1926.69,1318.02 1926.64,1317.05 1926.9,1316.27 1927.19,1315.69 1927.83,1315.07 1928.17,1314.34
@@ -7169,7 +6981,7 @@ function mapSvg() {
   		1929.63,1336.02 1929.73,1335.39 1930.05,1334.99 1930.64,1334.71 1930.85,1334.46 1931.18,1332.97 1931.01,1332.43
   		1931.01,1331.98 1931.38,1331.41 1931.45,1330.47 1931.3,1328.93 	"/>
   </g>
-  <g class="country" id="FR">
+  <g class="country" id="FRA">
   	<path class="st0" d="M1877.76,871.6l-0.67-0.27l-1.7-0.34l-1.59-0.22l-0.72-0.27l-0.63-0.72l-0.39-0.01l-0.76,0.26l-0.96,0.17
   		l-0.69-0.15l-0.44,0.03l-0.24,0.13l-0.12-0.12l-0.17-0.61l-0.36-0.16l-0.56-0.14l-0.35,0.06l-0.24,0.3l-0.37,0.21l-0.34-0.07
   		l-1.08-1.42l-0.28-0.31l-0.07-0.29l-0.27-0.53l-0.64-0.53l-0.64-0.17l-0.32,0.06l-0.56-0.27l-0.3-0.18l-0.51-0.05l-0.52,0.15
@@ -7223,7 +7035,7 @@ function mapSvg() {
   		l0.57-0.75l0.65-1.68l0.37-0.52l0.17-0.53l0.05-1.96l0.23-0.47l1.03-1.59l0.05-0.32l-0.26-3.96L1889.79,938.7z M1799.48,905.39
   		l0.3-0.92l-0.9-1.04l-0.87-0.5l0,0.18l0.17,0.69l0.74,0.74L1799.48,905.39z"/>
   </g>
-  <g class="country" id="FO">
+  <g class="country" id="FRO">
   	<path class="st0" d="M1753.24,724.11l-0.32-0.52l0-0.44l-0.25-0.18l-0.94-0.24l-0.2-0.36l-0.24-0.05l0.05,0.41l0.35,0.88l0.99,1.06
   		l0.57,0.45l0.2,0.04l-0.17-0.39L1753.24,724.11z M1749.17,715.77l-0.41-0.16l-0.85,0.16l-0.72-0.02l0.37,0.85l1.05,0.37l0.64,0.08
   		l0.53-0.09l0.43-0.34l-0.27-0.36L1749.17,715.77z M1753.06,718.21l0.09-0.17l-0.07-0.34l-0.73-1.17l-0.24-0.2l-0.02-0.31l0.14-0.26
@@ -7231,14 +7043,14 @@ function mapSvg() {
   		l-1.08-0.44l-0.43-0.11l-0.36,0.06l0.18,0.48l0.21,0.28l0.63,0.33l0.79,0.6l0.23,0l0.16-0.49l-0.02-0.27L1753.59,719.38z
   		 M1755.18,713.78l-0.69-0.83l0.02,1.01l-0.06,0.7l0.13,0.25l0.16,0.1l0.6,0.15l0.4-0.94L1755.18,713.78z"/>
   </g>
-  <g class="country" id="FM">
+  <g class="country" id="FSM">
   	<path class="st0" d="M3088.92,1256.06l-0.14,0.01l-0.05,0.07l-0.03,0.22l0.07,0.04l0.15-0.04l0.26-0.18l-0.02-0.05L3088.92,1256.06
   		z M3086.8,1256.7l-0.2,0.01l-0.11,0.08l0.13,0.03l-0.03,0.15l-0.25,0.05l-0.05,0.05l0.07,0.06l0.51,0.04l0.07-0.11l0.02-0.14
   		l-0.06-0.14L3086.8,1256.7z M2973.24,1238.22l-0.25,0.28l-0.27,0.47l-0.2,0.41l0.04,0.23l0.64-0.69l0.34-0.06l0.26-0.34l-0.23-0.39
   		L2973.24,1238.22z M3142.94,1260.4l-0.91-0.22l-0.43,0.28l-0.06,0.34l0.28,0.18l0.19,0.69l0.62,0.09l0.49-0.19l-0.05-0.34
   		l0.22-0.32L3142.94,1260.4z M3182.43,1274.05l-0.21-0.08l-0.31,0.14l0.07,0.14l0.54,0.2L3182.43,1274.05z"/>
   </g>
-  <g class="country" id="FK">
+  <g class="country" id="FLK">
   	<path class="st0" d="M1307.95,1795.41l0.5-0.61l0.65-0.38l0.38-0.41l0.32-0.51l0.51-0.36l0.22-0.57l-0.44-0.49l-0.56-0.26
   		l-0.65,0.57l-0.24-0.17l-1.84,0.49l-0.65,0.08l-0.45-0.48l-0.64-0.17l-0.77,0.25l-1.12,0.79l-1.22-0.21l-1.34-0.7l-0.59-0.5
   		l-0.44,0.04l0.42,0.78l-0.04,0.4l0.14,0.25l0.77,0.67l0.95,0.4l0.48,0.65l-0.3,0.19l-1.57,0.46l-0.51-0.01l-0.46,0.18l0.69,0.49
@@ -7254,7 +7066,7 @@ function mapSvg() {
   		l0.24,0.48l0.67,0.31l-0.05-0.99L1317.32,1799.01z M1306.09,1800.51l0.06,0.25l0.01,0.55l0.17,0.42l0.15,0.1l0.54-0.22l0.01-0.58
   		l-0.61-0.44L1306.09,1800.51z"/>
   </g>
-  <g class="country" id="FJ">
+  <g class="country" id="FJI">
   	<path class="st0" d="M3324.82,1459.4l0.13-0.72l0.17-0.27l0.03-0.28l-0.38-0.01l-0.37,0.16l-1.21,0.81l-1.09,0.99l-0.03-0.95
   		l0.46-0.94l1.09-0.7l0.39-0.65l0.46-0.59l1.27-1.14l0.01-0.13l-1.28,0.53l-0.5,0.06l-0.62-0.12l-0.67,0.13l-0.7,0.23l-0.65,0.38
   		l-0.98,0.74l-0.55,0.16l-0.58,0.06l-1.12,0.28l-1.1,0.39l-0.8,0.49l-0.51,0.79l-0.51,0.02l-0.49,0.27l-0.44-0.15l-0.43-0.23
@@ -7282,7 +7094,7 @@ function mapSvg() {
   		l0.62-0.32l-0.01-0.9l0.01-0.63l-0.58,0.78L3324.88,1461.95z M3327.17,1478.9l-0.21,0.17l-0.06,0.18l-0.04,0.12l0.02,0.18
   		l0.12,0.04l0.02-0.1l0.03-0.18l0.05-0.08l0.08-0.05l0.15,0.11l0.13,0.01l-0.02-0.26L3327.17,1478.9z"/>
   </g>
-  <g class="country" id="FI">
+  <g class="country" id="FIN">
   	<path class="st0" d="M1991.36,741.01l-0.52,0.3l-0.17,0.27l0.46,0.36l0.74-0.13l0.17-0.42l-0.12-0.36L1991.36,741.01z
   		 M1992.51,741.01l-0.08,0.73l0.32,0.1l0.84-0.43l0.26-0.77l-0.84,0.04L1992.51,741.01z M1988.56,700.78l-1.28,0l0.55,1.04
   		l0.88,0.63l0.47-0.14l0.07-0.22l0.41-0.37l0.09,0.11l0.32,0.02l0.05-0.64l-0.47-0.21l-0.66,0.45l-0.49,0.07l-0.09-0.25l0.03-0.24
@@ -7334,7 +7146,7 @@ function mapSvg() {
   		l-0.62-1.69l0.12-0.44l0.42-0.19l0.36-0.04l0.05,0.91l0.53-0.09l0.16-0.6l0.04-0.42l-0.14-0.21l-0.36-0.17l-0.21-0.28l0.3-0.46
   		l0.55-0.2l0.47,0.61L1978.06,738.75z"/>
   </g>
-  <g class="country" id="ET">
+  <g class="country" id="ETH">
   	<polygon class="st1" points="2210.93,1251.6 2208.13,1251.6 2205.37,1251.6 2204.88,1251.35 2202.57,1250.58 2199.63,1249.59
   		2195.98,1248.37 2193.39,1247.5 2190.62,1246.6 2187.82,1245.67 2185.61,1244.95 2182.87,1244.05 2180.48,1243.26 2180.15,1243.07
   		2178.83,1241.87 2177.09,1240.3 2176.76,1240.27 2175.93,1239.94 2175.19,1239.09 2174.42,1238.01 2173.71,1236.65 2173.4,1235.72
@@ -7377,7 +7189,7 @@ function mapSvg() {
   		2196.59,1268.41 2198.54,1266.42 2200.7,1264.21 2202.79,1262.2 2205.32,1259.77 2206.9,1258.24 2209.37,1255.86 2211.72,1253.6
   		2213.8,1251.6 	"/>
   </g>
-  <g class="country" id="ES">
+  <g class="country" id="ESP">
   	<path class="st0" d="M1665.43,1076.6l-0.71-0.39l-0.37-0.04l-0.27,0.24l-0.29,0.53l0.43,0.72l0.41,0.22l0.34-0.08l0.7-0.56
   		l-0.02-0.25L1665.43,1076.6z M1672.25,1072.95l-1.67,1.32l-0.33,0.11l-1.64,0.28l-0.77-0.06l-0.52,0.33l0.33,0.42l0.6,1.31
   		l1.15,1.29l0.97-0.23l0.39-0.27l0.66-0.81l0.71-2.08l1.81-1.35l-0.04-0.43L1672.25,1072.95z M1679.99,1076.68l-0.13-0.11
@@ -7427,7 +7239,7 @@ function mapSvg() {
   		 M1822.88,973.28l-1.82,0.4l-0.39,0.49l-0.02,0.49l-0.37,0.08l-0.28,0.68l0.28,0.24l1.28,0.21l0.31-0.6l0.42-0.14l1.09-1.04
   		l-0.09-0.48L1822.88,973.28z"/>
   </g>
-  <g class="country" id="ER">
+  <g class="country" id="ERI">
   	<path class="st0" d="M2147.53,1183.75l-0.28-0.83l-0.24-0.19l-0.08,0.2l-0.36,0.33l0.14,0.17L2147.53,1183.75z M2172.57,1210.76
   		l-0.71-0.64l-0.25,0.78l-1.46-0.48l-0.52-1.31l-1.78-1.73l-1.04,0.08l-0.45-1.58l-0.85-1.62l-4.94-3.37l-1.5-2.23l-2.55-3.22
   		l-3.18-1.05l-1.39-1.2l-0.74-0.43l-0.92-0.26l-1.11-0.09l-0.85-0.34l-1.01-1.18l-0.22-0.56l-0.14-1.01l-0.53-0.5l-0.96-0.66
@@ -7446,7 +7258,7 @@ function mapSvg() {
   		l0.85-0.06l0.92,0.18l0.79-0.02l0.08-0.42l-1.33-0.64l-0.13,0.32l-0.19,0.15l-0.24,0.04l-0.35-0.46l-0.07-0.85l-0.3-0.37
   		l-0.46-0.32l-0.72-0.12l0.37,0.52l-0.18,0.19l-0.29,0.15l-0.04,0.38l0.64,0.1L2147.19,1186.4z"/>
   </g>
-  <g class="country" id="EH_-_Disputed">
+  <g class="country" id="ESH">
   	<polygon class="st1" points="1666.16,1140.24 1666.16,1140.24 1665.98,1141.2 1666.11,1142.01 1665.69,1141.56 1666.44,1137.01
   		1667.1,1132.42 1668.26,1130.14 1669.18,1129.13 1670.61,1128.61 1671.92,1126.31 1672.38,1124.19 1673.24,1123.22
   		1673.51,1122.45 1673.17,1121.87 1673.98,1120.73 1674.97,1118.97 1675.42,1117.85 1676.58,1116.11 1676.72,1115.72
@@ -7470,40 +7282,7 @@ function mapSvg() {
   		1677.55,1137.42 1675.62,1137.42 1673.69,1137.42 1671.76,1137.42 1669.83,1137.43 1667.9,1137.43 1666.82,1137.43
   		1666.47,1139.07 	"/>
   </g>
-  <g class="country" id="EH" class="st2">
-  	<polygon class="st4" points="1871.27,1035.17 1871.27,1034.74 1871.27,1034.35 1871.27,1033.97 1871.27,1033.65 1871.27,1033.25
-  		1871.27,1032.93 1871.02,1032.93 1871.02,1032.93 1871.03,1033.01 1871.08,1033.17 1871.1,1033.31 1871.08,1033.4 1871.05,1033.5
-  		1871.06,1033.61 1871.1,1033.72 1871.14,1033.83 1871.14,1033.91 1871.06,1033.97 1870.89,1034 1870.69,1034.03 1870.54,1034.03
-  		1870.32,1034.01 1870.18,1034.01 1870.06,1034.01 1869.95,1034.03 1869.81,1034.1 1869.67,1034.22 1869.48,1034.37
-  		1869.37,1034.47 1869.22,1034.49 1869.07,1034.49 1868.92,1034.41 1868.83,1034.37 1868.77,1034.38 1868.67,1034.43
-  		1868.55,1034.47 1868.43,1034.47 1868.25,1034.39 1868.02,1034.28 1867.89,1034.22 1867.71,1034.2 1867.52,1034.16
-  		1867.39,1034.18 1867.22,1034.18 1867,1034.26 1866.81,1034.32 1866.61,1034.37 1866.37,1034.43 1866.43,1034.6 1866.51,1034.69
-  		1866.51,1034.81 1866.47,1034.91 1866.36,1035.01 1866.23,1035.13 1866.16,1035.22 1866.08,1035.36 1866.03,1035.43
-  		1865.93,1035.56 1865.85,1035.72 1865.82,1035.82 1865.79,1035.93 1865.72,1035.96 1865.49,1035.99 1865.35,1036.03
-  		1865.22,1036.07 1865.17,1036.14 1865.17,1036.15 1865.13,1036.28 1865.13,1036.38 1865.09,1036.45 1865.04,1036.65
-  		1864.97,1036.82 1864.91,1037.05 1864.86,1037.24 1864.79,1037.55 1864.72,1037.83 1864.63,1038.1 1864.55,1038.27 1864.5,1038.37
-  		1864.37,1038.48 1864.26,1038.56 1864.14,1038.66 1863.99,1038.75 1863.8,1038.87 1863.63,1038.96 1863.57,1039.01
-  		1863.49,1039.06 1863.36,1039.19 1863.25,1039.38 1863.18,1039.53 1863.05,1039.78 1862.96,1039.91 1862.91,1039.99
-  		1862.77,1040.06 1862.6,1040.12 1862.42,1040.2 1862.28,1040.27 1862.08,1040.35 1861.95,1040.43 1861.86,1040.54 1861.79,1040.67
-  		1861.7,1040.86 1861.63,1041.07 1861.59,1041.21 1861.48,1041.66 1861.45,1041.92 1861.41,1042.09 1861.36,1042.3 1861.32,1042.62
-  		1861.32,1042.89 1861.28,1043.04 1861.27,1043.15 1861.18,1043.28 1861.1,1043.38 1860.98,1043.51 1860.87,1043.59
-  		1860.83,1043.66 1860.72,1043.76 1860.62,1043.91 1860.53,1044 1860.54,1044.08 1860.56,1044.21 1860.51,1044.34 1860.45,1044.49
-  		1860.31,1044.68 1860.15,1044.77 1859.91,1044.79 1859.59,1044.79 1859.33,1044.77 1859.03,1044.77 1858.76,1044.74 1858.5,1044.7
-  		1858.2,1044.68 1857.98,1044.68 1857.71,1044.72 1857.01,1044.72 1856.73,1044.74 1856.34,1044.81 1856.24,1044.83
-  		1856.24,1044.83 1856.23,1044.91 1856.07,1045.89 1856.16,1045.98 1856.13,1045.81 1856.17,1045.6 1856.24,1045.35 1856.31,1045
-  		1856.54,1045 1856.96,1045 1857.37,1045 1857.79,1045 1858.2,1045 1858.61,1045 1859.03,1045 1859.44,1045 1859.86,1045
-  		1860.27,1045 1860.68,1045 1861.1,1044.99 1861.51,1044.99 1861.93,1044.99 1862.34,1044.99 1862.76,1044.99 1863.17,1044.99
-  		1863.44,1044.99 1863.43,1044.74 1863.41,1044.54 1863.4,1044.28 1863.38,1044.01 1863.36,1043.75 1863.35,1043.5 1863.33,1043.25
-  		1863.31,1043.02 1863.3,1042.8 1863.28,1042.68 1863.19,1042.44 1863.17,1042.32 1863.19,1042.19 1863.25,1042.07 1863.41,1041.85
-  		1863.66,1041.68 1863.94,1041.49 1864.16,1041.34 1864.27,1041.3 1864.6,1041.25 1864.87,1041.14 1865.13,1041.03 1865.23,1040.96
-  		1865.25,1040.76 1865.25,1040.53 1865.25,1040.27 1865.25,1040.01 1865.25,1039.75 1865.25,1039.49 1865.25,1039.23
-  		1865.25,1038.97 1865.25,1038.71 1865.25,1038.45 1865.25,1038.19 1865.25,1037.93 1865.25,1037.67 1865.25,1037.41
-  		1865.25,1037.15 1865.25,1036.89 1865.25,1036.63 1865.25,1036.37 1865.25,1036.14 1865.52,1036.14 1865.85,1036.14
-  		1866.19,1036.14 1866.53,1036.14 1866.86,1036.14 1867.2,1036.14 1867.54,1036.14 1867.87,1036.14 1868.21,1036.14
-  		1868.55,1036.14 1868.88,1036.14 1869.22,1036.14 1869.56,1036.14 1869.89,1036.14 1870.23,1036.14 1870.56,1036.14
-  		1870.9,1036.14 1871.27,1036.14 1871.27,1035.92 1871.27,1035.6 	"/>
-  </g>
-  <g class="country" id="EG">
+  <g class="country" id="EGY">
   	<polygon class="st1" points="2120.24,1131.41 2119.9,1130.69 2116.4,1128.08 2114.85,1126.01 2112.18,1125.03 2111.61,1124.63
   		2111.2,1124.07 2110.37,1123.21 2109.24,1120.34 2108.89,1118.82 2108.74,1115.84 2108.83,1115.28 2109.04,1114.59
   		2109.49,1114.39 2109.81,1114.33 2111.09,1114.44 2109.75,1113.3 2108.51,1112.51 2107.83,1111.49 2106.12,1109.66
@@ -7539,7 +7318,7 @@ function mapSvg() {
   		2087.09,1131.58 2089.85,1131.58 2092.62,1131.58 2095.38,1131.58 2098.14,1131.58 2100.91,1131.58 2103.67,1131.58
   		2106.43,1131.58 2109.2,1131.57 2111.96,1131.57 2114.72,1131.57 2117.49,1131.57 2120.25,1131.57 	"/>
   </g>
-  <g class="country" id="EE">
+  <g class="country" id="EST">
   	<path class="st0" d="M1997.59,756.98l0.87,0.4l0.57,1.36l-0.05,0.52l0.59,0.27l1-0.24l0.89-1.38l0.22,0.29l0.41,0.24l0.69-0.61
   		l0.72-0.09l-0.23-1.06l-0.6-0.88l-1.55-0.3l-0.11-0.21l-0.08-0.53l-0.44-0.16l-0.52,0.07l-0.7,0.68l-0.35,0.65l-3.42,0.38
   		l0.89,0.56L1997.59,756.98z M2003.12,760.56l-1.21-0.2l-0.56,0.21l-0.55,0.09l-0.6-0.3l-0.59-0.08l-0.61,0.28l-1.23,0.3l-0.52,0.9
@@ -7559,7 +7338,7 @@ function mapSvg() {
   		l0.13-0.19l0.56-0.18l0.19-0.21L2046.65,750.67z M2004.81,759.67l-0.47,0.23l-0.38,0.59l1.66,0.88l0.7-0.13l0.11-0.31l-0.2-0.9
   		L2004.81,759.67z"/>
   </g>
-  <g class="country" id="EC">
+  <g class="country" id="ECU">
   	<path class="st0" d="M1045.1,1319.99l-0.34,0.27l-0.4,0.66l0.49,0.49l1.59,0.29l0.39-0.25l0.17-0.46l-0.96-0.74L1045.1,1319.99z
   		 M1039.89,1322.17l0-0.82l-0.51-0.56l-1.57,0.24l-0.06,0.22l0.06,0.67l0.3,0.44l0.71,0.29l0.85-0.15L1039.89,1322.17z
   		 M1043.6,1323.63l-0.08-0.17l0.15-0.42l-0.21-0.91l-1.69-1.62l-0.28-1.54l-0.52-0.54l-0.28-0.55l-0.47-0.29l-1.09,0.17l-0.15,0.36
@@ -7592,7 +7371,7 @@ function mapSvg() {
   		l-0.36,0.65l0.46,0.36l0.34-0.02l0.38-0.4l-0.17-0.25L1048.04,1329.02z M1047.72,1322.97l-0.52,0.54l-0.09,0.79l1.31,0.81
   		l0.44-0.01l0.16-0.12l0.46-0.13l0.58-0.7l0.06-0.95l-0.71-0.5L1047.72,1322.97z"/>
   </g>
-  <g class="country" id="DZ">
+  <g class="country" id="DZA">
   	<polygon class="st1" points="1909.7,1116.59 1908.81,1114.84 1907.61,1112.64 1906.87,1111.3 1906.62,1111.09 1903.26,1110.03
   		1899.71,1108.99 1897.62,1109.62 1897.26,1109.57 1896.67,1109.17 1896.08,1108.63 1895.77,1107.87 1894.93,1106.86
   		1894.16,1104.53 1894.09,1102.68 1893.93,1102.03 1892.08,1099.41 1890.4,1097.03 1889.28,1095.45 1889.06,1094.73
@@ -7646,7 +7425,7 @@ function mapSvg() {
   		1875.61,1139.65 1879.97,1136.98 1884.33,1134.3 1888.69,1131.62 1893.05,1128.93 1897.42,1126.25 1901.78,1123.55
   		1906.14,1120.86 1910.5,1118.16 	"/>
   </g>
-  <g class="country" id="DO">
+  <g class="country" id="DOM">
   	<polygon class="st1" points="1233.76,1160.59 1233.22,1160.21 1231.2,1158.56 1229.38,1157.84 1228.29,1157.62 1227.18,1157.49
   		1226.19,1157.29 1225.22,1156.99 1224.27,1156.8 1223.3,1156.72 1223.3,1156.35 1223.45,1155.95 1224.17,1155.9 1225.83,1155.99
   		1226.32,1155.78 1226.59,1155.38 1225.81,1154.89 1222.32,1155.14 1221.61,1154.55 1221.15,1153.63 1221.04,1152.61
@@ -7664,11 +7443,11 @@ function mapSvg() {
   		1231.18,1164.54 1231.42,1164.48 1231.82,1163.75 1232.22,1163.32 1232.82,1163.12 1233.23,1162.79 1233.95,1161.74
   		1234.12,1161.11 	"/>
   </g>
-  <g class="country" id="DM">
+  <g class="country" id="DMA">
   	<polygon class="st1" points="1293.59,1187.69 1293.23,1187.19 1292.07,1186.78 1291.97,1187.03 1291.88,1187.7 1292.43,1188.78
   		1292.77,1190.25 1293.56,1190.07 1293.81,1189.01 	"/>
   </g>
-  <g class="country" id="DK">
+  <g class="country" id="DNK">
   	<path class="st0" d="M1893.92,804.02l-1.42-0.84l-0.41-0.13l-0.08,0.11l0.3,1.8l0.82,0.11l0.45,0.28l0.88-0.16l-0.03-0.25
   		L1893.92,804.02z M1898.36,794.64l0.53,0.22l0.14-0.21l0.17-0.6l0.29-0.52l-0.21-0.43l-0.75-0.92l-0.26,0.4l0.24,0.62l-0.2,0.69
   		L1898.36,794.64z M1902.79,777.08l0.21-0.29l0.82-0.56l-0.75-0.09l-1.27,0.26l-0.51,0.56l1.16,0.4L1902.79,777.08z M1896.85,804.97
@@ -7697,7 +7476,7 @@ function mapSvg() {
   		l0.81-0.2l0.58,0.04l1.5,0.29l0.36,1.07l0.06,0.67l0.31,0.78l0.01,0.67l1.02,1.67l1.58-0.5l0.16-1.09l0.04-0.79l-0.06-1.09
   		l0.21-1.39L1913.49,801.08z"/>
   </g>
-  <g class="country" id="DJ">
+  <g class="country" id="DJI">
   	<polygon class="st1" points="2174.85,1214.65 2174.38,1213.83 2172.97,1212.16 2172.85,1211.75 2171.92,1212.14 2170.89,1212.49
   		2170.74,1212.48 2170.4,1212.93 2169.91,1214.17 2169.37,1214.54 2169.09,1214.57 2167.48,1213.4 2167.24,1213.34 2166.89,1213.57
   		2166.63,1213.8 2165.81,1215.01 2164.7,1216.63 2163.41,1218.51 2163.02,1218.97 2161.89,1220.11 2161.7,1220.43 2161.48,1221.25
@@ -7707,7 +7486,7 @@ function mapSvg() {
   		2168.94,1221.93 2168.36,1222.03 2167.99,1221.97 2167.84,1221.4 2168.84,1221.5 2170.18,1219.98 2172.27,1219.22 2174.16,1218.02
   		2174.7,1217.54 2175.07,1216.99 2175.32,1216.15 	"/>
   </g>
-  <g class="country" id="DE">
+  <g class="country" id="DEU">
   	<path class="st0" d="M1920.56,811.27l0.24,0.45l1.47,0.93l0.42-0.04l0.57-1.02l0.95-0.01l0.95,0.66l0.23-0.4l-0.21-0.78l-0.9-0.49
   		l-0.18-0.45l0.19-0.28l0.57-0.55l-0.11-0.28l-0.18-0.2l-1.22-0.45l-0.35-0.4l-0.23-0.58l-0.72,0.03l-0.82,0.68l-0.07,0.65
   		l-0.46,0.45l0.04,0.41l-0.21,1.3L1920.56,811.27z M1926.54,815.07l0.41,0.46l-0.16,0.67l0.2,0.69l1.03,0.18l1.04-0.13l0.35,0.04
@@ -7758,7 +7537,7 @@ function mapSvg() {
   		 M1880.01,805.65l2.13-0.21l0.24-0.31l-2.1-0.09l-0.07-0.35l0.16-0.67l0.11-0.33l0.4-0.48l-0.39-0.04l-0.92,1.76l-0.09,1.65
   		l0.19-0.23L1880.01,805.65z"/>
   </g>
-  <g class="country" id="CZ">
+  <g class="country" id="CZE">
   	<polygon class="st1" points="1968.29,865.57 1968.1,864.76 1966.31,863.18 1966.1,862.53 1966.17,862.27 1966.04,861.85
   		1965.65,861.6 1964.24,861.3 1963.88,861.47 1963.55,861.29 1963.03,860.92 1962.14,860.61 1962.04,860.45 1961.72,860.18
   		1961.54,860.14 1961.43,860.31 1961.17,860.54 1960.25,860.83 1959.88,860.71 1959.55,860.46 1959.17,859.9 1958.62,859.42
@@ -7791,7 +7570,7 @@ function mapSvg() {
   		1964.53,867.49 1964.81,867.19 1965.32,866.86 1965.81,866.39 1966.33,866.1 1967,866.13 1967.62,866.07 1968.1,865.9
   		1968.32,865.89 	"/>
   </g>
-  <g class="country" id="CY">
+  <g class="country" id="CYP">
   	<polygon class="st1" points="2099.97,1007.44 2100.75,1006.79 2099.53,1007.1 2098.36,1007.66 2097.69,1007.9 2096.6,1008.58
   		2092.76,1009.72 2091.51,1009.9 2090.24,1009.84 2088.68,1009.68 2087.15,1009.38 2087.02,1010.45 2086.63,1011.38
   		2085.73,1011.58 2085.22,1011.47 2084.72,1011.36 2083.9,1011.61 2083.22,1012.24 2082.51,1012.62 2081.76,1012.3 2081.89,1013.54
@@ -7800,17 +7579,17 @@ function mapSvg() {
   		2091.14,1015.46 2091.98,1014.93 2093.53,1013.38 2094.04,1013.35 2094.57,1013.42 2095.53,1013.36 2096.49,1013.2
   		2096.26,1012.66 2096.1,1012.47 2095.49,1011.76 2095.29,1011.17 2095.58,1010.31 	"/>
   </g>
-  <g class="country" id="CX">
+  <g class="country" id="CXR">
   	<path class="st0" d="M2625.44,1421.11l-0.1-0.04l-0.04-0.09l0.03-0.09l-0.04-0.14l-0.01-0.07v-0.08h-0.06l0.02,0.21l0.06,0.25
   		l0.12,0.15l0.2-0.08l-0.05-0.05L2625.44,1421.11z M2626,1421l-0.05,0.07l-0.08,0.04l-0.1,0.01l0.01,0.05l0.02,0.03l0.08,0.04
   		l0.1-0.05l0.05-0.08l0.01-0.1l-0.04-0.1L2626,1421z M2700,1406.23l-0.3,0.16l-0.21,0.02l-0.42,0.06l-0.1,0.45l0.51,0.11l0.44,0.33
   		l0.24-0.6L2700,1406.23z"/>
   </g>
-  <g class="country" id="CW">
+  <g class="country" id="CW" style="display: none;">
   	<polygon class="st1" points="1230,1216.42 1228.44,1215.8 1227.9,1214.86 1227.55,1214.6 1227.21,1214.54 1227.25,1215.23
   		1228.59,1216.56 1230.21,1217.38 1230.65,1217.26 	"/>
   </g>
-  <g class="country" id="CV">
+  <g class="country" id="CPV">
   	<path class="st0" d="M1599.67,1175.7l-0.46,0.08l-0.67,0.37l-0.19,0.33l0.62,0.3l0.43,0.03l0.69-0.21l-0.04-0.24L1599.67,1175.7z
   		 M1604.26,1191.87l-0.88,0.5l-0.17,0.42l0.21,0.49l0.44,0.34l0.46,0.14l0.66-0.33l0.1-0.63l-0.28-0.77L1604.26,1191.87z
   		 M1599.31,1174.21l-0.46-0.7l-0.66-0.15l-1.88,0.88l-0.04,0.2l0.17,0.45l0.11,0.68l0.35,0.09l0.82-0.18l1.29-0.89L1599.31,1174.21z
@@ -7821,7 +7600,7 @@ function mapSvg() {
   		l-0.36,0.89l0.63,0.45l0.54,0.06l0.93-0.49l0.24-0.6L1618.57,1182.18z M1614.82,1189.48l-0.61-0.05l-0.31,0.57l0.04,0.14
   		l-0.08,0.53l0.35,0.39l0.23-0.03l0.56-0.26l-0.03-0.87L1614.82,1189.48z"/>
   </g>
-  <g class="country" id="CU">
+  <g class="country" id="CUB">
   	<path class="st0" d="M1147.45,1127.25l0.68,0.21l1.04,0.03l0.29,0.13h0.4l0.5-0.09l-0.57-0.73l-0.41-0.08l-0.39,0.03l-0.4,0.11
   		l-1.16-0.19l-0.55,0.16l0.18,0.22L1147.45,1127.25z M1153.43,1130.77l0.16,0.45l0.65,0.43l0.33,0.15l0.24,0.04l0.38,0.39l0.35-0.27
   		l0.19-0.39l0.1-0.51l-1.19-0.25l-0.68-0.08L1153.43,1130.77z M1152.65,1130.08l0.84,0.37l0.28-0.02l0.31-0.19l-0.39-0.46
@@ -7850,7 +7629,7 @@ function mapSvg() {
   		 M1113.76,1133.59l-0.44-0.48l-0.28-0.61l-0.35-0.17l-1.98-0.29l-0.73,0.96l-0.04,0.37l0.92,1.75l-0.28,0.23l-0.4,0.14l-0.49-0.21
   		l-0.57-0.43l-0.03,0.26l0.36,0.54l0.63,0.55l0.91,0.25l0.9-0.02l1.67-0.66l0.78-0.46l-0.05-0.44L1113.76,1133.59z"/>
   </g>
-  <g class="country" id="CR">
+  <g class="country" id="CRI">
   	<polygon class="st1" points="1113.92,1237.95 1112.5,1237.5 1112.23,1236.95 1111.76,1236.64 1110.39,1234.78 1109.58,1234.35
   		1107.71,1232.04 1106.86,1230.76 1105.79,1228.49 1105.68,1227.81 1105.44,1227.28 1105.23,1226.94 1105.08,1227.63
   		1104.63,1228.06 1103.8,1228.42 1102.89,1228.48 1101.4,1228.14 1100.79,1228.1 1100.56,1227.92 1100.49,1227.59 1100.06,1227.08
@@ -7870,7 +7649,7 @@ function mapSvg() {
   		1111.14,1239.36 1111.27,1239.19 1111.57,1239.09 1111.81,1238.83 1111.95,1238.33 1112.31,1238.15 1112.96,1238.54
   		1113.63,1238.88 1113.91,1238.76 1114.12,1238.6 1114.26,1238.44 1114.31,1238.28 	"/>
   </g>
-  <g class="country" id="CO">
+  <g class="country" id="COL">
   	<path class="st0" d="M1151.56,1297.56l0.23-0.18l-0.05-0.52l-0.16-0.26l-0.34-0.1l-0.27,0.31l0.15,0.42L1151.56,1297.56z
   		 M1246.27,1307.85l0.09-0.57l-0.39-0.83l-0.23-0.89l-0.2-0.31l-0.06-0.66l-0.47-1.2l-0.38-0.98l-0.35-0.5l0.15-0.42l-0.15-0.42
   		l-0.29-0.35l-0.42-1.11l0.15-0.48l-0.11-0.48l-0.35-0.33l-0.5-0.35l-0.67-0.74l-0.8-0.7l-0.41-0.28l-0.28-0.11l-0.24-0.66
@@ -7925,7 +7704,7 @@ function mapSvg() {
   		l0.37,0.6l0.36,0.3l0.45,0.03l0.51-0.1l0.51-0.25l0.87-1.11l0.86-0.95l0.45-0.32l0.48-0.29l0.35-0.11l0.48,0.04l0.41,0.26
   		l0.26,0.45l0.97,1.57l0.73,1.18l0.25,0.74l0.02,1.8l-0.04,1.59l0.1,0.21l0.14,0.06l1.59-0.37L1246.27,1307.85z"/>
   </g>
-  <g class="country" id="CN">
+  <g class="country" id="CHN">
   	<path class="st0" d="M2830.8,1076.37l-0.24-0.21l-0.6,0.63l-0.02,0.66l0.28,0l0.73-0.22l0-0.53L2830.8,1076.37z M2759.61,1133.54
   		l-0.18,0.34l-0.4,0.31l0.18,0.25l0.07,0.45l0.25,0.32l0.16-0.18l0.09-0.82l0.1-0.15l0.42-0.36l-0.2-0.1L2759.61,1133.54z
   		 M2819.04,1099.71l-0.08-0.15l-0.26-0.14l-0.16-0.27l-0.47,0.13l-0.22,0.43l0.23,0.36l-0.2,0.5l0.01,0.55l0.39,0.2l0.62-0.41
@@ -8154,7 +7933,7 @@ function mapSvg() {
   		l-0.16,0.19l0.3,0.75l0.22,0.06l0.08-0.42l-0.02-0.53L2840.2,1060.18z M2838.18,1058.49l-1.19-0.03l0.07,0.73l0.39,0.46l1.13,0.11
   		l1.04,0.53l0.12-0.18l0.22-0.62l-0.32-0.34L2838.18,1058.49z"/>
   </g>
-  <g class="country" id="CM">
+  <g class="country" id="CMR">
   	<polygon class="st1" points="1945.61,1298.87 1945.36,1297.95 1945.27,1296.9 1945.32,1296.62 1945.16,1296.3 1945.15,1296.23
   		1944.96,1295.44 1945.16,1294.89 1945,1294.31 1944.53,1293.74 1944.11,1293.3 1943.86,1292.91 1943.66,1292.74 1943.19,1292.68
   		1942.57,1292.47 1941.74,1291.62 1940.93,1290.78 1939.9,1289.71 1939.07,1288.79 1938.06,1287.66 1937.12,1286.61
@@ -8203,7 +7982,7 @@ function mapSvg() {
   		1944.25,1303.92 1944.96,1304.62 1945.22,1304.49 1945.47,1304.3 1945.61,1304.22 1945.6,1303.62 1945.2,1302.6 1945.05,1301.73
   		1945.14,1301.02 1945.44,1300.51 1945.95,1300.2 1946,1299.71 1946.01,1299.65 	"/>
   </g>
-  <g class="country" id="CL">
+  <g class="country" id="CHL">
   	<path class="st0" d="M1177.18,1722.36l0.26,0.05l0.21-0.17l0.09-0.2l-0.14-0.48l-0.26-0.3h-0.24l-0.29,0.21l0.15,0.56
   		L1177.18,1722.36z M888.36,1550.85l-0.33,0.43l-0.04,0.5l1.3-0.28l0.48-0.36l-0.45-0.05L888.36,1550.85z M1145.69,1610.82
   		l-0.18-0.07l-0.15-0.03l-0.09,0.01l-0.42,0.35l-0.35,0.29l-0.09,0.17l0.05,0.06l1.51-0.2l0.25-0.05l0.05-0.13l-0.13-0.16
@@ -8379,11 +8158,11 @@ function mapSvg() {
   		l0.54-0.14l0.91,0.19l-0.15,1.04l-0.84,1l-0.65,0.28l0.11,0.3l0.33,0.26l0.31,0.14l0.26-0.02l0.44-0.25l0.94-0.28l0.96-0.06
   		l0.78-0.53l0.52-0.28l0.33-0.27l0.03-0.46l0.5-0.91l0.85-0.63L1200.7,1818.63z"/>
   </g>
-  <g class="country" id="CK">
+  <g class="country" id="COK">
   	<polygon class="st1" points="464.3,1498.8 464.05,1498.63 463.7,1498.61 463.52,1498.73 463.43,1498.98 463.45,1499.06
   		463.68,1499.1 464.02,1499.16 464.29,1499.16 464.32,1499.08 	"/>
   </g>
-  <g class="country" id="CI">
+  <g class="country" id="CIV">
   	<path class="st0" d="M1782.36,1275.82l1.11,0.21l0.23-0.33l-1.08-0.16L1782.36,1275.82z M1788.17,1247.42l-0.35-2.39l-0.02-0.2
   		l-0.21-0.33l-0.2-0.99l-0.34-0.58l-0.48-0.17l0-0.54l0.48-0.92l0.13-0.54l-0.23-0.16l-0.03-0.42l0.17-0.68l-0.08-0.42l-0.18,0.2
   		l-0.42,0.27l-0.42-0.01l-0.49-0.63l-0.22-0.28l-0.4-0.64l-0.34-0.65l-0.46-0.28l-0.45-0.26l-0.55-0.82l-0.53-0.39l-0.56,0.11
@@ -8411,7 +8190,7 @@ function mapSvg() {
   		l1.11-1.38l0.23-0.5l0.21-0.35l0.03-0.49l0.2-1.61l0.53-1.94l0.33-0.73l0.23-0.4l0.27-0.65l0.07-0.3l1.02-0.76l0.47-0.21l0.1-0.3
   		l-0.16-0.33l0.07-0.22l0.24-0.11l0.37-0.09l0.27-0.31L1788.17,1247.42z"/>
   </g>
-  <g class="country" id="CH">
+  <g class="country" id="CHN">
   	<polygon class="st1" points="1897.74,894.34 1897.75,893.98 1897.42,893.29 1896.87,893.07 1895.44,894.37 1895.05,894.49
   		1893.9,894.13 1892.9,893.57 1892.79,893.17 1892.62,892.83 1891.78,892.52 1890.73,892.3 1890.39,892.3 1889.73,892.25
   		1889.61,892.25 1889.54,891.88 1889.58,891.08 1889.95,890.03 1890.63,888.74 1890.78,887.94 1890.17,887.47 1889.31,887.44
@@ -8437,7 +8216,7 @@ function mapSvg() {
   		1894.25,898.38 1894.44,897.71 1894.66,897.15 1895.08,897 1895.57,896.92 1896.22,897.52 1896.98,897.71 1897.55,897.68
   		1897.65,897.33 1897.62,896.95 1897.28,896.46 1897.35,895.72 	"/>
   </g>
-  <g class="country" id="CG">
+  <g class="country" id="COG">
   	<polygon class="st1" points="1966.45,1289.53 1965.97,1289.27 1965.52,1288.48 1965.3,1288.32 1963.99,1288.68 1963.3,1288.99
   		1962.94,1289.31 1962.66,1289.35 1962.24,1288.92 1961.91,1288.85 1961.4,1288.93 1960.87,1288.92 1960.52,1288.86 1960.3,1288.9
   		1959.68,1288.65 1957.41,1288 1957.02,1287.78 1956.57,1287.81 1955.4,1288.37 1954.78,1288.53 1952.91,1288.88 1950.9,1289.05
@@ -8483,7 +8262,7 @@ function mapSvg() {
   		1961.79,1305.8 1961.92,1304.26 1961.91,1301.8 1963.09,1298.44 1964.2,1296.42 1965.44,1294.17 1965.91,1292.81 1966.55,1290.99
   		"/>
   </g>
-  <g class="country" id="CF">
+  <g class="country" id="CAF">
   	<polygon class="st1" points="2039.91,1275.22 2039.27,1274.35 2039.07,1273.08 2039.04,1272.06 2038.91,1271.59 2038.64,1271.12
   		2038.32,1270.71 2037.81,1270.26 2036.62,1269.61 2035.39,1268.85 2034.8,1268.4 2033.69,1268.24 2033.02,1267.81 2032.45,1266.85
   		2032.23,1266.09 2031.66,1265.49 2031.42,1265.06 2031.29,1264.56 2031.73,1263.05 2031.08,1262.52 2030.11,1261.82
@@ -8528,7 +8307,7 @@ function mapSvg() {
   		2022.65,1276.25 2023.63,1274.63 2024.69,1274.16 2026.28,1274.4 2027.17,1274.65 2030.15,1275.34 2034.01,1276.07
   		2035.15,1276.18 2035.61,1276.26 2036.01,1276.15 2037.28,1275.23 2037.71,1275.1 2038.08,1275.12 2040.51,1275.86 	"/>
   </g>
-  <g class="country" id="CD">
+  <g class="country" id="COD">
   	<polygon class="st1" points="2072.79,1300.31 2072.41,1299.97 2072.28,1299.65 2071.96,1299.49 2071.49,1299.5 2071.18,1299.27
   		2070.83,1298.82 2070.48,1298.54 2069.37,1298.56 2068.51,1298.1 2068.52,1297.47 2068.86,1296.24 2069.51,1294.82
   		2069.54,1294.43 2069.45,1294.1 2069.29,1293.81 2069,1293.53 2068.73,1293.19 2068.94,1292.17 2069.35,1291.17 2069.68,1290.67
@@ -8622,7 +8401,7 @@ function mapSvg() {
   		2067.35,1305.43 2068.05,1304.62 2068.39,1304.4 2069.69,1303.09 2070.26,1302.62 2070.64,1302.48 2072.31,1301.3 2072.98,1300.63
   		2073.01,1300.57 	"/>
   </g>
-  <g class="country" id="CA">
+  <g class="country" id="CAN">
   	<path class="st0" d="M1003.7,614.83l-0.29,0.63l0.39,0.18l0.89,0l0.69-0.21l0.5-0.42l0.32-0.62l0.15-0.81l0.01-0.49l-1.12-1
   		l-0.75-0.42l-0.88-0.34l-0.77-0.02l-0.66,0.3l-0.51,0.58l-0.36,0.87l-0.13,0.59l0.14,0.55l-0.07,0.61l0.25,0.37l0.53,0.23l0.3-0.45
   		l0.39-0.97l0.11-0.79l-0.16-0.61l0.1-0.3l0.36,0.01l0.5,0.32l0.18,0.56l0.14,0.92l-0.04,0.55L1003.7,614.83z M999.59,616.78
@@ -9669,7 +9448,7 @@ function mapSvg() {
   		l-0.04-0.16L708.23,808.31z M705.45,836.76l-0.09,0.4l0.12,0.98l0.19,0.38l0.28,0.23l0.15-0.02l0.16-1.5l-0.74-0.62L705.45,836.76z
   		"/>
   </g>
-  <g class="country" id="BZ">
+  <g class="country" id="BLZ">
   	<path class="st0" d="M1069.71,1165.07l-0.33-0.01l-0.46,1.33l-0.05,0.32l-0.33,0.5l0.4-0.16l0.86-1.86L1069.71,1165.07z
   		 M1066.44,1163.33l-0.41,0.09l-0.45-0.13l0.45-0.98l-0.65-0.09l-0.75,0.05l-0.52,0.27l-0.53,1.35l-1.33,1.89l-0.53,0.92l-0.43,0.32
   		l-0.34,0.12l-0.38-0.22l-0.91-0.52l-0.7,0.25l-0.24,0.6l0.01,0.75l-0.08,2.09l-0.09,2.42l-0.07,1.78l-0.09,2.37l-0.09,2.42
@@ -9678,7 +9457,7 @@ function mapSvg() {
   		L1066.44,1163.33z M1069.98,1170.32l-0.05,0.39l-0.23,0.33l-0.37,0.31l-0.27,0.89l0.04,0.34l0.65-1.21l0.46-0.49l0.08-0.39
   		L1069.98,1170.32z"/>
   </g>
-  <g class="country" id="BY">
+  <g class="country" id="LBY">
   	<polygon class="st1" points="2085.17,822.17 2085,821.84 2083.18,820.71 2082.95,820.34 2082.8,819.9 2083.02,819.49
   		2083.01,819.03 2080.91,818.02 2079.16,817.84 2077.71,817.89 2077.15,817.68 2077.39,817.17 2077.75,816.24 2077.85,815.48
   		2077.76,815.14 2077.47,814.85 2076.09,814.21 2074.2,813.23 2073.32,812.12 2072.87,810.96 2072.35,810.25 2071.43,809.79
@@ -9721,7 +9500,7 @@ function mapSvg() {
   		2077.96,825.76 2079.69,825.95 2080.42,825.93 2081.33,825.5 2082.81,824.56 2083.17,823.88 2084.09,823.4 2084.65,823.21
   		2085.15,823.12 2085.2,822.72 	"/>
   </g>
-  <g class="country" id="BW">
+  <g class="country" id="BWA">
   	<polygon class="st1" points="2056.61,1507.13 2055.95,1506.45 2054.85,1506.32 2054.56,1506.16 2054.31,1505.91 2054.15,1505.58
   		2054.09,1505.22 2054.27,1504.09 2054.17,1503.96 2053.88,1503.83 2053.27,1503.69 2051.83,1503.18 2050.01,1502.68
   		2047.06,1502.14 2045.92,1502 2045.65,1501.83 2045.32,1501.42 2044.75,1500.12 2044.22,1499.27 2042.95,1497.95 2042.75,1497.54
@@ -9753,7 +9532,7 @@ function mapSvg() {
   		2045.77,1513.44 2047.3,1511.85 2048.75,1510.97 2050.1,1510.79 2051.39,1510.46 2052.6,1509.98 2053.5,1509.22 2054.07,1508.2
   		2055.05,1507.62 2057.03,1507.45 	"/>
   </g>
-  <g class="country" id="BT">
+  <g class="country" id="BTN">
   	<polygon class="st1" points="2584.83,1086.69 2584.56,1086.34 2584.51,1086.16 2584.59,1085.73 2584.83,1085.13 2585.27,1084.44
   		2584.95,1083.77 2584.49,1082.99 2584.16,1082.92 2583.32,1083.1 2582.41,1083.06 2581.69,1082.6 2581.16,1082.02 2581.03,1081.54
   		2581.18,1080.94 2581.42,1080.4 2581.47,1080.19 2581.45,1079.82 2581.55,1078.71 2581.25,1078.46 2580.3,1078.18 2579.24,1077.82
@@ -9769,7 +9548,7 @@ function mapSvg() {
   		2581.8,1088.84 2582.5,1088.58 2583.24,1088.38 2583.72,1088.32 2584.1,1088.31 2584.56,1088.37 2584.99,1088.19 2585.19,1087.83
   		2585.14,1087.28 	"/>
   </g>
-  <g class="country" id="BS">
+  <g class="country" id="BHS">
   	<path class="st0" d="M1159.8,1090.69l-0.8-0.37l-0.1-0.22l0.03-0.23l-0.25-0.21l-0.61-0.32l-0.68-0.8l-0.71-0.6l-1.16-0.09
   		l-0.97-0.2l-0.63-0.04l-0.68,0.33l1.24,0.02l2.4,0.5l1.52,2.05l0.77,0.51l0.27,0.65l-0.2,0.58l0.08,0.57l-0.22,0.65l0.01,1.19
   		l-0.4,0.55l-0.92,0.63l0.59,0.26l0.73,0.9l0.18-0.08l0.29-0.46l0.2-2.56l1.09-0.84l-0.24-1.77L1159.8,1090.69z M1158.4,1104.25
@@ -9796,7 +9575,7 @@ function mapSvg() {
   		 M1182.46,1112.76l-0.46,0.19l-0.2,1.21l0.36,0.08l0.67-0.96l-0.18-0.51L1182.46,1112.76z M1184.4,1125.25l1.21,0.44l0.54-0.35
   		l-0.19-0.16l-0.99-0.32l-0.39-0.46l-0.72-0.25l-0.06,0.32l0.09,0.35l0.24,0.47L1184.4,1125.25z"/>
   </g>
-  <g class="country" id="BR">
+  <g class="country" id="BRA">
   	<path class="st0" d="M1386.28,1316.71l-0.61,0.81l0.05,0.76l0.45,0.12l1.45-0.04l0.93,0.52l0.72-0.05l0.66-0.25l1.19-1.75
   		l-0.35-0.44l-1.19-0.3l-2.1,0.65L1386.28,1316.71z M1387.29,1315.36l0.95-1.09l0.03-0.6l-0.19-0.36l-0.34,0.11l-0.12,0.17
   		l-1.17,0.16l-0.26,0.58l0,1.05l0.17,0.26L1387.29,1315.36z M1385.22,1302.81l0.84-0.38l0.06-0.34l-0.42-1.36l-0.17-0.11l-0.47-0.06
@@ -9965,11 +9744,11 @@ function mapSvg() {
   		l-0.12-0.41L1484.02,1427z M1437.5,1515.56l-0.24-0.27l-0.19-0.08l-0.26,0.37l-0.72,0.49l0.34,0.36l0.84-0.19l0.55-0.21l0.49,0.02
   		l-0.26-0.24L1437.5,1515.56z"/>
   </g>
-  <g class="country" id="BQ">
+  <g class="country" id="BQ" style="display: none;">
   	<polygon class="st0" points="1233.86,1215.2 1233.85,1215.58 1234.04,1215.83 1234.39,1216.01 1234.55,1216.31 1234.59,1217.07
   		1234.83,1217.49 1235.24,1216.54 1235.12,1215.8 	"/>
   </g>
-  <g class="country" id="BO">
+  <g class="country" id="BOL">
   	<path class="st0" d="M1324.97,1472.47l-0.29-0.53l-0.63-1.51l-1-2.38l-0.07-0.85l-0.37-0.53l-0.61,0.17l-0.72-0.17l-1.81-1.29
   		l-1.2-0.7l-0.41-0.41l-0.18-1.32l-0.36-1.46l-0.15-1.81l0.06-0.43l1.01-1.37l0-0.69l0.09-0.6l-0.04-0.48l-0.25-0.01l-0.41,0.21
   		l-0.61,0.16l-0.35,0.01l-3.53-0.13l-4.02-0.15l-3.34-0.12l-2.9-0.11l-0.1-1.18l-0.16-1.98l-0.12-1.4l-0.18-2.22l-1.16-1.38
@@ -10011,7 +9790,7 @@ function mapSvg() {
   		l0.72-2.24l0.55-1.69l0.18-0.28l0.4-0.08l0.09-0.2L1324.97,1472.47z M1228.72,1455.72l0.29-0.14l0.34,0.16l0.17-0.01l-0.05-0.3
   		l-0.47-0.26l-0.57-0.56l-0.53-0.25l-0.21,0.05l-0.04,0.39l-0.11,0.39l-0.1,0.38l0.73-0.04L1228.72,1455.72z"/>
   </g>
-  <g class="country" id="BN">
+  <g class="country" id="BRN">
   	<path class="st0" d="M2778.69,1276.64l-0.44-0.05l-1.3,0.64l-0.84,0.55l-0.8,0.69l-0.85,0.62l-1.01,0.54l-1.05,0.45l-1.02,0.14
   		l-0.96-0.01l0.26,0.23l0.62,0.32l0.47,0.41l0.31,0.53l0.22,0.5l0.02,0.42l0.28,0.35l0.79,0.06l0.26,0.44l0.55,0.75l0.5,0.54
   		l0.31,0.21l0.39-0.11l0.6-0.49l0.43-0.61l0.29-0.82l-0.23-0.12l0.4-0.62l0.08-0.32l-0.19-0.3l-0.24-0.29l-0.09-0.75l-0.16-0.95
@@ -10019,15 +9798,15 @@ function mapSvg() {
   		l-0.5-0.97l-0.24-0.28l-0.95,0l0.02,0.66l-0.02,1.09l0.21,0.91l0.47,1.61l0.54,0.22l0.64,0.14l0.37-0.04l0.24-0.11l0.06-0.13
   		L2780.64,1281.34z"/>
   </g>
-  <g class="country" id="BM">
+  <g class="country" id="BMU">
   	<polygon class="st1" points="1264.81,1037.69 1264.17,1038.43 1263.39,1038.75 1263.54,1038.85 1263.75,1038.88 1264.51,1038.56
   		1265.03,1037.74 	"/>
   </g>
-  <g class="country" id="BL">
+  <g class="country" id="BLR">
   	<polygon class="st1" points="1280.22,1167.11 1280.14,1167.07 1280.13,1167.15 1280.18,1167.28 1280.27,1167.41 1280.37,1167.48
   		1280.5,1167.47 1280.62,1167.39 1280.71,1167.28 1280.77,1167.19 	"/>
   </g>
-  <g class="country" id="BJ">
+  <g class="country" id="BEN">
   	<polygon class="st1" points="1841.96,1229.18 1841.34,1228.2 1841.24,1227.51 1841.15,1226.48 1841,1225.57 1840.82,1225.23
   		1840.5,1224.93 1840.35,1224.75 1839.08,1222.89 1839.1,1222.01 1839.63,1220.89 1839.98,1220.34 1839.45,1219.57 1838.76,1219.02
   		1838,1218.78 1837.49,1218.38 1837.22,1217.83 1836.23,1216.76 1833.94,1214.64 1833.71,1214.59 1833.33,1214.51 1832.68,1214.76
@@ -10049,7 +9828,7 @@ function mapSvg() {
   		1839.66,1235.49 1840.04,1234.67 1840.41,1233.35 1839.82,1232.44 1839.84,1232.23 1840.06,1231.74 1840.41,1231.25
   		1840.7,1231.09 1841.36,1231.21 1841.47,1231.17 1841.57,1231.02 1842,1229.57 	"/>
   </g>
-  <g class="country" id="BI">
+  <g class="country" id="BDI">
   	<polygon class="st1" points="2069.21,1344.73 2069.06,1344.33 2069.09,1343.88 2068.95,1343.62 2068.35,1343.56 2067.47,1343.21
   		2066.71,1343.06 2066.21,1342.86 2066.03,1342.7 2065.95,1342.28 2066.09,1341.82 2066.17,1341.69 2066.36,1341.19 2066.03,1340.9
   		2065.95,1340.75 2066.1,1340.52 2066.87,1338.95 2067.04,1338.73 2066.83,1338.69 2066.44,1338.53 2065.82,1338 2064.66,1338.29
@@ -10063,11 +9842,11 @@ function mapSvg() {
   		2065.96,1348.68 2066.84,1347.88 2067.7,1347.26 2067.64,1347.01 2067.52,1346.82 2067.65,1346.66 2068.12,1346.34
   		2069.03,1346.05 2069.21,1345.43 	"/>
   </g>
-  <g class="country" id="BH">
+  <g class="country" id="BHR">
   	<polygon class="st1" points="2235.96,1094.93 2235.52,1094.27 2235.76,1093.89 2235.58,1093.84 2234.78,1093.99 2234.64,1094.34
   		2234.95,1095.52 2234.75,1096.36 2235.41,1097.54 2235.67,1097.78 2235.94,1097.1 2236.03,1096.03 	"/>
   </g>
-  <g class="country" id="BG">
+  <g class="country" id="BGR">
   	<polygon class="st1" points="2049.1,926.92 2048.69,926.87 2047.4,926.58 2045.95,926.08 2045.1,925.09 2044.56,924.38
   		2043.33,924.7 2043.09,924.61 2042.76,924.27 2041.83,924.04 2040.69,924.04 2038.12,922.75 2037.84,922.53 2035.83,922.75
   		2032.81,923.39 2030.5,924.18 2028.13,925.58 2027.16,926.65 2026.04,927.21 2024.45,927.63 2021.61,927.47 2018.65,926.94
@@ -10092,7 +9871,7 @@ function mapSvg() {
   		2043.46,937.47 2044,937.37 2044.59,937.03 2044.66,934.27 2044.93,932.59 2045.36,932.13 2045.83,931.75 2046.66,930.45
   		2048.22,930.13 2049.45,930.51 2050.26,929.37 2050.46,926.9 	"/>
   </g>
-  <g class="country" id="BF">
+  <g class="country" id="BFA">
   	<polygon class="st1" points="1829.44,1218.22 1828.18,1216.61 1827.32,1215.41 1827.16,1215.14 1827.04,1214.73 1827.12,1214.55
   		1827.47,1214.42 1828.26,1214.26 1828.41,1214.14 1828.45,1213.81 1828.33,1213.19 1827.89,1212.36 1827.43,1211.81
   		1827.17,1211.7 1826.69,1211.68 1826.18,1211.76 1825.21,1212.43 1824.78,1212.56 1823.78,1212.5 1822.88,1212.37 1822.34,1212.02
@@ -10128,7 +9907,7 @@ function mapSvg() {
   		1821.72,1222.46 1822.35,1222.38 1822.85,1222.44 1823.18,1222.85 1825.35,1222.49 1826.38,1222.7 1828.49,1220.91
   		1828.97,1220.39 1829.61,1219.12 1829.82,1218.64 	"/>
   </g>
-  <g class="country" id="BE">
+  <g class="country" id="BEL">
   	<polygon class="st1" points="1863.13,856.12 1863.11,855.55 1862.72,855.18 1861.95,855.03 1861.74,854.77 1861.66,854.52
   		1862.22,853.95 1861.54,853.5 1861.24,853.04 1860.29,852.45 1860.19,852.25 1859.33,852.23 1858.81,851.6 1857.66,851.91
   		1857.66,851.98 1857.45,851.63 1857.2,851.22 1857.27,850.96 1858.02,850.23 1858.13,850.03 1858.05,849.92 1858.13,849.6
@@ -10151,7 +9930,7 @@ function mapSvg() {
   		1858.08,861.41 1858.45,860.95 1858.7,860.39 1859.12,859.62 1860.04,858.69 1860.7,858.83 1860.99,858.83 1861.16,859.17
   		1861.22,859.2 1861.26,859 1861.71,857.97 1863.31,857.05 	"/>
   </g>
-  <g class="country" id="BD">
+  <g class="country" id="BGD">
   	<path class="st0" d="M2576.82,1126.97l-0.29,3.65l0.89-0.62l0.23-0.95l-0.17-0.73L2576.82,1126.97z M2580.55,1127.23l-0.33-0.76
   		l-0.24-0.35l-0.14,0.16l-0.23,1.08l0.47,0.86l0.37,0.23l0.39-0.26l-0.07-0.38L2580.55,1127.23z M2573.28,1123.44l-0.15-0.38
   		l-0.52-0.64l-0.37,0.18l0.22,0.35l0.35,0.26L2573.28,1123.44z M2573.61,1125.26l-0.14-0.63l-0.09-0.25l-0.64-0.44l-0.79,0.25
@@ -10187,11 +9966,11 @@ function mapSvg() {
   		l-0.13,0.37l-0.13,0.66l0.15,0.52l0.31-0.72L2583.58,1132.57z M2584.01,1133.98l-0.22-0.01l-0.43,0.12l0.14,1.18l-0.12,0.36
   		l0.25,0.26l0.51-0.04l0.11-0.89l-0.11-0.64L2584.01,1133.98z"/>
   </g>
-  <g class="country" id="BB">
+  <g class="country" id="BB" style="display: none;">
   	<polygon class="st1" points="1308.66,1207.59 1307.79,1206.56 1307.33,1206.69 1307.36,1207.99 1307.63,1208.4 1308.38,1208.74
   		1308.62,1208.57 1309.17,1207.97 	"/>
   </g>
-  <g class="country" id="BA">
+  <g class="country" id="BIH">
   	<polygon class="st1" points="1974.34,923.49 1973.35,922.66 1972.58,921.92 1971.68,921.36 1971.01,921.13 1970.81,920.85
   		1970.73,920.54 1970.8,919.98 1970.84,919.26 1971,918.81 1971.61,917.96 1972.19,917.06 1972.55,916.19 1972.73,915.38
   		1972.67,915.15 1972.36,914.98 1971.72,914.8 1970.84,914.96 1970.08,915.25 1969.79,915.27 1969.23,915.31 1968.35,915.12
@@ -10212,7 +9991,7 @@ function mapSvg() {
   		1973.84,927.29 1972.79,925.85 1971.89,924.83 1971.79,924.61 1971.99,924.42 1972.3,924.32 1972.64,924.4 1973.51,924.48
   		1974.36,924.38 1974.64,924.14 1974.65,923.8 	"/>
   </g>
-  <g class="country" id="AZ">
+  <g class="country" id="AZE">
   	<path class="st0" d="M2233.41,960.52l-0.5-0.49l-0.55-0.43l-0.53-0.3l-1.08-0.42l-1.17,0l-0.64-0.07l-0.49-0.24l-1.37-1.08
   		l-0.84-0.83l-1.94-2.26l-0.44-0.9l-0.26-1.02l-0.31-0.84l-0.47-0.72l-1.91-2.57l-1.34-1.58l-0.77-0.58l-0.46,0.66l-0.74,1.17
   		l-0.33,0.62l-0.79,0.57l-1.31,0.6l-0.73,0.26l-0.78,1.25l-0.86,1.21l-0.59,0.14l-1.68-0.19l-0.6-0.11l-1.71-0.53l-0.48-0.33
@@ -10238,11 +10017,11 @@ function mapSvg() {
   		l0.35,0.51l0.24,0.56l0.42,0.38l0.55,0.21l0.67,0.55l0.45,0.43l0.76,0.88l0.8,0.33l2.92,0.64l1.62,0.3l-0.31-0.76L2197.52,974.3z"
   		/>
   </g>
-  <g class="country" id="AW">
+  <g class="country" id="ABW">
   	<polygon class="st1" points="1220.98,1213.93 1220.87,1213.69 1220.35,1212.94 1219.83,1212.55 1219.7,1212.69 1219.57,1213.12
   		1220.09,1213.51 1220.61,1214.04 1221.01,1214.17 	"/>
   </g>
-  <g class="country" id="AU">
+  <g class="country" id="AUS">
   	<path class="st0" d="M3006.8,1408l-0.05,0.24l0.1,0.54l0.46,0.25l0.7-0.48l-0.65-0.95L3006.8,1408z M2984.29,1462.69l-0.43,0.36
   		l0.11,0.35l0.32-0.15l0.94-0.17l-0.09-0.45l-0.57-0.44L2984.29,1462.69z M2982.44,1459.84l0.37,0.01l0.6-0.2l0.31-0.41l0.33,0.11
   		l0.65-0.76l0.44-0.37l1.16-0.13l-0.79-0.96l-0.14-0.07l-1.09,0.37l-1.4,0.25l-0.54,0.52l-0.56,0.85l-0.13,0.76l0.1,0.24
@@ -10403,7 +10182,7 @@ function mapSvg() {
   		l1.33,0.13l0.95-0.22l1.03,0.15l0.52-0.54l1.45,0.37l0.56,0.52l1.19-0.46l0.27-0.85l0.41-0.38l1.39-0.29l1.49,0.38l0.46-0.07
   		l0.48-0.46l-0.65-0.93L2971.41,1631.12z"/>
   </g>
-  <g class="country" id="AT">
+  <g class="country" id="AUT">
   	<polygon class="st1" points="1953.61,881.82 1953.46,881.35 1952.65,880.11 1951.75,878.08 1951.73,877.49 1952.08,876.82
   		1952.41,876.31 1952.45,875.9 1952.49,875.79 1952.28,875.55 1951.9,874.66 1951.48,874.54 1950.9,874.46 1950.46,874.33
   		1949.52,873.81 1949.04,873.66 1948.49,873.61 1947.95,873.92 1947.55,874.28 1946.31,874.27 1944.94,874.1 1942.99,872.92
@@ -10440,11 +10219,11 @@ function mapSvg() {
   		1951.73,885.48 1952.66,885.5 1953.44,885.37 1953.27,884.77 1953.27,884.33 1953.14,883.99 1953.22,883.6 1953.54,883.3
   		1953.63,882.63 1954.12,882.18 	"/>
   </g>
-  <g class="country" id="AS">
+  <g class="country" id="ASM">
   	<polygon class="st1" points="3404.17,1438.74 3403.9,1438.9 3403.06,1439.21 3403.5,1439.62 3403.86,1439.54 3404.58,1438.95
   		3405.19,1438.82 	"/>
   </g>
-  <g class="country" id="AR">
+  <g class="country" id="ARG">
   	<path class="st0" d="M1259.13,1829.13l-3.18,0.25l-2.07-0.63l-2.05-0.76l-1.91-1.08l-1.75-1.48l-1.64-1.06l-1.72-0.86l-1.89-1.14
   		l-1.75-1.48l-1.48-1.55l-1.54-1.44l-0.67-0.5l-0.57-0.63l-1.14-2.81l-0.14-0.14l-1.95-0.13l-0.8-0.39l-0.27-0.45l0-0.51l0.35-0.73
   		l0.41-0.67l0.83-0.41l0.78,0.71l-0.32-1.12l-0.51-0.96l-1.96-2.33l-0.49-0.48l-0.01,3.38l-0.01,3.34l-0.01,3.13l-0.01,3.14
@@ -10536,7 +10315,443 @@ function mapSvg() {
   		l0.56-0.38l0.46-0.83l0.41-0.32l0.36,0.19l0.62-0.28l0.88-0.75l0.17-0.01l0.65-0.35l0.67-1.29l0.35-0.86l-0.08-0.7l-0.22-0.5
   		l0.07-0.74L1357.26,1545.22z"/>
   </g>
-  <g class="country" id="AO">
+  <g class="country" id="ATA" class="st2" style="display: none;">
+  	<path class="st5" d="M1779.46,1213.98l0.25-0.02l0.06-0.09l-0.08-0.13l-0.15-0.04l-0.33,0.01l0.07,0.11L1779.46,1213.98z
+  		 M1780.3,1213.69l0.4-0.13l-0.07-0.1l-0.15-0.01l-0.05-0.04l-0.13-0.03l-0.25,0.12l0.05,0.05L1780.3,1213.69z M1780.85,1213.29
+  		l0.02,0.03l0.18,0.02l0.09,0.06l0.06-0.01l0.1-0.05l0.07-0.25l0.23-0.05l0.29,0.14l0.09-0.07l-0.07-0.08l0.04-0.15l0.33,0.04
+  		l0.28-0.18l0.3,0.02l0.01-0.06l-0.07-0.16l-0.11-0.06l-0.2,0.05l-0.23-0.08l-0.52,0.12l-0.24-0.04l-0.51,0.19l-0.05,0.1l-0.44,0.33
+  		l-0.09,0.13l0.33-0.11L1780.85,1213.29z M1776.68,1214.62l0.12,0l0.36-0.05l0.18-0.12l0.14,0.04l0.44-0.05l0.04,0.18l0.06,0.08
+  		l0.18,0.11l0.67-0.37l-0.28,0.01l-0.25-0.2l-0.79,0.07l-0.09-0.04l-0.19-0.19l-0.12-0.04l-0.07,0.16l-0.25,0.16l-0.32-0.01l0,0.13
+  		L1776.68,1214.62z M1777.69,1215.44l-0.24-0.2l-0.12,0.03l-0.06,0.12l0.09,0.13l0.13,0.06l0.1-0.03l-0.1-0.06l0-0.05l0.12,0.02
+  		L1777.69,1215.44z M1777.59,1217.52l-0.28-0.08l-0.15,0.14l-0.02,0.34l-0.29,0.04l0.22,0.12l0.14,0.03l0.22-0.1l0-0.05l-0.06-0.12
+  		l0.06-0.14L1777.59,1217.52z M1775.15,1218.55l0.04-0.08l0.16-0.17l-0.25,0.07l-0.15,0.11l-0.04,0.15l0.17-0.01L1775.15,1218.55z
+  		 M1789,1276.71l0.07,0.07v0l0.07,0.03l7.93-0.36l0.04-0.04l0.09-0.09l0.11-0.15l0.02-0.02l0.17-0.08l0.23-0.11l0.4-0.1l3.41-0.63
+  		l6.81-1.26l0.07-0.06l0.06-0.1v0l-0.01-0.13l-0.02-0.05l-0.03-0.07l-0.48-0.31l0.01-0.04l0.01-0.04l0.07-0.05l0.19-0.07l0.09-0.01
+  		l0.09-0.01l0.14,0.01l0.27,0.03l0.36-0.36l0.14-0.37l0.08-0.91l-0.04-0.42l-0.28-0.52l-0.17-0.2l-0.1-0.55l-0.09-0.16l-0.08-0.15
+  		l-0.16-0.38l-0.17-0.35l-0.09-0.13l-0.06-0.09l-0.13-0.08l-0.04-0.03l-0.29-0.02l-0.29-0.02l-0.95-0.01l-0.95,0.04l-0.12-0.01
+  		l-0.12-0.01l-0.23-0.08l0.1-0.21l0.15-0.21l0.26-0.1l0.67-0.08l1.35-0.17l0.1-0.15l0.08-0.12l0.06-0.2l0.05-0.18l0-0.04l0.02-0.15
+  		l-0.01-0.08l-0.01-0.11l-0.04-0.2v0l0,0l-0.07-0.09l-0.01-0.02h0l-0.02-0.02l-0.41-0.34l-0.33-0.22l-0.11-0.07l-0.15-0.08
+  		l-0.31-0.15l-0.46-0.18l-1.22-0.42l-0.5-0.13l-0.33-0.09l-0.48-0.09l-0.35-0.03l-0.67-0.05l-0.37,0.02l-0.78,0.11l-0.23,0.05
+  		l-0.19,0.04l-1.57,0.51l-0.94,0.3l-0.11,0.18l-0.38,0.51l-1.06,0.95l-0.18,0.19l-0.18,0.19l-0.14,0.19l-0.13,0.36l-0.06,0.14
+  		l-0.09,0.2l0,0v0l0.08,0.15l0.08,0.03l0.09,0.03l-0.1,0.19l0,0.01l-0.15,0.16l-0.22,0.11l0,0.02l-0.02,0.1v0v0l0.02,0.17
+  		l-0.03,0.33l-0.1,0.27l-0.1,0.18l-0.03,0.06l-0.15,0.2l0,0l0.49,0.12l0.02,0.01l0.06,0.02l0.07,0.07l0.09,0.18l0.07,0.2l-0.08,0.2
+  		l-0.08,0.09l-0.04,0.04l-0.47,0.47l-0.94,0.79l-0.46,0.34l-0.5,0.37l-1.06,0.63l-0.07-0.06l-0.03-0.2l-0.14-0.03l-0.05-0.01
+  		l-0.1,0.07l-0.1,0.07l-0.43,0.24l-0.44,0.08l-0.22-0.06l-0.15-0.1l-0.15-0.1l-0.09-0.02l-0.08,0.17l-0.08,0.17l-0.35,0.39
+  		l-0.67,0.85l-0.15,0.12l-0.39,0.22l-0.04,0.23l0.04,0.58L1789,1276.71z M1789.23,1210.8l0.08-0.03l0.05-0.12l0.03-0.33l-0.05,0.02
+  		l-0.13,0.16l-0.13,0.12l0.02,0.06L1789.23,1210.8z M1784.84,1215.81l0.35,0.2l0.17,0.01l0.36-0.27l0.02-0.07l-0.01-0.1l-0.01-0.02
+  		l-0.14-0.02l-0.63-0.07l-0.23,0.18l0.02,0.05L1784.84,1215.81z M1787,1210.53l0.09,0.1l0.24-0.08l0.19-0.14l0.63-0.08l0.07-0.06
+  		l-1.29-0.12l-0.1,0.09l0.13,0.11L1787,1210.53z M1784.98,1216.34l0.01,0.05l-0.03,0.05l-0.05,0.05l0.01,0.07l0.07,0.17l0.15,0.05
+  		l0.53-0.16l0.13-0.12l0.32-0.12l0.15-0.01l0.28,0.11l0.79,0.05l0.15-0.08l-0.06-0.21l-0.09-0.13l-0.11-0.02l-0.45,0l-0.11-0.07
+  		l0-0.05l-0.11-0.08l-0.82,0.08l-0.62,0.22L1784.98,1216.34z M1786.08,1216.69l-0.64,0.08l-0.05,0.09l0.1,0.13l0.4,0.19l0.15-0.13
+  		l0.28-0.12l-0.08-0.2L1786.08,1216.69z M1753.23,1247.51l-0.06,0.1l-0.09,0.09l-0.02,0.14l0.2,0.17l0.11,0.04l0.17-0.07l0.28-0.21
+  		l0.07-0.25l0.25-0.35l-0.24-0.08l-0.29,0.04L1753.23,1247.51z M1756.31,1235.77l0.26,0.11l0.39-0.13l-0.62-0.66l-0.24-0.13
+  		l-0.47-0.12l-0.24,0.06l-0.14,0.11l-0.04,0.19l0.33,0.37L1756.31,1235.77z M1762.17,1229.14l0.21,0.24l0.15,0.2l0.15,0.03
+  		l0.15-0.02l0.13-0.07l0.08,0l0.08,0.03l0.13-0.08l0.12-0.16l0.1-0.31l0.1-0.07l0.13,0.02l0.14,0.06l0.15-0.06l0.19-0.2l0.03-0.07
+  		l-0.07-0.1l-0.25-0.11l-0.16-0.03l0.11-0.09l0.26-0.14l0.13-0.14l0.2-0.11l0.29-0.22l-0.13-0.07l-0.12-0.13l-0.09-0.06l-0.13-0.05
+  		l-0.04-0.04l0-0.15l0.07-0.42l0.35-0.3l0.11-0.11l-0.05-0.23l-0.22-0.03l-0.19,0.1l-0.72,0.44l-0.15,0.16l-0.28,0.42l-0.15,0.24
+  		l-0.14,0.27l-0.16,0.23l-0.47,0.52l-0.09,0.15l-0.01,0.19l0.03,0.19L1762.17,1229.14z M1764.98,1229.7l0.35-0.06l0.09-0.09
+  		l0.04-0.08l0.24-0.19l-0.05-0.08l-0.13-0.08l-0.31-0.03l-0.25,0.04l-0.34,0.18l0.02,0.06l0.07,0.03l-0.01,0.23L1764.98,1229.7z
+  		 M1754.01,1241.3l0.04,0.17l0.38,0.27l-0.08,0.1l-0.09,0.07l-0.12-0.02l-0.32-0.19l-0.38-0.26l-0.19-0.09l-0.26-0.09l-0.09,0.02
+  		l-0.13,0.04l-0.12,0.05l-0.09,0.14l0.01,0.17l0.07,0.24l0.01,0.13l-0.03,0.07l-0.05,0.02l-0.12-0.01l-0.27-0.08l-0.41-0.25
+  		l-0.43,0.04l-0.35,0.2l-0.08,0.1l-0.03,0.12l0.05,0.15l-0.01,0.09l-0.08,0.09l-0.02,0.16l0.05,0.17l0.17,0.12l0.23,0.17l0.19,0.08
+  		l0.21,0.15l0.22,0.1l0.22,0.02l0.42-0.05l0.19,0.06l0.2,0.24l0.1,0.06l0.28,0.04l0.17-0.06l0.65-0.44l-0.06-0.14l-0.21-0.17
+  		l-0.25-0.2l0.1-0.07l0.26-0.05l0.4,0.06l0.44,0.17l0.35,0.06l0.08-0.01l0.93-0.87l0.14-0.1l0.14,0.03l0.38,0.33l0.41,0.28l0.44,0.1
+  		l0.2-0.04l0.2,0l0.96,0.24l-0.04,0.13l-0.08,0.14l-0.26,0.16l-0.13,0.04l-1.43,0.25l0.01,0.11l0.42,0.33l0.45,0.12l0.42-0.07
+  		l0.42-0.12l0.55-0.2l0.2-0.02l0.2,0.01l0.2,0.08l0.2,0.12l-0.4,0.32l-0.44,0.12l-0.36,0.03l-1.32-0.03l-0.96-0.09l-0.44-0.12
+  		l-0.44-0.07l-0.22,0.02l-0.21,0.08l-0.42,0.35l0.05,0.14l0.09,0.12l0.22,0.21l0.19,0.12l0.2,0.05l0.25-0.02l0.09,0.09l0.08,0.14
+  		l0.12,0.04l0.94-0.1l1.24-0.04l0.43-0.05l0.35,0.03l0.34,0.14l0.87-0.13l1.54-0.32l0.11-0.37l0.92-0.74l0.18-0.18l0.15-0.24
+  		l0.12-0.37l0.28-0.52l0.02-0.33l-0.04-1.38l-0.05-0.72l-0.07-0.61l-0.04-0.18l-0.21-0.13l-0.02-0.44l-0.17-0.33l-0.32-0.57
+  		l-0.65-1.03l-0.26-0.59l-0.22-0.78l-0.12-0.27l-0.52-0.84l-0.27-0.14l-0.11-0.03l-0.3,0.14l0.05-0.39l0-0.16l-0.1-0.57l-0.09-0.12
+  		l-0.28-0.29l-0.19-0.14l-1.76,0.27l-0.86,0.21l-0.22,0.09l-0.12,0.1l-0.09,0.19l-0.05,0.17l0,0.2l0.04,0.16l0.06,0.13l0.21,0.2
+  		l0.23,0.12l0.16,0.18l0.04,0.32l-0.09,0.4l-0.15,0.51l-0.03,0.13l-0.02,0.2l0.05,0.2l0.08,0.12l0.15,0.16l0.06,0.05l1.04,0.42
+  		l0.17,0.02l0.18-0.03l0.37-0.17l0.71,0.07l0.17,0.07l0.21,0.17l0.42,0.23l0.48,0.3l-0.07,0.05l-0.08,0.01l-0.49-0.18l-0.21-0.03
+  		l-0.43,0.03l-0.42,0.14l-0.9,0.43l-0.23,0.4l0.03,0.18l0.22,0.16l0.24,0.08l0.46,0.11l0.65,0.06l0.18,0.05l0.18,0.11l0.18,0.05
+  		l0.11-0.06l0.1-0.01l0.08,0.12l0.01,0.2l0,0.2l-0.02,0.19l-0.06,0.11l-0.08,0.03l-0.63-0.56l-0.1-0.04l-0.1-0.02l-0.65,0.15
+  		l-0.82-0.03l-0.2,0.09l-0.36,0.33l-0.39,0.11l-1.15-0.23l-0.64-0.01l-0.63,0.18l0.12,0.2l0.16,0.12l0.86,0.17l0.39,0.2l-0.74,0.18
+  		l-0.36-0.02l-0.36-0.05l-0.68-0.16l-0.14,0.01l-0.24,0.09L1754.01,1241.3z M1804,1208.91l0.28-0.09l0.13,0.16l0.56,0.01l0.41,0.23
+  		l0-0.09l-0.02-0.07l-0.04-0.06l-0.03-0.02l-0.23-0.04l-0.05-0.11l-0.2-0.1l-0.39-0.07l-0.21,0.06l-0.18-0.05l-0.04,0.11l0,0.08
+  		L1804,1208.91z M1758.12,1237.72l-0.02-0.04l-0.08-0.06l-0.05-0.04l-0.15,0.04l-0.24,0.06l-0.01-0.01l-0.07-0.09l-0.18,0.08
+  		l0.02,0.1l0.18,0.4l0.24-0.01l0.18-0.14l0.03-0.02v0l0,0l0.03-0.04l0.15-0.2h0l0,0L1758.12,1237.72z M1765.02,1226.98l0.2,0.01
+  		l0.08-0.02l0.19-0.16l-0.02-0.08l-0.11-0.19l-0.17-0.05l-0.15,0.06l0.02,0.14l-0.17,0.22L1765.02,1226.98z M1772.52,1220.69
+  		l-0.17,0.01l-0.18,0.32l0.15,0l0.29-0.13l0.11-0.21l0.14-0.15l-0.08-0.03L1772.52,1220.69z M1771.2,1220.52l0.17,0.1l0.37,0.07
+  		l0.06,0.05l0.05,0.08l0.17-0.09l0.16-0.2l0.18-0.02l0.19,0.02l0.14-0.05l0.13-0.11l0.32-0.2l0.34-0.11l-0.17-0.15l-0.19,0.05
+  		l-0.18,0.11l-0.26,0l0.17-0.3l-0.16-0.26l0.07-0.17l-0.19-0.17l-0.27-0.02l-0.09,0.04l-0.13,0.12l-0.14,0.08l0.03,0.12l-0.01,0.11
+  		l-0.44,0.1l0.03,0.09l0.05,0.07l-0.55,0.21l-0.1,0.16l-0.08,0.18l0.16,0.04L1771.2,1220.52z M1774.25,1215.45l0.12-0.15l0.05-0.12
+  		l-0.38,0.14l-0.2,0.31l-0.03,0.12l0.07-0.01L1774.25,1215.45z M1773.94,1219.88l0.13-0.18l0.1,0.05l0.11-0.02l0.13-0.12l0.04-0.07
+  		l0.21-0.09l0.02-0.21l0.15-0.18l0.06-0.28l-0.38-0.14l0-0.14l-0.11-0.08l-0.22,0l-0.17,0.1l-0.07,0.09l-0.05,0.12l0.04,0.07
+  		l0.2,0.21l-0.04,0.12l-0.25,0.4l-0.14,0.15l-0.05,0.08l-0.06,0.02l0.1,0.05L1773.94,1219.88z M1767.65,1223.91l0.39-0.11l0.02-0.09
+  		l-0.01-0.22l0.05-0.15l0.05-0.04l0.21-0.06l0-0.08l0.06-0.23l-0.36-0.06l-0.24,0.13l-0.06,0.18l-0.12,0.1l0.03,0.23l-0.19,0.09
+  		l-0.05,0.16l0.01,0.12L1767.65,1223.91z M1766.29,1225.21l0.4-0.34l0-0.07l-0.05-0.13l0.09-0.15l-0.1-0.05l-0.27,0.13l-0.02,0.37
+  		l-0.14,0.12l0,0.06l0.03,0.03L1766.29,1225.21z M1888.73,1237.44l0.21,0.26l0.09,0.24l0.1,0.01l0.16-0.41l0.29-0.39l-0.09-0.31
+  		l-0.18-0.06l-0.52,0.09l-0.14,0.14l0.01,0.24L1888.73,1237.44z M2053.68,1223.69l0.25,0.04l0.24-0.04l0.12-0.1l-0.01-0.04
+  		l-0.06-0.09l-0.25-0.08l-0.35,0.01l-0.1,0.1l0.03,0.06L2053.68,1223.69z M2065.09,1225.63l0.17,0.09l0.17-0.04l0.19-0.15
+  		l-0.36-0.15l-0.27,0.04l0.02,0.05L2065.09,1225.63z M2061.98,1224.87l0.15-0.11l0.01-0.07l-0.02-0.13l-0.13-0.12l-0.37,0.01
+  		l-0.21-0.07l-0.2,0.03l-0.18,0.1l-0.17,0.32l0.16,0.12L2061.98,1224.87z M2043.01,1226.66l0.21-0.07l0.2-0.15l-0.17-0.04
+  		l-0.07-0.06l-0.25-0.04l-0.19,0.07l-0.08,0.11l0.19,0.17L2043.01,1226.66z M2040.68,1226.19l0.16,0.02l0.19-0.1l-0.24-0.17
+  		l-0.05-0.1l-0.08-0.01l-0.09,0.2l0.02,0.06L2040.68,1226.19z M2041.08,1226.84l0.47,0.29l0.01,0.04l0.05,0.04l0.31-0.08l0.21-0.18
+  		l-0.24-0.36l-0.46-0.14l-0.38-0.02l-0.05,0.16L2041.08,1226.84z M2016.46,1238.5l0.21,0.24l0.16,0.04l0.13,0l0.14-0.08l0.03-0.11
+  		l-0.04-0.16l-0.03-0.08l-0.1-0.14l-0.22-0.17l-0.05-0.12l-0.02-0.18l-0.07-0.16l-0.17,0.07l-0.11,0.17l-0.02,0.35l0.04,0.18
+  		L2016.46,1238.5z M2180.02,1225.47l0.38,0.36l0.08,0.02l0.1-0.14l-0.09-0.14l-0.46-0.55l-0.02,0.04l-0.01,0.12l0.05,0.13
+  		L2180.02,1225.47z M2181.71,1226.89l0.09,0.04l0.03-0.18l-0.01-0.07l-0.05-0.09l-0.06-0.18l-0.15-0.06l-0.12,0.04l0.13,0.36
+  		L2181.71,1226.89z M2067.76,1224.96l0.24-0.04l0.03-0.11l0.02-0.2l-0.21,0.06l-0.18,0.17l0.01,0.04L2067.76,1224.96z
+  		 M2184.34,1229.01l0.1,0.03l0.16-0.09l0.05-0.11l0.1-0.17l-0.02-0.09l-0.1-0.17l-0.05-0.12l-0.25-0.2l-0.02,0.09l0.04,0.37
+  		l-0.1,0.28L2184.34,1229.01z M2073.04,1222.14l0.11,0.08l0.02,0.08l0.03,0.29l0.07,0.06l0.29,0.04l0.11-0.07l-0.03-0.06l-0.21-0.15
+  		l-0.14-0.14l-0.01-0.07l0.02-0.21l-0.1-0.14l-0.44-0.18l-0.17,0.02l-0.07,0.09l0.05,0.2L2073.04,1222.14z M1822.83,1270.37
+  		l2.63,0.15l0.1-0.07l0.1-0.07v0l0,0l-0.02-0.05l-0.01-0.02l-0.09-0.11l-0.72-0.23l-2.06-0.54l-0.11,0.01l-0.35,0.23l-0.23,0.07
+  		l-0.23,0.07l-0.17,0.03l-0.17,0.03l-0.28,0.03l-0.31,0.03l-0.06,0.3l0.22,0.05L1822.83,1270.37z M2068.15,1223.29l0.29,0.01
+  		l0.06,0.08l0.78-0.07l0.46-0.34l0.04-0.11l-0.07-0.16l-0.26-0.21l-0.35-0.07l-0.5,0.05l-0.11,0.04l-0.25,0.17l-0.15,0.16l-0.1,0.25
+  		l0.04,0.14L2068.15,1223.29z M1863.67,1243.79l0.3,0.17l0.24,0.03l0.14-0.08l-0.05-0.11l-0.18-0.23l-0.28-0.22l-0.16-0.02
+  		l-0.07,0.05l-0.09,0.17l0.04,0.12L1863.67,1243.79z M1875.79,1238.62l0.04,0.09l0.47-0.19l-0.1-0.39l-0.04-0.04l-0.17-0.05
+  		l-0.32,0.13l-0.35,0.02l0.31,0.32L1875.79,1238.62z M1880.83,1240.46l0.14,0.19l0.19,0.1l0.25,0.02l0.19-0.08l-0.43-0.39
+  		l-0.04-0.06l-0.09-0.08l-0.25,0.03l0.01,0.06l-0.02,0.13L1880.83,1240.46z M1857.24,1245.55l0.24,0.17l0.26,0l0.13-0.08l-0.12-0.27
+  		l-0.24-0.42l-0.1-0.07l-0.18,0.05l-0.11,0.2l0.01,0.18L1857.24,1245.55z M1848.72,1250.71l0.21,0.15l0.13,0.17l0.24,0.76l0.05,0.06
+  		l0.15,0.09l0.45,0.04l0.13-0.18l0.01-0.12l-0.02-0.33l-0.32-0.43l-0.07-0.16l-0.02-0.16l0.08-0.77l0.16-0.31v-0.3l-0.11-0.32
+  		l-0.2,0.02l-0.32,0.18l-0.2,0.4l-0.08,0.32l-0.18,0.21l-0.29,0.18l-1.16,0.24l-0.19,0.18l0.77-0.05L1848.72,1250.71z
+  		 M1880.65,1239.11l0.87,0.38l0.05,0.09l0.01,0.02l0.02,0.19l0.16,0.07l0.13,0.06l-0.01,0.11l-0.03,0.14l-0.01,0.19l0.08,0.18
+  		l0.32-0.09l0.05-0.04l0.38-0.28l0.14-0.15l0.15-0.32l0.17-0.15l0.05-0.11h0l0,0l-0.13-0.04l-0.16-0.04l-0.3,0.01l-0.11-0.06
+  		l-0.08-0.05l-0.11-0.07l-0.28-0.18l-0.4-0.05l-0.13-0.02l-0.9,0.03l-0.07,0.07l0.04,0.03L1880.65,1239.11z M1974.17,1226.67
+  		l0.13,0.03l0.3-0.07l0.41-0.02l0.02-0.03l-0.01-0.11l-0.06-0.03l-0.2-0.06l-0.51,0.01l-0.1,0.06l-0.01,0.08l0,0.07L1974.17,1226.67
+  		z M1894.4,1238.07l0.09,0.11l0.34,0.17l0.29-0.08l0.12-0.15l0.05-0.21l-0.06-0.24l-0.16-0.14l-0.43-0.03l-0.26,0.08l-0.08,0.08
+  		l0.01,0.11L1894.4,1238.07z M1915.14,1236.51l0.09,0.05l0.33,0.09l0.57,0.29l0.11-0.21l0.17-0.53l0.56-0.3l-0.09-0.09l-0.59-0.06
+  		l-0.61,0.08l-0.38,0.14l-0.18,0.18l-0.06,0.11l0.02,0.07L1915.14,1236.51z M1880.73,1238.45l0.29-0.01l0.98-0.09l0.1-0.15l0-0.28
+  		l-0.05-0.18l-0.17-0.1l-0.26-0.03l-0.4,0.09l-0.21,0.12l-0.38,0.47l0.01,0.06L1880.73,1238.45z M1933.91,1237.92l0.64,0.2l0.2,0.04
+  		l0.25-0.12l0.33,0.02l0.12-0.12l0.03-0.17l-0.25-0.47l-0.09-0.23l-0.15-0.12l-0.32-0.06l-0.22,0.04l-0.58,0.41l-0.05,0.2l0.02,0.11
+  		L1933.91,1237.92z M1752.42,1247.54l0.26-0.45l0.24-0.35l-0.09-0.16l-0.11-0.11l-0.25-0.09l-1.63-0.25l-0.64,0.2l0.05,0.11
+  		l0.18,0.14l0.29,0.14l0.35,0.05l-0.06,0.14l-0.25,0l-0.09,0.17l-0.07,0.03l-0.49-0.19l-0.22,0.01l-0.22,0.1l-0.08,0.08l-0.06,0.14
+  		l0.01,0.18l0.07,0.18l0.09,0.12l0.18,0.16l2.39,0.97l0.22-0.16l0.16-0.35l-0.18-0.13l-0.15-0.2l-0.04-0.14l-0.07-0.06l-0.09-0.13
+  		l0.26-0.11L1752.42,1247.54z M1891.82,1238.74l0.61-0.09l0.11-0.07l0.13-0.08l0.09-0.11l0.07-0.23l0,0l0,0l-0.05-0.15l-0.04-0.02
+  		l-0.03-0.01l-0.22-0.04l-0.8,0.39l-0.08,0.11l0.07,0.19L1891.82,1238.74z M1761.64,1270.21l0.26-0.28l1.11-0.8l0.87-0.57l1.22-0.75
+  		l0.23-0.18l0.34-0.27l0.09-0.09l0.12-0.13l0.26-0.2l0.21-0.16l0.11-0.15l-0.2-0.13l-0.21-0.08l-0.15-0.06l-0.8,0.18l-3.47,1.28
+  		l-0.63,0.33l-0.4,0.16l-1.03,0.3l-0.15,0.07l-1.14,0.64l-0.36,0.28l-0.39,0.47l-0.19,0.72l-0.02,0.09v0l0,0.01l0.01,0.22l0.04,0.08
+  		l0.04,0.08l0.09,0.12l0.29,0.23l0.2,0.07l0.23,0.04l0.55,0.1l0.39,0.02l0.39,0.02l0.16-0.01l0.24-0.01l0.39-0.06l0.69-0.2
+  		l0.18-0.41l0,0v0l-0.08-0.24l-0.02-0.06l0.18-0.22L1761.64,1270.21z M1779.14,1274.51l0.03-0.04l0.13-0.25l0.15-0.2l0.09-0.02
+  		l0.09-0.02l0.19-0.01l-0.16-0.19l-0.16-0.15l-0.52-0.06l0-0.41l0,0l0.01-0.06l0.05-0.2l0.08-0.26l-0.3-0.4l-1.14-0.13l-0.13-0.02h0
+  		l-0.12,0.04l-0.69,0.24l-0.16,0.22l-0.41,0.1l0,0.07l0,0.2v0l0.18,0.11l-0.1,0.07l-0.17,0.02l-0.52,0.07l-0.04,0.15l-0.01,0.05v0
+  		l0.02,0.13l0.02,0.14l0.17,0.3l0.09,0.07l0.11,0.09l0.26,0.03l0.26,0.03l-0.21,0.21l-0.24,0.07l-0.33,0.09l-0.54,0.05l-0.54,0.05
+  		l-0.51,0.02l-0.01,0l-0.02,0l-6.23,0.05l-0.24-0.1l-0.04-0.03l-0.05-0.04l-0.09-0.37v0l-0.14-0.1l-0.07-0.02l-0.08-0.03l-0.19,0.01
+  		l-0.19,0.06l-0.17,0.09l-0.16,0.14l0.07,0.1l0.26,0.16l0.74,0.35l1.77,0.69l0.56,0.2l1.12,0.4l0.03-0.02l0.06-0.04l0.09-0.15
+  		l0.08-0.13l0.05-0.03l0.06-0.04l0.27-0.06l0.36-0.08l1.03-0.09l0.14,0.14l0.15,0.45l0.08,0.13l0.29,0.17l0.2,0.12l1.17,0.23
+  		l1.49,0.14l1.11,0.11l0.57-0.28l0.09-0.06l0.17-0.11l0.18-0.14l0.18-0.14l0.06-0.06l0.12-0.12l0.1-0.32v0l0-0.41l0.07-0.9
+  		L1779.14,1274.51z M1763.42,1270.96l0.45,0.06l1.31,0.09l0.26-0.17l0.05-0.03v0l-0.08-0.24l0.06-0.14l0.06-0.13l0.12-0.07l0.11-0.1
+  		l0.08-0.07h0l0,0l-0.37-0.09l-0.37-0.09l-0.43-0.04l-0.57,0.05l-0.36,0.23l-0.11,0.04l-0.05,0.02l-0.18,0.14l-0.08,0.15l-0.15,0.27
+  		l0,0v0L1763.42,1270.96z M1783.57,1218.01l0.05,0.02l0.21-0.1l-0.1-0.07l-0.36,0.03l-0.03-0.05l-0.12-0.05l-0.44,0.06l0.12,0.12
+  		l0.49,0.07L1783.57,1218.01z M1777.49,1239.72l-0.31-0.02l-0.19,0.07l-0.1,0.11l0,0l0.04,0.08l0.03,0.05l0.21,0.11l0.25,0.06
+  		l0.09-0.01l0.09-0.01l0.01-0.02l0.01-0.02l0,0l0,0l0.04-0.14v0l-0.01-0.04l-0.02-0.08v0l0,0L1777.49,1239.72z M1782.97,1219.41
+  		l0.35,0.08l0.17-0.03l-0.08-0.14l-0.14-0.06l0.16-0.17l0.19-0.05l-0.09-0.16l0.04-0.2l-0.48-0.25l0.07-0.14l-0.2,0.02l-0.21,0.14
+  		l-0.06,0.09l-0.06,0.04l-0.06,0.02l-0.07-0.04l0.03-0.3l0.08-0.12l0-0.11l-0.09-0.19l-0.17,0.01l-0.08,0.08l-0.18,0.04l-0.14,0.09
+  		l-0.23,0.11l-0.12,0.23l-0.15,0.21l-0.02,0.13l0.07,0.06l0.08-0.01l0.18-0.07l0.19-0.03l-0.03,0.18l0.04,0.13l0.21,0.1l-0.51,0.21
+  		l0.16,0.16l0.08,0l0.27-0.14l0.09,0l0.09,0.03l-0.06,0.18l0.08,0.05l0.07-0.03l0.09-0.29l0.22-0.03l0.06,0.05l-0.02,0.13
+  		L1782.97,1219.41z M1777.76,1238.73l0.03-0.06v0l0-0.1l0-0.1l-0.18-0.12l-0.6,0.03l-0.06,0.03l-0.04,0.02l-0.03,0.11l-0.03,0.11
+  		l0,0l0.03,0.1l0.11,0.2l0.13,0.07h0.15l0.46-0.21L1777.76,1238.73z M1764.57,1271.47l0.03,0.03l0.07,0.09l0.9,0.45l0.26,0.13
+  		l0.15,0.13l0.04,0.24l0.02,0.09l0.11,0.15l0.38,0.11l0.51,0.15l0.05,0.23l0.03,0.11l0.09,0.09l0.09,0.03l0.06-0.01l0.11-0.01
+  		l0.33-0.1l0.16-0.06l0.36-0.18l0.36-0.18v0l-0.06-0.48l-0.05-0.18l-0.02-0.09l-0.19-0.05l-0.33-0.09l-0.05-0.08l-0.21-0.38
+  		l-0.47-0.05l-0.92-0.02l-0.01,0l-0.17-0.11l-0.18-0.06l-0.83-0.03l-0.35-0.1l-0.1-0.03l0,0l-0.11,0.04l-0.11,0.04l0.06,0.15
+  		L1764.57,1271.47z M1607.16,1273.02l0.67,0.13l0.07,0.01l0.33,0.11l0.01,0l0.41,0.04l0.33-0.01l-0.06-0.07l-0.11-0.12l-0.92-0.22
+  		l-0.86-0.27l-0.27-0.08l-0.35-0.13l-0.57-0.22l-0.14,0.26l0.41,0.07l0.87,0.22L1607.16,1273.02z M1783.98,1219.41l-0.53,0.24
+  		l-0.09,0.01l-0.14,0.06l0,0.08l0.03,0.15l0.19,0.09l0.16-0.01l0.45-0.29l0.08-0.12l-0.01-0.13l0.1-0.14L1783.98,1219.41z
+  		 M1620.46,1259.97l-0.02-0.05l-0.11-0.15l-0.22-0.13l-0.23-0.07l-0.18,0.07l0.08,0.08l0.41,0.21L1620.46,1259.97z M2232.44,1294
+  		L2232.44,1294L2232.44,1294L2232.44,1294z M1621.54,1261.28l0.68-0.17l0.8-0.05l-0.15-0.25l-1.12-0.17l-0.4,0l-0.05,0.11l0.03,0.08
+  		l0.1,0.16l-0.06,0.24L1621.54,1261.28z M1621.6,1259.57l-0.34-0.09l-0.26,0.08l-0.14,0.25l0.24,0.2l0.57,0.16l0.21-0.31l-0.16-0.26
+  		L1621.6,1259.57z M2189.4,1265.09l-0.14,0.06l-0.11,0.15l-0.41,0.33l-0.5,0.26l-0.19,0.01l-0.35-0.2l-0.82-0.23l-0.18,0.05l0,0.12
+  		l0.07,0.32l0.13,0.24l0.29,0.13l0.62-0.09l0.56-0.24l0.8,0.1l0.25-0.13l0.23-0.29l-0.01-0.12l-0.08-0.35L2189.4,1265.09z
+  		 M2221.62,1292.94l-0.58,0.01l-0.71,0.07l-0.89,0.15l-0.42-0.17l-0.33-0.27l-1.26-0.09l-1.34-0.02l-0.61-0.2l-0.58-0.07l-2.91,0.07
+  		l-0.69-0.39l-0.39-0.29l-0.83-0.12l-0.81-0.22l-0.26-0.04l-0.26,0.02l-1.13-0.26l-3.02-0.48l-0.55-0.03l-0.51-0.13l-0.24-0.29
+  		l-0.32-0.18l-2.15-0.13l-0.29-0.23l-0.48-0.01l-0.95-0.4l-0.77,0.01l-0.96-0.15l-0.69-0.29l-0.45-0.12l-0.12-0.37l-0.33-0.12
+  		l-0.39-0.06l-0.88,0.2l-0.89-0.37l-3.12-0.17l-0.48-0.21l-0.33-0.2l0.03-0.19l0.27,0.05l0.27,0l0.48-0.06l0.14-0.09l0.16-0.25
+  		l0.13-0.13l0.23-0.28l-0.6-0.35l-0.33-0.06l-0.48,0.25l-0.41,0.08l-0.36-0.22l-0.19-0.06l-0.12-0.15l0.07-0.33l-0.28-0.35
+  		l-0.29-0.16l-0.39-0.03l-0.54-0.16l-0.84-0.41l-1.81-1.09l-0.42-0.14l-1.35,0.19l-1.32,0.3l-0.17,0.25l-0.29,0.07l-0.66-0.24
+  		l-2.46,0.04l-0.21-0.37l2.28-0.41l2.26-0.56l-0.14-0.29l-1.08-0.67l-0.27-0.21l-0.06-0.24l-0.44-0.15l-0.27-0.29l-0.77-0.49
+  		l-0.48-0.18l-0.27,0l-1.22-0.95l-0.79-0.21l0.02-0.3l0.11-0.12l0.32-0.18l0.02-0.37l-0.02-0.88l-0.2-0.03l-0.6-0.23l-0.03-0.25
+  		l0.44-0.03l0.39-0.11l0.2-0.1l-0.01-0.24l-0.4-0.16l-0.14-0.22l0.15-0.32l0.06-0.24l-0.17-0.1l-2.67,0.07l-0.89-0.08l-0.02-0.31
+  		l0.37-0.23l2.55-0.85l0.37-0.14l0.32-0.18l0-0.33l-0.31-0.21l-0.5,0.05l-0.39-0.14l-0.04-0.28l0.71-0.22l0.15-0.19l-0.04-0.23
+  		l-0.43-0.01l-0.19-0.19l0.17-0.1l0.25-0.03l0.79-0.52l0.04-0.28l-0.19-0.23l-0.15-0.41l0.71-0.61l0.57-0.29l0.64,0.15l0.35,0.18
+  		l0.23,0l0.16-0.12v-0.25l-0.25-0.24l-0.56-0.92l0.02-0.42l0.29-0.14l0.16,0.03l0.39,0.59l1.2,0.81l0.46-0.21l1.1-0.35l0.72-0.17
+  		l0.72-0.35l0.6-0.11l2.68-0.13l0.31,0.23l0.43,0.27l0.59-0.06l0.36,0.02l0.15-0.32l-0.13-0.35l-0.46,0.01l-0.53-0.1l-0.54-0.18
+  		l-0.99-0.58l-0.23-0.6l-0.02-0.35l-0.19-0.08l-0.26,0.34l-0.4,0.38l-0.76,0.35l-0.6-0.31l-0.58-0.05l0.24-0.3l0.58-0.41l0.11-0.35
+  		l-0.13-0.28l-0.34-0.03l-0.35-0.09l0.02-0.31l-0.5-0.29l-0.27-0.46l-0.02-0.75l-0.27-0.46l-0.38-0.55l-0.29-0.36l-0.43-0.03
+  		l-0.31-0.06l-0.41-0.19l0.07-0.33l0.22-0.15l0.28-0.31l-0.03-0.33l-0.13-0.33l0.27-0.4l-0.18-0.89l-0.41-0.07l-0.11-0.2l0.38-0.39
+  		l0.18-0.36l0.13-0.39l-0.11-0.2l-0.32-0.13l-0.41-0.26l-0.2-0.24l-0.09-0.57l-0.52-0.23l-1.22-0.07l-0.35,0.04l-0.22-0.22
+  		l1.39-0.43l0.42,0.06l0.32,0.1l0.25-0.1l0.33,0.01l0.22-0.26l0.13-1.25l0.27-0.31l0.38-0.29l0.37-0.19l0.18-0.63l0.24-0.16
+  		l0.29,0.13l0.32,0.52l0.36,0.01l0.43-0.16l0.43,0.04l0.5,0.13l0.3,0.04l0.27-0.06l0.54,0.11l0.19-0.13l-0.02-0.28l-0.25-0.19
+  		l-0.41-0.58l-0.47-0.83l0.24-0.09l0.13-0.27l-0.17-0.31l-0.25-0.98l0.11-0.57l0.35-0.08l0.23,0.03l0.21,0.66l0.01,0.74l0.18,0.34
+  		l0.36-0.12l0.33,0.07l0.32-0.15l0.35-0.31l-0.24-0.37l-0.2-0.13l0.25-0.06l0.29-0.15l0.49-0.02l1.02,0.06l0.54-0.36l0.43,0.03
+  		l0.32-0.19l-0.17-0.2l-0.7-0.21l-0.71-0.18l-0.66-0.79l-0.03-0.21l0.78,0.26l0.49,0.47l1.26-0.09l0.63,0.03l0.32-0.22l0.64,0.09
+  		l0.54,0.38l0.92-0.52l0.3-0.6l0.24-0.28l-0.03-0.23l-1.01-0.37l-0.81-0.24l-0.36-0.27l-0.35-0.3l0.27-0.01l0.26,0.02l0.64,0.29
+  		l0.66,0.06l0.6,0.16l0.49,0.23l0.29-0.12l0.14-0.3l-0.05-0.36l-0.24,0.09l-0.31,0.02l0.14-0.98l0.35-0.57h0.33l0.48,0.07l0.33-0.34
+  		l-0.14-0.42l-0.32-0.47l-0.3-0.62l-0.29,0.08l-0.05,0.42l-0.16,0.21l-0.33-0.17l-0.57-0.23l-1.56-0.79l-0.75-0.26l-0.38-0.05
+  		l-0.37-0.3l-0.16-0.26l-0.14-0.29l-0.29-0.23l-0.13-0.15l-0.61-0.13l-1.09-0.35l-0.89-0.1l-0.5,0.04l-1.16-0.24l-0.89-0.05
+  		l-0.56-0.15l-0.73,0.41l-0.78,0.02l-0.39-0.07l-0.58-0.39l-0.64-0.64l-0.83,0.1l-0.35,0.35l0.03,0.61l0.45,1.13l-0.02,0.17
+  		l-0.16,0.06l-0.49-0.44l-0.53,0.03l-0.36-0.29l-0.7-1.67l-0.38-0.44l-0.32-0.33l-0.8-0.34l-0.15-0.44v-0.34l-0.35-0.33l-0.27-0.35
+  		l-0.72-0.17l-1.33-0.47l-0.39-0.07l-0.5-0.29l-0.41-0.09l-0.28,0.08l-0.53,0.33l-0.79-0.42l-1.01,0.02l-0.86-0.33l-0.89-0.17
+  		l-0.64-0.41l-0.32-0.17l-0.22-0.21l-0.52-0.44l-0.68-0.68l-0.3-0.21l-0.22-0.08l-0.22,0.08l0.01,0.45l-0.05,0.46l-0.11,0.28
+  		l-0.38,0.11l-0.28,0.17l-0.47,0.12l-0.48-0.28l-0.49-0.12l-0.51-0.01l-1.27-0.1l-0.21,0.22l-0.29,0.17l-0.27-0.17l-0.03-0.44
+  		l-0.1-0.75l-0.24-0.08l-0.48,0.14l-0.6,0.1l-0.5-0.05l-0.63-0.01l-0.82,0.04l-0.69,0l-0.77,0.11l-1.6-0.29l-0.39,0.03l-0.47-0.05
+  		l-0.53-0.3l0.15-0.26l0.03-0.22l-0.08-0.25l-0.04-0.24l-1-0.66l-0.54-0.39l-0.76-0.1l-0.77,0.11l-0.45,0.29l-0.86,0.23l-0.39,0.33
+  		l-0.38-0.11l-0.06-0.22l0.38-0.46l0.19-0.51l0.46-0.6l0.19-0.43l-0.13-0.32l-0.37-0.05l-0.42,0.21l-0.37,0.01l-0.09-0.46
+  		l-0.24-0.19h-0.51l-0.5,0.22l-0.51,0.16l-0.36,0.04l-0.65-0.2l-0.3-0.23l-0.34-0.2l-0.82-0.04l-0.42,0.11l-0.69-0.24l-1.81-0.11
+  		l-0.52-0.23l-0.67-0.19l-1.56-0.1l-0.19,0.07l-0.24-0.06l-0.39-0.26l-0.31-0.15l-0.75-0.18l-0.81-0.02l-0.27,0.21l-0.34,0.09
+  		l-0.65-0.44l-0.33-0.08l-0.82-0.26l-0.37-0.16l-0.69,0.61l-0.36,0.07l-0.67,0.38l-0.2-0.01l-0.1-0.39l-0.1-0.21l-0.4-0.22
+  		l-0.21-0.15l-0.72-0.22l-0.53,0.04l-0.49,0.25l-1-0.04l-0.88,0.21l-1.08-0.06l-0.51-0.07l-0.67,0.05l-0.5,0.18l-0.33,0.07
+  		l-0.26,0.16l-0.42,0.37l-0.44,0.86l-0.48,0.88l-0.46,0.17l-0.3-0.05l-0.34,0.08l-0.36,0.04l-0.84-0.28l-0.77,0.07l-0.32-0.19
+  		l-0.89-0.7l-0.38-0.79l-0.44-0.11l-0.63-0.2l-0.38-0.09l-0.47,0.09l-0.37,0.09l-0.2,0.28l-0.35,0.38l-0.49,0.16l-0.4,0.04
+  		l-0.41-0.17l-0.31-0.16l-0.41,0.02l-0.55,0.21l-0.8,0.21l-1.06,0.18l-0.81,0.17l-0.27,0.13l-0.76,0.47l-0.23,0.1l-0.92,0.14
+  		l-1.04,0.31l-2.29,0.41l-0.38-0.16l0.65-0.37l1.22-0.38l0.76-0.28l-0.15-0.05l-0.18,0l-0.76,0.08l-0.81,0.24l-0.64,0.23l-0.45,0.08
+  		l-0.35-0.03l-0.35-0.14l-0.34-0.1l-0.34,0.01l-0.37,0.13l-0.81-0.06l-0.3,0.02l-0.38-0.18l-0.38-0.03l-0.37,0.19l-0.53,0.11
+  		l-0.59,0.18l-0.9,0.11l-0.38,0.21l-0.44,0.15l-0.48,0.1l-0.61,0.05l-0.53,0.11l-0.21-0.23l0.14-0.48l0.49-0.12l0.56-0.19l1.27-0.25
+  		l0.3-0.21l0.35-0.57l-0.59-0.64l-0.41-0.2l-0.38-0.05l-0.45-0.03l-0.51-0.33l-0.69-0.9l-0.44-0.39l-0.38-0.13l-0.24-0.11
+  		l-0.49-0.15l-1,0.14l-0.75,0.16l-1.22,0.18l-0.99,0.35l-0.58,0.71l0.06,0.64l-0.33,0.29l-1.11,0.64l-0.65,0.23l-1-0.14l-0.96-0.29
+  		l-0.39-0.38l-0.3,0.1l-0.37-0.02l-0.21-0.25l-0.18-0.08l-0.71-0.25l-1.42-0.18l-2.5-0.74l-0.6-0.08l-0.68-0.29l-0.61-0.15l-0.34,0
+  		l-0.23,0.03l-0.85-0.25l-0.89-0.15l-0.51,0.2l-0.39,0.06l-1.26-0.01l-0.17,0.07l-0.11,0.14l0.01,0.24l-0.79,0.77l-0.54,0.2
+  		l-0.69,0.15l-0.7,0.23l-0.82,0.3l-0.92,0.07l-0.25-0.36l-0.21-0.06l-0.26-0.11l-0.37-0.09l-0.97,0.42l-0.6-0.09l-0.52-0.24
+  		l-0.56,0.15l-0.66,0.15l-0.78,0.07l-0.81,0.03l-0.53-0.18l-0.3-0.13l-0.44-0.08l-0.46,0.13l-0.49,0.31l-0.41,0.13l-0.23,0
+  		l-0.44-0.14l-0.66-0.17l-0.51-0.04l-0.62,0.16l-0.25-0.03l-0.19-0.03l-0.31-0.14l-0.43-0.15l-0.54,0.09l-0.42,0.1l-0.95,0.09
+  		l-0.86,0.4l-0.46,0.11l-1.07,0.16l-0.63-0.01l-0.5-0.06l-0.52-0.02l-0.86,0.08l-0.6-0.09l-1.62,0.46l-0.25,0.14l-0.35,0.16
+  		l-1.14,0.05l-0.74,0.32l-0.51,0l-0.56-0.11l-0.67-0.07l-0.48,0.04l-0.59,0.4l-0.46,0.15l-0.74,0.46l-0.34,0.5l-0.26,0.02
+  		l-0.99,0.01l-0.6,0.24l-0.46-0.01l-1.5,0.44l-1.49,0.36l-1.94,0.54l-0.46,0.17l-0.56,0.32l-0.29,0.36l-0.13,0.73l-0.47,0.41
+  		l-0.39,0.43l-0.36,0.56l-0.5,0.34l-0.63,0.1l-0.76,0.43l-0.74,0.48l-0.45-0.01l-0.4,0.28l-0.13,0.48l-0.33,0.4l-0.38,0.14
+  		l-0.5-0.12l-1.04,0.08l-0.62-0.26l-0.51-0.18l-0.48,0.27l-0.63,0.07l-0.51,0.52l-0.4,0.28l-0.14,0.47l0.03,0.51l-0.25,0.25
+  		l-0.37,0.41l-0.28,0.19l-0.65,0.16l-0.24,0.31l-0.25,0.49l-0.31,0.68l-0.16,0.51l-0.05,0.68l-0.13,0.37l-0.2,0.16l-0.16,0.22
+  		l-0.63,0.29l-0.21,0.07l-0.08,0.3l-0.5,0.42l-0.6,0.26l-0.35,0.41l-0.39,0.41l-0.44,0.12l-0.28,0.03l-1.33,0.33l-0.57,0.46
+  		l-0.24,0.34l0.08,0.58l-0.08,0.58l-0.4,0.29l-0.77,0.46l-0.58-0.22l-0.43-0.07l-0.35-0.03l-0.13-0.29l0.45-0.44l0.26-0.18l0.4-1.06
+  		l0.18-0.61l0.12-0.58l0.27-0.98l0.47-0.9l0.32-0.53l0.3-0.63l0.49-0.35l0.25-0.12l0.32-0.23l0.26-0.3l0.19-0.18l0.57-1.09
+  		l0.02-0.39l0.1-0.5l-0.16-0.32l-0.25-0.03l-0.48,0.15l-0.36,0.14l-1.12,0.03l-0.51-0.32l-0.71-0.17l0.27-0.31l0.29-0.29l0.62-0.44
+  		l0.2-0.19l0.27-0.18l0.43,0.21l0.59,0.06l0.32-0.03l0.29-0.15l0.14-0.31l0.05-0.37l-0.1-0.25l-0.32-0.12l-0.14-0.23l0.05-0.31
+  		l0.29-0.11l0.55-0.02l0.32-0.12l0.14-0.2l-0.03-0.25l-0.15-0.41l0.21-0.29l-0.18-0.24l-0.02-0.38l0.41-0.44l0.3-0.2l0.1-0.22
+  		l-0.14-0.27l-0.21-0.31l-0.15-0.37l-0.18-0.37l0.1-0.55l-0.17-0.31l-0.26-0.06l-0.45,0.25l-0.48,0.12l-1.03,0.09l-0.41-0.11
+  		l-1.08-0.14l-0.59-0.13l-1.24-0.01l-1.41-0.15l-2.05-0.3l-1.16-0.29l-0.42-0.05l-0.83,0.06l-0.4,0.11l-0.6,0.26l-0.93-0.22
+  		l-1.56-0.11l-0.54-0.13l-0.96-0.35l-1.11,0.06l-0.39,0.17l-0.72,0.08l-0.93-0.78l-0.76-0.2l-0.52-0.18l-0.36-0.19l-0.36-0.08
+  		l-0.48,0.12l-0.85,0.01l-0.24,0.05l-0.36,0.13l-0.35,0.3l-0.38,0.16l-0.64-0.2l1.06-0.69l0.16-0.35l-0.05-0.24l-0.29-0.18
+  		l-0.26-0.29l0.27-0.07l0.39,0.17l0.57,0.16l0.29-0.03l0.36-0.28l-0.33-0.42l-0.25-0.16l-0.9-0.15l-0.7-0.49l-0.48-0.39l-0.37-0.23
+  		l-0.39-0.14l-0.62-0.11l-2.3-0.17l-1.29,0.26l-1.04,0.07l-0.89,0.15l-0.36,0.16l-1.36,0.73l-0.63,0.12l-0.46,0.27l-0.16,0.48
+  		l0.11,0.45l0.39,0.2l-0.02,0.36l0.18,0.65l-0.1,0.14l-0.47-0.07l-0.52,0.01l-0.93-0.44l-0.44-0.27l-0.75-0.01l-0.66,0.32l0.24,0.39
+  		l0.21,0.14l0.38-0.05l0.54,0.08l-0.3,0.39l-0.76,0.52l-0.02,0.32l0.05,0.52l-0.18,0.41l-0.32,0.19l-0.1-0.22v-0.41l-0.2-0.27
+  		l-0.45-0.12l-0.46,0.17l-0.39,0.04l-0.32-0.19l-0.36-0.28l0.21-0.32l0.31-0.18l-0.09-0.15l-0.36-0.01l-0.49-0.25l-0.59-0.02
+  		l-0.19,0.11l-0.25,0.3l0,0.23l0.21,0.18l-0.07,0.26l-0.44,0.12l-0.48,0.01l-0.57,0.24l-0.67-0.02l-0.37,0.12l-0.52,0.42l-0.59,0.18
+  		l-0.35,0.03l-1.13,0.23l-0.69,0.04l-0.38,0.11l-0.26,0.09l-0.74,0.71l-1.05,0.25l-0.85,0.26l-0.4,0.19l-0.57,0.47l-0.6,0.05
+  		l-0.48,0.21l-0.31,0.2l-0.32,0.31l-0.18,0.66l-0.1,0.8l-0.39,0.58l-0.5,0.57l-0.35,0.45l-0.29,0.26l0.09,0.3l-0.05,0.24l-0.7-0.38
+  		l-0.64-0.75l-0.65-0.32l-0.41-0.02l-0.33,0.09l-0.47,0.2l-0.47-0.27l-0.25-0.24l-0.24-0.05l-0.46,0l-0.57,0.07l-0.81-0.01
+  		l-0.38,0.07l-0.24-0.14l-0.17-0.48l-0.69-1.02l-0.28-0.23l-0.97,0.05l-0.44-0.04l-0.08-0.25l0.2-0.13l0.34-0.3l0.26-0.3l-0.05-0.28
+  		l-0.61-0.06l-0.7-0.04l-0.62,0.06l-0.62,0.3l-0.24,0.27l-0.13,0.65l0.31,0.57l0.3,0.4l0.13,0.44l0.02,0.34l-0.14,0.35l-0.18,0.57
+  		l-0.34,0.29l-0.3,0.08l-0.54,0.24l-1.41,0.41l-0.57,0l-0.41,0.07l-1.5,0.17l-0.97,0.35l-1,0.58l-0.95,0.32l-1.24,0.3l-0.34,0.13
+  		l-0.54,0.32l-0.52,0.14l-0.3,0.04l-0.46,0.17l-0.95,0.06l-0.58-0.15l-0.84-0.06l-0.78-0.26l-0.3-0.24l-0.37-0.38v-0.55l-0.27-0.29
+  		l-0.38-0.12l-0.4-0.03l-0.25,0.56l-0.47,0.49l-0.46,0.24l-0.31,0.05l-0.96-0.23l-0.3-0.15l-0.08-0.17l0.29-0.27l-0.06-0.28
+  		l-0.27-0.19l-0.46-0.38l-0.2-0.08l-0.26-0.06l-0.66,0.77l-0.27,0.61l-0.21,0.54l-1.7,0.24l-0.33-0.02l-0.53,0.03l-0.44-0.01
+  		l-0.26-0.05l-0.2-0.27l-0.23-0.48l0.19-0.6l0.12-0.65l-0.34-0.26l-0.24-0.03l-0.45,0.22l-0.35,0.07l-0.15,0.41l-0.22,0.34
+  		l-0.19,0.07l-1.73-0.29l-0.83-0.18l-0.22-0.63l-0.37-0.19l-0.64,0.16l-0.39,0.43l-0.44,0.02l-0.9-0.12l-1.03,0.02l-1.21,0.14
+  		l-0.52-0.18l-0.42-0.19l-0.42-0.57l-0.79,0.04l-0.06,0.17l0.23,0.09l0.25,0.06l0.12,0.17l-0.45,0.31l-0.4,0.2l-0.28,0.24
+  		l-0.43,0.57l-0.42,0.39l-0.24,0.1l-0.9-0.12l-0.42-0.13l-1.36-0.59l-0.6-0.34l-0.49-0.44l-0.85-0.28l-0.59,0.67l-0.53,0.27
+  		l-0.39-0.04l-1.14-0.34l-0.5,0.45l-0.81,0.13l-0.8,0.17l-1.56,0.16l-0.96,0.06l-2.9,0.62l-1.62,0.18l-1.27,0.34l-0.64,0.25
+  		l-1.3,0.4l-0.54,0.24l-0.69,0.41l-0.61,0.54l-0.26,0.28l-0.39,0.24l-0.39-0.28l-0.14-0.3l-0.1-0.64l-0.31-0.28l-0.27,0.06
+  		l-0.25,0.34l-0.26,0.09l-0.93,0.07l-0.45-0.25l-0.63-0.12l-0.36,0l-0.77,0.13l-0.86,0.05l-0.51-0.12l-0.47,0l-0.36-0.04l-2.71,0.05
+  		l-0.3-0.05l-0.02-0.2l0.08-0.37l0.32-0.34l0.35-0.28l0.22-0.37l-0.19-0.37l-0.44-0.11l-0.56,0.14l-0.55,0.2l-0.52,0.09l-0.35-0.03
+  		l-0.64-0.16l-0.42,0.14l-0.24,0.05l-0.18,0.14l-0.03,0.18l0.21,0.25l0.25,0.35l0.05,0.34l-0.14,0.33l-0.08,0.74l-0.36,0.3
+  		l-0.54,0.04l-0.51,0.09l-0.27-0.01l-0.58-1.04l-0.48-0.62l-0.31-0.19l-0.36-0.07l-0.52-0.22l-0.38-0.33l-0.31,0.03l-0.16,0.15
+  		l0.05,0.14l0.38,0.12l0.16,0.23l-0.36,0.23l-0.32,0.16l-0.2,0.15l-0.25,0.49l-0.3,0.37l-0.26,0.02l-0.34-0.26l-0.3-0.14l-0.6-0.36
+  		l-0.47-0.14l-0.27,0.03l-0.24,0.12l-0.26,0.19l0.12,0.35l0.25,0.4l0.81,0.35l0.66,0.22l0.28-0.03l0.31-0.06l0.09,0.22l0.01,0.27
+  		l-0.29,0.44l-0.41,0.85l-0.27,0.45l-0.51,0.11l-0.57,0.18l-1.18,0.45l-0.83,0.54l-0.71,0.02l-0.61-0.12l-0.65-0.08l0,0.18l0.23,0.2
+  		l0.3,0.54l-0.3,0.35l-0.28,0.07l-1.24-0.26l-1.06,0.17l-0.37,0.19l-0.63,0.63l-0.23,0.19l-0.28,0.13l-0.13,0.46l-0.02,0.31
+  		l0.24,0.13l0.52,0.1l0.29,0.17l-0.12,0.21l-0.32,0.05l-0.18,0.13l0.11,0.17l0.85,0.11l0.88-0.2l1.17-0.13l0.07,0.3l-0.15,0.18
+  		l-0.78,0.62l-0.36,0.42l-0.44,0.34l-0.26,0.11l-1.37-0.3l-0.54,0.01l-0.47-0.03l-0.56,0.05l-0.25,0.16l-0.88,1.15l-0.26,0.59
+  		l-0.28,0.4l-0.53,0.28l-0.18,0.23l-0.24,0.46l0.24,0.37l0.18,0.17l0.18,0.02l0.2,0.13l-0.51,0.11l-0.48,0.03l-1.16,0.26l-1.8-0.18
+  		l-0.53,0.37l-0.37,0.15l-0.8,0.18l-0.93,0.04l-0.93-0.12l-1.32,0.21l-1.94,0.18l-3.23,0.7l-0.9,0.36l-1.04,0.38l-0.94,0.26
+  		l-0.77,0.12l-1.54,0.42l-1.73,0.86l-0.6,0.24l-0.48,0.39l-2.14,1.03l-0.7,0.48l-0.62-0.09l-0.38,0.02l-1.38,0.54l-0.39,0.11
+  		l-0.88,0.44l-0.39,0.37l-0.47,0.8l-0.46,0.36l-0.5,0.06l-0.76,0.8l-1.21,1.68l-0.15,0.58l0.05,0.63l0.63,0.28l0.68,0.36l0.94,0.18
+  		l1.44,0.53l2.17,0.48l0.82-0.03l2.04-0.31l0.77-0.07l0.61-0.02l0.59,0.16l0.25,0.57l-0.06,0.74l0.29,0.41l0.18,0.06l8.47,0.67
+  		l1.06,0.05l0.25-0.07l0.42,0.05l0.38,0.18l1.23,0.18l-0.3,0.44l-0.8,0.18l-0.4,0.22l-9.19,0.46l-0.37,0.04l-0.48,0.17l-1.13,0.23
+  		l-1.07,0.12l-0.54,0.59l-0.58-0.02l-1.12,0.07l-0.81,0.22l-0.63,0.07l-0.24-0.05l-0.25,0.09l-1.84,0.27l-1.76,0.2l-0.35,0.4
+  		l-0.46,0.28l-0.34,0.33l-0.48,0.13l-0.48,0.17l-0.56,0.06l-0.72,0.38l-1.45-0.47l-1.37-0.31l-1.79,0.64l-1.23,0.57l-0.86,0.03
+  		l-0.38,0.18l-0.56,0.36l-0.5,0.47l-0.6,0.82l-0.94,0.71l-1.11,1.12l-0.88,1.12l-0.71,0.27l-0.41-0.06l-0.29,0.21l-1.06,0.32
+  		l-1.34,0.25l-0.7,0.07l-0.62-0.25l0.12-0.51l0.45-0.3l0.27-0.5l-0.13-0.52l-0.25-0.41l-0.56,0.14l-0.82,0.11l-0.61,0l-0.95-0.35
+  		l-0.86-0.14l-3.01,0.33l-1.13,0.03l-1.01,0.17l-0.94,0.2l-1.24,0.32l-0.69,0.08l-0.98-0.04l-0.39,0.11l-0.33,0.04l-0.45,0.1
+  		l-1.11,0.51l-1.25,0.66l-0.91,0.06l-0.5,0.41l-0.44,0.28l-1.87,0.93l-0.37,0.23l-0.43,0.31l-0.89,0.74l-2.21,1.55l-0.61-0.07
+  		l-0.98-0.01l-1.06-0.06l-0.8-0.15l-0.3-0.25l0.11-0.28l0.17-0.21l0.24-0.22l0.19-0.39l-0.03-0.48l-0.17-0.24l-0.72,0.32l-0.38-0.15
+  		l-0.38-0.7l-0.61-0.47l-0.3-0.44l-0.19-0.42l0.33-0.11l0.83-0.16l2.31-0.85l0.52-0.34l-0.29-0.05l-0.31-0.01l-1.88,0.37l-1.34-0.04
+  		l-1.48,0.19l-0.55-0.01l-1.13,0.31l-0.94-0.02l-0.45-0.23l-0.46-0.17l-0.27,0.06l-0.26-0.07l-0.36-0.42l0.23-0.61l-0.1-0.23
+  		l-0.2-0.1l-0.33-0.08l0.17-0.17l0.23-0.05l2.19-0.06l1.03-0.08l-0.1-0.33l-1.12,0.03l-0.82-0.07l-0.4-0.05l-0.24-0.2l1.08-0.14
+  		l0.59-0.19l0.4,0.08l0.44-0.05l0.84,0.07l0.39-0.04l1.1,0.07l0.73-0.02l0.68-0.18l-0.34-0.26l-0.25-0.09l-1.78-0.02l-2.3-0.14
+  		l-1.49-0.26l-4.32-1.34l-0.32-0.08l-0.25-0.24l-0.08-0.3l-0.48-0.15l-1.07,0.16l-0.82-0.17l-0.25-0.02l-0.43-0.19l-0.41-0.26
+  		l-0.28-0.51l-0.3-0.38l-0.23-0.09l-0.6-0.03l-0.38,0.12l-0.27,0.15l-1.43,0.34l-0.69,0.38l-0.86,0.27l-0.64-0.1l-1-0.33l-1.04,0.09
+  		l-0.53,0.21l-0.49-0.11l-0.29-0.24l-0.2-0.35l-0.27-0.43l-0.11-0.36l-0.28-0.62l-0.2-0.19l-0.29-0.18l-0.49-0.56l-0.27-0.27
+  		l-0.63,0.15l-0.73,0.09l-1.83,0.06l-1.32-0.32l-1.36-0.38l1.75-0.01l1.79,0.06l0.87-0.06l0.57-0.16l0.62-0.21l0.39-0.34l0.56-0.8
+  		l-0.13-0.66l-0.2-0.32l-0.51-0.25l-5.34-0.09l-1.26-0.15l-0.48,0.11l-0.13,0.11l0.02,0.43l-0.1,0.35l-0.31,0.02l-0.34-0.06
+  		l-0.49-0.41l-0.11-0.42l-0.51-0.55l-0.29-0.25l-1.68-0.74l-0.69-0.4l-0.52-0.17l-0.61-0.65l-0.18-0.29l-0.12-0.3l0.1-0.23
+  		l0.29-0.19l0.34,0.21l0.23-0.02l-0.03-0.18l-0.47-0.43l-0.32-0.39l-0.12-0.32l-0.05-0.32l0.66,0.51l0.59,0.52l0.86,0.65l1.23,0.58
+  		l2.01,0.78l0.95,0.27l0.95-0.01l1.9-0.27l1.52-0.03l0.59-0.34l0.17-0.39l0.04-0.5l-0.42-0.13l-0.35-0.2l-2.98-0.78l-3.49-1.05
+  		l-0.25-0.15l0.86-0.02l0.39-0.17l0.52-0.18l0.9,0.17l0.77,0.18l3.5,0.38l2.36,0.41l1.88,0.45l1.06,0.08l1.39-0.27l1.01-0.54
+  		l0.42-0.3l0.68-0.78l0.04-0.4l-1.13-0.21l-1.99-0.22l-1.46-0.01l-0.65-0.29l-0.34-0.25l-0.56-0.23l-1.04-1.08l-0.62-0.61l-0.21-0.5
+  		l0.18-0.27l1.71-0.17l0.51,0.03l0.24,0.06h0.31l0.39-0.08l0.32-0.02l2.51,0.44l0.74-0.08l1.35,0.05l1.67,0.24l1.63-0.05l0.62-0.08
+  		l0.62-0.17l0.21-0.07l0.33-0.5l1.1-0.64l3.23-0.9l2.07-0.36l0.73-0.23l1.16-0.51l0.5-0.1l0.48-0.18l1.31-0.58l1.24-0.47l0.19-0.19
+  		l-0.08-0.17l-0.31-0.06l-0.37-0.03l-0.53,0.01l-0.55-0.13l0.76-0.32l0.55-0.13l0.58-0.06l0.1-0.14l-0.3-0.29l-0.42-0.02l-0.64-0.09
+  		l0.31-0.19l0.35-0.17l0.36-0.1l0.29,0.11l0.13-0.22l-0.08-0.31l-0.02-0.29l0.19-0.02l0.33,0.05l0.32,0.17l0.26,0.57l0.35,0.2
+  		l0.42-0.09l0.38-0.23l0.13-0.31l-0.07-0.23l-0.43-0.59l-0.17-0.16l-0.02-0.23l0.26,0.04l0.17,0.08l0.64,0.14l0.49-0.01l0.65-0.12
+  		l0.31-0.38l0.24-0.23l-0.14-0.24l-0.61,0.23l-0.38,0.08l-0.92-0.14l0.22-0.22l0.27-0.12l0.62,0.05l0.33-0.31l-0.21-0.23l-0.29-0.07
+  		l-0.94-0.01l0.17-0.13l0.09-0.26l0.26-0.1h0.26l0.36,0.21l0.21-0.1l0.34-0.21l0.2-0.56l-0.16-0.35l-0.36-0.26l-0.59-0.25
+  		l-0.42,0.12l-0.18-0.44l-0.09-0.42l-0.23-0.14l-0.17-0.24l0.51,0.05l0.54,0.11l0.34,0.2l0.29,0.27l0.33-0.03l0.38-0.17l0.23-0.21
+  		l0.28,0.1l0.51,0.12l0.19-0.3l0.11-0.55l-0.1-0.32h-0.25l-0.19,0.27l-0.23-0.03l-0.27-0.6v-0.55l-0.35-0.09l-0.39,0.18l-0.63-0.34
+  		l0.01-0.45l0.42,0.01l0.57-0.15l0.12-0.22l-0.05-0.32l-0.02-0.43l-0.03-0.24l-0.21-0.07l-0.21,0l-0.28,0.14l-0.37,0.07l-0.33-0.14
+  		l-0.24-0.07l-0.48,0.06l-0.65-0.18l0.57-0.38l0.53-0.14l1.1-0.14l0.16-0.24l-0.08-0.29l-0.16-0.24l-0.24-0.08l-0.63,0.37
+  		l-0.29-0.01l-0.42-0.05l0.09-0.09l0.22-0.05l0.49-0.46l0.26-0.09l0.24-0.17l0.16-0.2l0.26-0.08l0.07-0.25l-0.1-0.26l-0.42-0.55
+  		l-0.11-0.44l-0.36-0.05l-0.34,0.02l-0.47,0.14l-0.14-0.33l0.08-0.24l0.33-0.07l0.2-0.11l0.16-0.19l0.21-0.15l-0.02-0.26l-0.9,0.02
+  		l-0.42-0.24l-0.26-0.19l0.08-0.28l0.21-0.15l0.37,0.15l0.14-0.26l-0.05-0.26l-0.44-0.3l-0.37-0.65l-0.08-0.78l-0.25-0.34
+  		l-0.46-0.34l-0.28-0.14l-0.18-0.24l-0.37-0.36l-0.28-0.31l-0.04-0.29l0.24-0.45l-0.18-0.15l-0.55-0.19l-0.05-0.23l0.12-0.12
+  		l0.65-0.29l0.42-0.09l0.24,0.05l0.08-0.14l-0.22-0.07l-0.29-0.01l-1.05,0.16l-0.23,0.09l-0.44,0.27l0.02,0.33l0.14,0.27l-0.63-0.08
+  		l-0.85-0.23l-0.47-0.17l-0.15-0.11l0.18-0.3l0.15-0.13l0.1-0.13l-0.17-0.12l-0.44-0.02l-0.22-0.09l0.16-0.15l0.85-0.37l0.12-0.13
+  		l-0.04-0.14l-0.06-0.08l-0.13,0.04l-0.47,0.23l-0.31,0.03l-0.29-0.01l-0.17-0.05l0.16-0.26l0.15-0.12l-0.11-0.25l-0.13-0.17
+  		l0.02-0.18l0.03-0.09l0.28-0.4l-0.05-0.15l-0.04-0.07l-0.06-0.18l-0.04-0.26l0.04-0.21l0.11-0.16l0.17-0.05l0.18,0.1l0.31-0.02
+  		l0.47-0.09l-0.01-0.12l-0.06-0.08l-0.3-0.09l0.14-0.09l0.2-0.08l0.1-0.1l-0.12-0.06l-0.04-0.25l0.15-0.16l0.1-0.24l0.09-0.27
+  		l0.14-0.02l0.1,0.16l0.28,0l0.65,0.22l0.37-0.05l0.15-0.12l-0.03-0.21l-0.07-0.13l-0.49-0.32l0.11-0.14l0.09-0.05l0.15-0.25
+  		l0.23-0.29l0.18-0.08l-0.06-0.19l-0.12-0.13l0.3-0.11l0.25,0.01l0.34,0.06l0.14,0.27l0.33,0.3l0.53,0.69l0.14,0.08l0.17,0
+  		l-0.01-0.26l-0.2-0.2l0.03-0.14l0.04-0.06l0-0.16l-0.06-0.22l-0.19-0.16l0.13-0.22l0.18-0.06l0.16,0.01l0.46-0.07l0.23,0.04
+  		l0.44,0.26l0.06,0.32l0.16,0.08l0.11-0.26l0.04-0.28l0.27-0.07l0.17-0.24l0.25,0.06l0.26,0.14l0.03,0.24l0.19,0.14l0.16-0.22
+  		l0.07-0.22l-0.19-0.24l0.1-0.12l0.18-0.02l0.2,0.12l0.22-0.22l0.11-0.16l-0.1-0.14l-0.35,0l-0.18-0.04l-0.14,0.06l-0.09,0.15
+  		l-0.18-0.01l-0.11-0.04l-0.12,0.02l-0.17,0.24l-0.39,0.04l-0.09,0.07l-0.39,0.07l-0.3-0.02l-0.3-0.24l-0.22-0.34l-0.02-0.23
+  		l0.15-0.2l0.13-0.23l0.29-0.33l0.43-0.06l-0.07-0.14l-0.19-0.03l-0.27-0.17l-0.17-0.37l0.11-0.17l0.11-0.12l0.14-0.12l0.17,0.13
+  		l0.35,0.01l0.16-0.16l-0.29-0.45l0.06-0.14l0.18,0l0.18,0.04l0.11,0.05l0.19,0.02l0.49-0.13l0.26-0.22l0.46-0.52l0.19-0.15
+  		l0.29-0.2l0.1-0.17l0.18-0.01l0.5-0.34l0.2,0.01l0.15,0.05l0.06,0.31l0.16,0.07l0.13-0.15l-0.07-0.26l0.12-0.24l0.16-0.04
+  		l0.16,0.17l0.25,0.12l0.32,0.02l0.29,0.25l0.19-0.04l-0.04-0.23l-0.16-0.16l-0.02-0.11l0.16-0.04l0.04-0.13l-0.22-0.04l-0.1-0.04
+  		l-0.13-0.09l0.08-0.11l0.3-0.02l0.21-0.32l0.34-0.47l0.49-0.44l0.73-0.31l0.22-0.12l0.28-0.2l0.22-0.09l0.32-0.07l0.24-0.03
+  		l0.1,0.13l-0.1,0.14l0.06,0.19l0.26-0.04l0.25,0.02l0.1-0.17l-0.26-0.19l-0.17-0.38l-0.1-0.31l-0.17-0.08l-0.4-0.02l-0.86,0.26
+  		l-0.63,0.38l-0.83,0.24l-0.36,0.05l-0.3,0.34l-0.33,0.12l-0.53,0.31l-0.87,0.26l-0.52,0.04l-1.06,0.43l-0.1,0.1l0.06,0.12
+  		l-0.35,0.48l-0.17,0.14l-0.4,0.19l-0.13,0.14l-0.05,0.2l-0.24,0.17l-0.22,0.02l-0.23,0.05l-0.46,0.3l-0.19,0.06l-0.17-0.05
+  		l-0.12-0.25l-0.18,0.04l-0.13,0.29l0.09,0.23l-0.25,0.07l-0.2-0.05l-0.62,0.3l0.06,0.25l0.1,0.15l-0.05,0.18l-0.21-0.04l-0.16-0.16
+  		l-0.39,0.03l-0.5-0.15l-0.27,0.18l-0.23,0.25l-0.06,0.29l0.04,0.41l0.26,0.15l0.2,0.04l-0.04,0.15l-0.08,0.07l-0.37-0.01
+  		l-0.12,0.05l-0.09,0.14l-0.06,0.05l-0.41,0.02l0.04,0.12l0.05,0.09l-0.08,0.18l-0.07,0.04l-0.31-0.1l-0.05,0.2l0.04,0.16l0.19,0.1
+  		l0.06,0.18l-0.18,0.18l-0.2-0.08l-0.5-0.14l-0.19,0.03l-0.29,0.11l0.08,0.22l0.09,0.14l-0.26,0.07l-0.27-0.03l-0.27,0.02
+  		l-0.18,0.36l-0.1,0.1l0,0.16l0.18,0.18l-0.07,0.51l-0.09,0.16l-0.15,0.08l-0.19-0.01l-0.41-0.16l-0.23,0l-0.12,0.05l-0.24,0.25
+  		l-0.04,0.15l0.11,0.41l-0.07,0.2l-0.06,0.12l0.03,0.25l0.04,0.16l0.03,0.39l-0.05,0.14l-0.1-0.08l-0.11-0.17l-0.27,0.07l-0.14,0.15
+  		l-0.12-0.08l0.03-0.23l-0.08-0.11l-0.05-0.48l-0.14-0.12l-0.23,0.02l-0.25,0.36l-0.26,0.06l-0.1,0.07l-0.1,0.48l-0.06,0.51
+  		l0.04,0.21l0.04,0.1l0.1,0.04l0.65-0.19l0.36,0.02l0.39,0.11l0.05,0.1l-0.17,0.1l-0.26,0.31l-0.19,0.43l-0.15,0.31l-0.08,0.29
+  		l0.31,0.38l0.33,0.29l-0.18,0.18l-0.27,0.49l-0.14,0.38l0.11,0.3l-0.14,0.31h-0.3l-0.17,0.29l0.37,0.36l0.3,0.17l0.08,0.42
+  		l-0.24,0.28l-0.35,0.22l-0.12,0.3l-1.39-0.21l-0.58,0.12l-0.21,0.09l-0.23,0.06l0.13,0.3l0.3,0.38l0.12,0.53l0,0.68l0.5,0.75
+  		l0.43,0.56l0.35,0.87l0.17,0.52l0.17,0.7l-0.05,0.75l0.13,0.81l0.48,0.64l0.2,0.31l0.24,0.29l0.22,0.65l-0.45,1.01l-0.41,0.76
+  		l-0.65,0.77l-0.6,0.35l-1.48,0.59l-0.83,0.22l-1.24,0.2l-0.64,0.17l-1.25-0.04l-0.79,0.32l-0.44-0.01l-0.54,0.09l-0.7,0.21
+  		l-0.55,0.05l-0.44-0.02l-1.93,0.88l-0.36-0.02l-0.27-0.04l-0.45,0.11l-0.47-0.2l-0.34-0.05l-0.45-0.02l-0.55,0.25l-0.58,0.09
+  		l-0.68,0.24l-0.84-0.06l-0.24,0.11l-0.29,0.08l-0.16-0.09l0.18-0.35l0.48-0.53l-0.16-0.37l-0.51,0.12l-0.56-0.03l-0.73,0.09
+  		l-0.54,0.11l-0.48,0.03l-0.68-0.17l-0.32-0.68l-1.01-0.77l-0.52-0.21l-0.62-0.1l-0.52-0.19l-0.26,0.11l-0.05,0.37l0.32,0.49
+  		l0.11,0.29l0.08,0.37l-1.24-0.62l-0.27,0.05l-0.16,0.23l0.05,0.55l0.13,0.56l-0.26,0.37l-0.54,0.2l-1.04,0.22l-1.14-0.44
+  		l-0.41-0.09l-0.94,0l-0.42-0.21l-0.75-0.25l-0.64-0.06l-0.74-0.19l-0.5-0.31l-0.58-0.54l-0.4-0.23l-0.32,0.06l-1.12,0.51
+  		l-0.34,0.03l-0.45-0.03l-0.66-0.56l-0.37,0.01l-0.59,0.16l-0.49-0.07l-0.39,0.03l-0.26-0.38l0.41-0.64l0.25-0.26l0-0.24l-0.6-0.29
+  		l-0.46-0.07l-0.63,0.03l-0.18,0.46l-0.2,0.22l-0.33-0.06l-0.53-0.03l-0.39,0.34l-0.21-0.05l-0.26,0.12l0.04,0.49l-0.28,0.43
+  		l-0.88,0.26l-0.45-0.04l-1.94-0.45l-1.06-0.05l-1.58,0.18l-0.5,0.25l-0.47,0.09l-0.61-0.22l-0.8-0.04l-0.37-0.07l-0.53,0.07
+  		l-0.63,0.18l-0.49,0.05l-0.44-0.03l-0.51-0.11l-0.51-0.22l-0.94-0.28l-0.32,0.06l-0.3-0.15l-0.35-0.24l-0.35-0.04l-2.89-0.08
+  		l-0.81,0.14l-0.55-0.09l-0.46-0.12l-0.92,0.05l-0.63,0.12l-0.29-0.03l-0.34-0.08l-0.69-0.04l-0.13-0.13l0.22-0.14l0.16-0.26
+  		l-0.16-0.26l-0.22-0.08l-0.67-0.07l-0.46,0.02l-0.19,0.17l-0.29,0.16l0.12,0.44l0.42,0.83l0.3,0.35l0.42,0.12l1.55-0.03l0.44,0.06
+  		l0.69-0.04l1.36,0.12l0.75,0.17l0.89,0.32l0.59,0.27l0.55,0.14l-0.48,0.1l-0.33-0.02l-0.36,0.04l-0.21,0.17l-0.23,0.09l-1.69,0.13
+  		l-0.48,0l-0.26-0.08l-0.33-0.14l-0.5-0.1l-0.44-0.04l-0.38-0.09l-0.68-0.05l-0.7,0.1l-0.11,0.48l0.17,0.35l0.59,0.15l0.61,0.11
+  		l0.7,0.23l0.23,0.26l0.44,0.9l0.16,0.48l0.41,0.07l0.26,0.13l0.63-0.19l0.53-0.02l0.22,0.11l0.19,0.53l-0.46,0.58l-0.38,0.18
+  		l0.29,0.15l0.27,0.09l0.57-0.06l0.36,0.1l0.8,0.47l0.87,0.23l0.31,0.18l-0.16,0.32l-0.19,0.15l-0.41,0.04l-1-0.07l-1,0.22
+  		l-0.69-0.06l-0.44,0.16l-0.6,0.09l-0.48-0.21l-0.59-0.53l-0.14-0.34l-1.92-0.04l-0.63-0.08l-0.55,0.02l-0.86,0.19l-0.47-0.12
+  		l-0.83,0.13l-0.51-0.15l-0.9,0.3l-2.2,0.53l-0.57-0.13l-0.6,0.09l-0.97-0.05l-0.81-0.25l-1.03-0.17l-0.81-0.08l-1.3,0.05
+  		l-2.01-0.03l-0.46,0.11l-0.19-0.31l0.89-0.66l0.79-0.42l0.42-0.45l0.13-0.63l-0.14-0.61l-0.41-0.28l-0.43-0.07l-0.45-0.14
+  		l-0.29-0.15l-0.52,0.05l-0.29-0.07l-0.32,0.31l0.15,0.42l0.05,0.42l-0.17,0.24l0.09,0.29l0.28,0.35l-0.2,0.15l-0.31,0.03
+  		l-0.55,0.11l-1.66,0.21l-0.91,0.19l-0.29,0.03l-0.32,0.11h-0.32l0.02-0.26l0.2-0.24l0.15-0.72l0.22-0.09l0.34-0.21l0.48-0.37
+  		l-0.22-0.21l-0.34,0.04l-0.2-0.14l0.07-0.5l0.25-0.07l0.15-0.18l-0.03-0.25l-1.51-0.58l-0.5-0.08l-0.3,0.3l-0.36,1.02l-0.21,0.64
+  		l-0.21,0.12l-2.19-0.14l-1.15,0.09l-1.33-0.25l-0.97-0.08l-0.57,0.04l-0.27,0.11l-0.4,0.34l-0.72,0.37l-0.46,0.12l-3.37,0.34
+  		l-4.24,0.08l-0.76-0.13l-1.88-0.08l-1.86,0.1l-1.15-0.16l-1.52,0.08l-1.95,0.36l-0.54,0.03l-1,0.23l-0.73,0l-1.2-0.23l-1.53-0.05
+  		l-0.62-0.16l-0.55,0.09l-1.16,0.06l-0.87,0.16l-0.58,0.01l-0.58-0.09l-0.63-0.19l-0.68-0.3l-0.94-0.01l-1.21,0.27l-0.36,0.26
+  		l-0.42,0.72l-0.16,0.38l-0.18,0.08l-0.8-0.03l-0.95-0.28l-2.76,0.31l-0.98,0.19l-1.09,0.71l-0.32,0.15l-0.43,0.18l-0.52,0.08
+  		l-0.41,0.09l0.63,0.74l-0.24,0.02l-0.23-0.02l-0.67-0.2l-1.06-0.59l-0.43-0.14l-1.25,0.19l-1,0.07l-1.17,0.62l-0.9,0.37l-0.69,0.17
+  		l-1.59,0.04l-0.61,0.49l-0.11,0.3l0.94,0.62l0.39,0.22l0.36,0.31l-0.44,0.07l-0.36-0.02l-1.29-0.32l-0.4-0.07l-1.88-0.7l-0.83-0.1
+  		l-0.25,0.05l-0.31,0.19l-0.27,0.26l-0.21,0.13l-0.7,0.15l-0.67,0.2l0.57,0.2l0.53,0.15l0.8,0.13l2.28-0.21l1.02,0.26l1.1,0.57
+  		l0.75,0.35l0.14,0.18l-0.02,0.33l0.1,0.26l-0.32,0.22l-0.23,0.06l-0.06,0.15l0.19,0.1l0.2,0.04l0.34,0.22l0.09,0.14l-0.21,0.08
+  		l-0.31,0.2l0.02,0.22l0.15,0.03l0.12,0.23l0.09,0.22l-0.14,0.13l-0.72-0.01l-0.57-0.06l-0.97-0.82l-0.51,0.1l-0.42,0.13l-0.22,0.02
+  		l-0.3-0.06l-0.84-0.38l-0.68-0.41l-0.37,0.08l-0.11,0.3l-0.01,0.31l0.18,0.23l0.33,0.07l0.54,0.2l0.19,0.19l-0.33,0.34l-1.42,0.35
+  		l-0.63,0.28l-0.21,0.23l-0.23,0.09l-0.66-0.1l-0.4-0.15l-1.18-0.61l-1.38-0.57l-0.5-0.05l-1.95,0.12l-0.69-0.1l-0.2-0.2l-0.06-0.2
+  		l-0.19-0.14l-0.36-0.18l-1.63-0.38l-0.52-0.03l-0.46,0.05l-1.01-0.13l-0.53,0.03l-0.28,0.11l-0.54,0.3l-0.85,0.11l-0.59-0.04
+  		l-0.68-0.58l-0.29,0.05l-0.38,0.25l-0.06,0.76l0.03,0.55l-0.22,0.45l-0.27,0.63l0.17,0.43l0.22,0.25l0.79,0.48l1.05,0.49l1.26-0.05
+  		l2.22,0.02l0.55,0.11l0.62-0.02l0.73,0.17l-0.44,0.39l-0.32,0.16l-2.17,0.44l-0.52,0.19l-0.47,0.3l0.64,0.44l1.63,0.88l1.25,0.33
+  		l1.81,0.28l1.47,0.07l0.83-0.13l0.19,0.05l0.15,0.31l-0.07,0.2l0.34,0.16l0.48,0.15l0.48,0.31l0.58,0.27l1.01,0.35l2.6,0.46
+  		l1.14,0.31l0.44,0.18l0.17,0.33l-0.08,0.21l-0.3,0l-0.25,0.09l0.01,0.17l0.16,0.13l0.04,0.28l-0.24,0.08l-0.57,0.07l-1.47-0.01
+  		l-0.48,0.05l-0.68,0.13l-0.39,0.25l-0.25,0.6l0.11,0.23l0.42,0.3l0.27,0.13l1.27,0.32l0.3,0.03l0.09,0.05l0.01,0.28l0.11,0.2
+  		l0.29,0.1l0.8,0.08l0.94,0.32l-0.18,0.28l-7.06,0.55l-7.02,0.45l-1.1,0.12l-0.52,0.29l-0.39,0.38l0.98,0.25l2.86,0.58l0.76,0.24
+  		l0.46,0.25l0.5,0.33l-0.19,0.28l-0.23,0.2l-0.47,0.25l-0.48,0.32l1.51,1.04l1.58,1.21l-0.7,0.61l-0.76,0.37l-2.4,0.85l-0.56,0.55
+  		l-1.04,0.21l-1.77,0.22l-0.91,0.14l-0.28,0.1l0.16,0.26l0.42,0.05l0.59,0.16l-0.72,0.51l-0.49,0.16l-3.15,0.75l-0.87-0.22
+  		l-1.21-0.02l-2.89,0.14l-0.68-0.5l-0.61-0.29l-0.36-0.08l-1.12,0.2l-0.59,0.24l-0.7,0.2l-0.36-0.25l-0.49-0.56l-1.27-0.34
+  		l-1.08-0.07l-2.72,0.08l-0.6,0.04l-0.25-0.06l0.26,5.85l0,1.25l0.05,0.03l1.22,27.92h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54
+  		h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54
+  		h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54
+  		h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54
+  		h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54
+  		h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54
+  		h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54
+  		h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54
+  		h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54
+  		h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54
+  		h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54h2.54l0.15-28.17
+  		l-5.48-0.68L2221.62,1292.94z M2193.06,1248.7l0.34,0.22l0.24-0.07l0.03-0.13l0.18-0.19l-0.13-0.19l-0.19-0.47l-0.08-0.01
+  		l-0.12,0.09l-0.05,0.12l0.03,0.14l-0.32,0.42L2193.06,1248.7z M2190.89,1263.88l0.35-0.01l0.43-0.11l0.65-0.36l0.43-0.14
+  		l-0.14-0.27l-1.49-0.26l-1.79,0.03l-0.68-0.28l0-0.05l0.04-0.14l-0.22-0.32l-0.49-0.09l-0.38,0.11l-0.17,0.24l0.1,0.14l0.25,0.18
+  		l0.03,0.16l-0.3,0.26l-0.14,0.19l-0.29,0.12l0.04,0.09l0.53,0.59l0.21,0.29l0.14,0.3l0.53-0.37l0.46-0.21l0.2-0.21l0.95-0.02
+  		L2190.89,1263.88z M2182.62,1252.78l-0.01,0.08l0.05,0.25l0.15,0.11h0.24l0.15-0.29l0.07-0.07l0.2-0.45l-0.37,0.08L2182.62,1252.78
+  		z M2232.89,1287.19l-0.34-0.12l-0.34-0.06l-0.41-0.17l-0.77-0.25l-2.87-0.69l-1.43-0.43l-0.55,0.07l-0.48,0.14l-0.36-0.04
+  		l-0.47,0.15l-0.4,0l-2.1-0.55l0.12,0.24l0.19,0.24l4.56,1.38l0.63,0.24l3.65,0.89l0.69,0.37l0.52,0.38l0.27,0.12L2232.89,1287.19z
+  		 M2181,1255.89l-0.22,0.11l-0.23,0.26l0.13,0.09l0.23,0.02l0.32-0.48l-0.09-0.04L2181,1255.89z M1777.12,1232.81l0.23,0.05
+  		l0.07-0.09l-0.09-0.14l-0.2-0.11l-0.24-0.02l-0.12,0.09l0.22,0.15L1777.12,1232.81z M1828.23,1271.86l0.11-0.01l0.2-0.02l0.31-0.14
+  		l0.31-0.14l0.05-0.01l0.03,0l0.03-0.09l0.01-0.05l0,0v0l-0.33-0.13l-0.07-0.03l-0.41,0.02l-0.15,0.16l-0.07,0.08l-0.15,0.27h0l0,0
+  		L1828.23,1271.86z M2010.94,1243.68l-0.18,0.29l-0.24,0.24l-0.05,0.14l0.1,0l0.38-0.08l0.27-0.16l0.04-0.21l-0.2-0.26
+  		L2010.94,1243.68z M1776.21,1236.25l-0.11,0.12l-0.03,0.13l0.05,0.06l0.13,0.09l0.27-0.01l0.09-0.07l-0.08-0.23L1776.21,1236.25z
+  		 M1775.34,1235.15l0.04-0.23l-0.04-0.15l-0.02-0.06l-0.29-0.24l-0.12-0.12l-0.14-0.15l-0.22-0.12l-0.37-0.09h0l-0.13,0.03
+  		l-0.09,0.08v0l0,0l0.06,0.17l0.06,0.17l0.51,0.66l0.08,0.45l0.16,0.3l0.12-0.02l0.04-0.01l0.05-0.1l0.11-0.33v0l-0.01-0.17
+  		l0.07-0.02L1775.34,1235.15z M2012.87,1243.06l-0.08,0.16l0.09,0.26l0.09,0.01l0.23-0.44l-0.04-0.03l-0.18-0.05L2012.87,1243.06z
+  		 M1831,1272.41l-0.24-0.08l-0.88-0.63l-0.14-0.04l-0.58,0.4l0,0l0.32,0.48l0.3,0.11l0.11,0.04l1.35,0.21l0.34,0.13l0.42,0.17
+  		l0.71-0.31l0.14-0.01l0.28-0.03l0.14,0.02l0.13-0.06l0.06-0.03h0h0l-0.09-0.07l-0.37-0.28l-1.43-0.37l-0.22-0.35l-0.1,0.21
+  		l-0.05,0.11v0l0.01,0.04l0.03,0.15l-0.15,0.11L1831,1272.41z M1619.12,1260.39l-0.11-0.1l-0.5-0.09l-0.48,0.04l-0.73-0.05
+  		l-0.25,0.15l0.42,0.23l0.46,0.1l0.31-0.02l0.26-0.15l0.54-0.03L1619.12,1260.39z M1648.54,1251.98l0.13,0.09l0.2,0.1l0.44,0.04
+  		l0.76,0.18l0.2-0.08l0.18-0.25l0.02-0.21l-0.04-0.15l-0.46,0l-0.59-0.17l-0.06-0.13l-0.3-0.02l-0.32,0.09l-0.41,0.27l0.2,0.14
+  		L1648.54,1251.98z M1591.28,1285.5L1591.28,1285.5l0.06,0.1l0.13,0.1l0.06,0.11l0,0.11l0,0.07l0.09,0.09l0.37,0.15l0.19,0.17
+  		l0.15,0.07l0.2,0.09l0.33,0.05l1.01,0.15l0.56-0.1l0.3-0.35l0.35-0.07h0l0,0l-1.27-0.47l-0.13-0.11l-0.52-0.11l-0.19-0.04
+  		l-0.46-0.03l-1.34-0.07l0,0h0L1591.28,1285.5z M1697.25,1247.18l0.31,0.26l0.4,0.04l0.22-0.16l-0.78-0.78l-0.2,0.09l-0.09,0.09
+  		l0.02,0.12L1697.25,1247.18z M1675.26,1250.93l0.89-0.1l0.3-0.14l0.1-0.11l-0.04-0.04l-0.13-0.05l0.04-0.05l0.24-0.13l0.54-0.38
+  		l-0.09-0.05l-0.32-0.11l-1.8,0.77l-0.04,0.14l0.06,0.14L1675.26,1250.93z M1655.68,1251.94l0.13,0.04l0.15,0.19l0.18,0.11
+  		l0.54,0.24l0.27-0.06l0.24-0.16l0.16-0.35l-0.15-0.2l-0.46-0.07l-0.66-0.26l-0.34-0.07l-0.16,0.05l0.07,0.5L1655.68,1251.94z
+  		 M1657.02,1248.72l0.18,0.06l0,0.45l0.04,0.04l0.16,0.03l0.21-0.03l0.19-0.17l0.11-0.07l0.23-0.01l0.23,0.06l0.08,0.04l0.08,0.07
+  		l0.06,0.16l-0.01,0.23l0.41,0.28l0.65,0.22l0.37,0.29l0.24,0.1l0.23,0.03l0.6,0.4l0.39,0.09l1.22,0.06l0.39,0.11l0.08,0l0.18-0.11
+  		l0-0.2l0.05-0.18l0.02-0.15l-0.09-0.07l-0.15-0.17l-0.36-0.13l-0.04-0.09l0.09-0.13l0.11-0.09l-0.16-0.16l-0.74-0.33l-0.14-0.02
+  		l-0.14,0.05l-0.54,0.28l-0.21-0.01l-0.21-0.09l-0.18-0.02l-0.41,0.09l-0.22,0.01l-0.22-0.07l-0.11-0.08l-0.01-0.11l0.06-0.11
+  		l0.19-0.05l0.2,0.03l0.61-0.07l0.02-0.08l-0.11-0.17l-0.32-0.19l-0.1-0.09l-0.12-0.29l-0.2-0.17l-0.22-0.06l-0.22-0.11l-0.16-0.15
+  		l-0.48-0.1l-0.48-0.03l-0.42,0.04l-0.27,0.06l-0.26-0.05l-0.26,0.03l-0.23,0.27l-0.06,0.23l0.03,0.24L1657.02,1248.72z
+  		 M1670.62,1250.34l-0.2,0.19l0.03,0.06l0.12,0.08l0.11,0.01l0.38-0.04l0.18-0.12l0.7-0.28l0.12-0.11l0.2-0.31l-0.06-0.15
+  		l-0.09-0.09l-0.46-0.11l-0.54-0.01l-0.28,0.12l-0.24,0.02l0.25,0.62l-0.06,0.06L1670.62,1250.34z M1723.28,1232.84l0.02,0.03
+  		l0.01,0.01l0.01,0.01h0.01l0.01,0l0.03-0.01l0.03-0.01l0.03,0l0.04,0l0.02,0l0.01,0l0.01-0.01l0.01-0.04l0.01-0.04l-0.01-0.02
+  		l0-0.03l0-0.02l0-0.02v-0.01l-0.02-0.03l-0.02-0.03l-0.02-0.01l-0.02,0l-0.03,0l-0.02,0l-0.03,0l-0.02,0.01l-0.01,0.01l0,0.02
+  		l-0.01,0.03l-0.01,0.03v0.03l0,0.02l-0.02,0.02l-0.01,0.04l0.01,0.03L1723.28,1232.84z M1702.72,1243.95l0.21,0.02l0.21-0.04
+  		l0.33-0.01l2.25,0.35l0.29-0.02l0.16,0.05l0.16,0.09l0.62,0.23l0.43,0.09l0.52,0.22l0.48,0l0.43,0.06l0.42,0.2l0.44,0.03l0.61,0
+  		l0.42-0.03l0.42-0.09l0.21,0l0.4,0.18l0.2,0.02l0.2-0.07l0.2-0.04l1.16,0.1l0.04-0.08l0.03-0.1l-0.12-0.24l0.46-0.05l0.45-0.1
+  		l0.08-0.55l-0.14-0.25l0-0.36l-0.14-0.04l-0.4,0.22l-1.04,0.29l-0.42,0.16l-0.15,0.01l-0.17-0.04l-0.16-0.09l0.48-0.31l0.75-0.29
+  		l0.31-0.51l-0.47-0.2l-0.88,0.05l-0.4,0.31l-0.12,0.34l-0.07,0.15l-0.08,0.14l-0.19,0.19l-0.21,0l-0.12-0.13l-0.1-0.18l0.2-0.32
+  		l-0.2-0.4l-0.42,0.12l-0.19,0.67l-0.44,0.02l-0.01-0.35l0.15-0.36l-0.18-0.31l-0.37-0.13l-0.4-0.06l-0.63,0.3l-0.21,0.26
+  		l-0.31,0.13l-0.56-0.09l-0.31,0.3l-0.09,0.04l-0.09,0.01l-0.27-0.36l-0.18-0.35l-0.24-0.01l-0.33,0.11l-3.12,0.4l-0.2,0.08
+  		l-0.09,0.08l-0.05,0.17l0.09,0.18L1702.72,1243.95z M1749.05,1240.37l0.17,0.05l0.17,0l2.47-0.4l0.54-0.13l0.54-0.16l0.92-0.43
+  		l0.26-0.23l-0.28-0.29l-0.31-0.19l-0.14-0.06l-0.15-0.03l-0.13,0.08l0,0.26l-0.2-0.13l-0.32-0.13l-0.1,0.04l-0.02,0.46l-0.11,0.14
+  		l-0.11,0.07l-0.36-0.53l-0.2-0.13l-0.1,0l-0.1,0.06l-0.05,0.14l-0.04,0.18l-0.12,0.15l-0.15,0.07l-1.49,0.21l-0.39,0.09l-0.23,0.1
+  		l-0.22,0.16l-0.02,0.16l0.16,0.33L1749.05,1240.37z M1721.93,1246.29l0.05,0.14l-0.17,0.2l-0.11,0.79l0.3,0.04l0.33-0.09l0.29-0.16
+  		l0.19-0.18l0.21-0.31l0.04-0.26l-0.05-0.22l-0.22-0.1l0.21-0.32l0.03-0.17l-0.08-0.24l-0.25-0.19l-0.64-0.03l-0.56,0.16l-0.1,0.1
+  		l0.21,0.45L1721.93,1246.29z M1715.35,1245.59l1.09-0.18l-0.01-0.08l-0.14-0.33l-0.04-0.05l-0.05-0.03l-0.34,0.17l-0.84,0.28
+  		l-0.1,0.16l0.1,0.08L1715.35,1245.59z M1717.27,1246.47l0.31,0l0.07-0.04l-0.08-0.09l-0.37-0.21l-0.08,0.01l-0.12,0.13l0.06,0.08
+  		L1717.27,1246.47z M1664.78,1249.67l0.08,0.02l0.07,0.08l0.59,0.35l-0.15,0.1l-0.31,0.37l0.01,0.15l0.15,0.17l0.05,0.1l-0.23,0.03
+  		l-0.12,0.05l0.03,0.22l0.14,0.14l1.03,0.22l2.21-0.23l0.11-0.04l0-0.12l-0.06-0.05l-0.03-0.07l0.06-0.31l0.05-0.06l1.29-0.59
+  		l-0.07-0.24l-0.12-0.23l-0.32-0.35l-0.3-0.01l-1.4-0.07l-0.85-0.07l-0.85-0.11l-0.86-0.01l-0.18-0.02l-0.18,0.03l-0.25,0.2
+  		l-0.08,0.23l-0.1,0.14l0.28,0.02L1664.78,1249.67z M1599.97,1280.89L1599.97,1280.89l0.28,0.25l0.15,0.12l0.26,0.21l0.21,0.14
+  		l0.5,0.34l0.07,0.12l0.07,0.11l0.16-0.03l0.11-0.13l0.16-0.19l-0.77-0.37l-0.12-0.15l-0.04-0.05l-1.02-0.53l-0.04,0l-0.09,0l0,0h0
+  		L1599.97,1280.89z M1615.23,1262.69l0.14-0.02l0.07-0.08l-0.26-0.05l-0.94-0.44l-0.35,0.02l-0.53,0.18l0.3,0.09L1615.23,1262.69z
+  		 M1647.88,1251.81l0.05-0.11l-0.34-0.08l-0.5,0.12l-0.05,0.14l0.56,0.13L1647.88,1251.81z M1597.15,1279.8l-0.24-0.19l-0.58-0.25
+  		l-1.12-0.29l-1.62-0.36l-1.34-0.14l-1.21,0.18l-0.07,0.08l-0.04,0.04l-0.01,0.05l-0.03,0.12l0.02,0.06v0l0.02,0.02l0.07,0.06
+  		l0.16,0.06l0.07,0.03l0.19,0.03l0.74,0.13l4.84,0.5l0.19-0.04l0,0h0L1597.15,1279.8z M1590.4,1270.38l0.15,0.09l0.31,0.18
+  		l0.47,0.22l0.6,0.21l0.11,0.04l2.62,0.81l0.86,0.2l1.06,0.25l0.26,0.04l0.65,0.1l2.26-0.15l0.08-0.11l0.02-0.19l-0.1-0.17
+  		l-0.12-0.08l-0.07-0.09l-0.06-0.07l-0.09-0.13l-0.03-0.05v0l-0.01-0.01l-0.19-0.18l-0.05-0.08l-0.04-0.07l-0.26-0.23l-0.22-0.2
+  		l-0.5-0.32l-0.52-0.21l-0.93-0.57l-0.46-0.25l-0.48-0.26l-0.65-0.43l-0.93-0.43l-0.41-0.13l-0.02,0l-0.4-0.07l-0.45-0.07
+  		l-0.18-0.01l-0.27-0.01l-0.24,0.01l-0.16,0.23l-0.57,0.3l-0.28,0.29l-0.31,0.15l-0.25,0.12l-0.04,0.07l-0.09,0.16l-0.08,0.35
+  		l-0.04,0.26l-0.03,0.17l0,0v0l0.07,0.2L1590.4,1270.38z M1750.14,1236.99l0.07,0.04l0.83,0.17l0.76,0.1l0.32-0.15l0.17-0.43
+  		l0.21-0.09l0.04-0.07l-0.05-0.11l-0.15-0.18l-0.47-0.35l-0.32-0.08l-0.27,0.04l-0.08-0.02l-0.15,0.05l-0.09,0.22l-0.05,0.08
+  		l-0.62,0.13l-0.14,0.11l-0.1,0.22l0.02,0.18L1750.14,1236.99z M1614.9,1260.45l0.76-0.05l0.27-0.16l-0.03-0.06l-0.13-0.1
+  		l-1.19,0.09l-0.06,0.09l0.08,0.09L1614.9,1260.45z M1624.14,1256.35l0.35,0.09l0.2-0.02l-0.03-0.1l-0.11-0.15l-0.18-0.2l-0.62-0.27
+  		l-0.24-0.03l-0.33,0.1l-0.14,0.15l0.2,0.14L1624.14,1256.35z M1620.88,1258.04l0.35,0.19l0.46,0.24l0.37-0.05l-0.47-0.55
+  		l-0.74-0.13l-0.1,0.04l-0.01,0.06l0.02,0.05L1620.88,1258.04z M1618.84,1261.25l0.06-0.08l-0.12-0.09l-0.35-0.07l-0.96-0.13
+  		l-0.12,0.06l0.1,0.29l0.42,0.1l0.76-0.05L1618.84,1261.25z M1617.44,1262.46l-0.23-0.13l-0.26-0.02l-0.26,0.1l0.4,0.27l0.92,0.06
+  		l-0.52-0.19L1617.44,1262.46z M1615.23,1260.97l-0.37,0.09l-0.2,0.13l0.1,0.09l0.49,0.27l1.09,0.09l0.07,0.06l0.16,0.05l0.79,0.03
+  		l0.11-0.06l-0.1-0.1l-0.23-0.05l-0.05-0.11l-0.12-0.18l-0.43-0.28l-0.09-0.14l-0.15-0.05l-0.94,0.09L1615.23,1260.97z"/>
+  </g>
+  <g class="country" id="AGO">
   	<path class="st0" d="M1911.7,1362.16l0.56,1.07l0.25,1.2l-0.22,0.59l-0.21,0.79l0.37,0.83l0.12,0.22l0.35-0.1l1.1-0.16l0.83-0.08
   		l0.16-0.19l0.13-2.28l0.03-2.31l-0.29-0.3l-0.29-0.19l-0.01-0.16l0.43-0.29l0.6-0.34l0.19-0.15l0.66-0.61l1.3-1.42l0.99-0.35
   		l0.93-0.37l0.13-0.14l-0.21-0.13l-0.65-0.57l-0.76-0.89l-0.28-0.14l-0.42,0.01l-0.66,0.33l-0.65,0.51l-1.18,0.47l-0.98,0.27
@@ -10567,7 +10782,7 @@ function mapSvg() {
   		l0.46-0.02l0.55-0.08l0.04-0.27l-0.72-1.34l0.03-0.47l0.19-0.91l0.3-0.79l0.39-1.03l0.04-0.61l-0.32-1.98l0.03-1.1l0.09-1.15
   		l0.09-1.09l-0.11-0.76l0.13-0.41l0.23-0.59l0.12-0.67l0.15-0.29L2012.19,1414.22z"/>
   </g>
-  <g class="country" id="AM">
+  <g class="country" id="ARM">
   	<path class="st0" d="M2192.75,958.17v0.41l0.3,0.07l0.32-0.16l0.08-0.33l-0.24-0.15l-0.25-0.01L2192.75,958.17z M2201.15,972.52
   		l0.61-0.03l0.29-0.22l-0.66-0.74l-0.58-0.49l-0.5-0.33l-0.11-0.2l0-0.14l0.11-0.17l0.85-0.41l0.08-0.37l-0.06-0.42l-1.35-0.61
   		l-1.01,0.23l-0.9-0.69l-0.58-0.53l-0.72-0.57l-0.65-0.31l-0.62-0.72l-1.08-0.74l-0.69-0.21l0.01-0.11l0.13-0.14l0.29-0.11
@@ -10582,7 +10797,7 @@ function mapSvg() {
   		l1.24-0.43l1.46,0.06l-0.03-0.89l0.03-0.71l-0.12-0.41l-0.62-0.56l-0.01-0.24l0.17-0.15L2201.15,972.52z M2188.91,954.39
   		l-0.18,0.11l-0.28-0.11l-0.09-0.25l0.02-0.27l0.28-0.06l0.23,0.08l0.06,0.24L2188.91,954.39z"/>
   </g>
-  <g class="country" id="AL">
+  <g class="country" id="ALB">
   	<polygon class="st1" points="1986.47,957.48 1986.2,956.9 1986.27,956.16 1986.22,955.94 1986.01,955.63 1985.48,955.48
   		1984.39,955.61 1984.12,955.37 1983.68,954.04 1983.33,953.83 1982.93,953.38 1982.27,951.93 1982.25,951.3 1982.3,950.74
   		1981.93,949.44 1982.16,949.11 1982.5,948.9 1982.5,948.37 1982.41,947.58 1982.81,946.01 1982.92,945.89 1983.05,945.45
@@ -10599,15 +10814,15 @@ function mapSvg() {
   		1981.99,963.96 1982.59,963.93 1983.26,963.79 1983.69,963.44 1983.75,963.1 1984.02,962.16 1984.2,961.71 1984.48,961.29
   		1984.64,960.72 1984.94,960.19 1985.58,959.96 1986.15,959.7 1986.59,959.01 1986.83,958.43 1986.84,958.07 	"/>
   </g>
-  <g class="country" id="AI">
+  <g class="country" id="AIA">
   	<polygon class="st1" points="1278.87,1164.07 1277.79,1164.67 1277.74,1164.92 1279.07,1164.48 1279.26,1164.11 	"/>
   </g>
-  <g class="country" id="AG">
+  <g class="country" id="ATG">
   	<path class="st0" d="M1289.51,1170.3l0.13-0.23l-0.02-0.75l-0.23-0.25l-0.36-0.06l-0.27-0.15l-0.12,0.08l-0.02,0.16l0.21,0.77
   		L1289.51,1170.3z M1289.96,1174.12l-0.26-0.29l-0.66-0.26l-0.59,0.61l0.04,0.3l0.19,0.43l0.94,0.14l0.27-0.34l0.18-0.1l0.07-0.18
   		l0-0.25L1289.96,1174.12z"/>
   </g>
-  <g class="country" id="AF">
+  <g class="country" id="AFG">
   	<polygon class="st1" points="2440.34,991.6 2439.96,991.17 2439.12,990.48 2438.52,990.12 2437.38,990.24 2436.71,990.11
   		2435.91,989.89 2435.15,989.92 2434.68,990.34 2434.37,990.75 2433.62,990.88 2432.53,991.2 2430.86,991.7 2430.05,991.62
   		2429.83,991.41 2430.01,991.12 2430.58,990.75 2430.72,990.3 2430.61,989.89 2430.08,989.77 2429.87,989.71 2429.64,989.62
@@ -10663,7 +10878,7 @@ function mapSvg() {
   		2434.61,994.93 2436.6,994.09 2437.52,993.72 2437.4,993.64 2437.16,993.38 2436.13,992.61 2436.1,992.41 2437.67,991.65
   		2438.6,991.36 2439.09,991.13 2439.19,991.18 2439.43,991.53 2440.04,991.76 2440.47,991.7 	"/>
   </g>
-  <g class="country" id="AE">
+  <g class="country" id="ARE">
   	<path class="st0" d="M2262.82,1112.68l0.23-0.16l0.86,0.09l0-0.3l-0.29-0.34l-0.51-0.39l-1.21,0.43l-0.46,0.36l0.69,0.22
   		L2262.82,1112.68z M2258.89,1111.59l0.42-0.2l0.22-0.24l0.31-0.56l-0.28-0.35l-0.35,0.41l-0.32,0.2l-1.19,0.45l0.57,0.34
   		L2258.89,1111.59z M2268.12,1110.11l0.24,0.02l0.07-0.17l-0.33-0.25l-0.24-0.31l-0.16,0.02l-0.37,0.3l0.19,0.25L2268.12,1110.11z
@@ -10682,8 +10897,13 @@ function mapSvg() {
   		 M2283.73,1102.89l-0.35,0.24l-0.25-0.04l0.05-0.48l0.15-0.33l0.36,0.03l0.09,0.2L2283.73,1102.89z M2252.87,1111.32l0.34-0.39
   		l-0.24-0.39l-0.39,0.22l-0.01,0.15l0.15,0.48L2252.87,1111.32z"/>
   </g>
+  <g class="country" id="AND">
+  	<polygon class="st1" points="1824.35,938.79 1824.1,938.51 1822.91,938.2 1822.35,938.12 1821.99,938.33 1821.73,938.59
+  		1821.62,939.07 1821.68,939.25 1821.75,939.59 1821.73,939.96 1821.9,940.2 1822.22,940.23 1822.62,940.15 1823.06,940.01
+  		1823.84,939.6 1824.07,939.53 1824.14,939.3 1824.36,938.99 	"/>
+  	<rect class="st6" width="3840" height="2160"/>
+  </g>
   </svg>
-
   `
 }
 
