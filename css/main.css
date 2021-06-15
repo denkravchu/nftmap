@@ -31,6 +31,7 @@ body {
 }
 
 body.fixed {
+  position: fixed;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -2315,6 +2316,7 @@ header [data-close-popup].show {
   top: 9rem;
   z-index: -1;
   transition: .3s ease, opacity .15s ease;
+  box-sizing: border-box;
 }
 
 .main-page-title h1 {
@@ -3803,10 +3805,6 @@ header [data-close-popup].show {
   z-index: 12;
 }
 
-.card-planet {
-  display: none;
-}
-
 .switch-distance {
   display: -ms-flexbox;
   display: flex;
@@ -4508,7 +4506,7 @@ header [data-close-popup].show {
   -ms-flex-direction: row;
   flex-direction: row;
   letter-spacing: .111em;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.6);
   position: absolute;
   left: 50%;
   top: 50%;
@@ -17680,6 +17678,7 @@ header [data-close-popup].show {
 .loading .background-blend-red-2,
 .loading header,
 .loading video,
+.loading .card-planet,
 .loading .planet-body [class^="planet"] {
   opacity: 0 !important;
   transition: 0s !important;
@@ -17704,6 +17703,7 @@ header [data-close-popup].show {
 .preloading [class^="background-blend"],
 .preloading header,
 .preloading video,
+.preloading .card-planet,
 .preloading .planet-body [class^="planet"] {
   transition: .5s linear !important;
 }
@@ -17993,7 +17993,8 @@ header [data-close-popup].show {
   }
 
   .main-page-title {
-    top: calc(5rem + 2rem);
+    top: 6rem;
+    padding: 0 1rem;
   }
 
   .main-page-title h1 {
@@ -18014,36 +18015,80 @@ header [data-close-popup].show {
     font-weight: 600;
     letter-spacing: 0.115em;
     text-transform: uppercase;
-    margin-top: 1rem;
+    margin-top: .5rem;
   }
 
-  .zoom-out .active-planet-mobile .planet,
-  .zoom-out .active-planet-mobile .earth-tooltip {
-    width: 14rem !important;
-    height: 14rem !important;
-    left: calc(50% - 14rem / 2 + 2rem) !important;
-    top: calc(50% - 14rem / 2 + 1.25rem) !important;
+  .main-page-btns {
+    right: 50%;
+    top: auto;
+    bottom: 8rem;
+    -webkit-transform: translate(50%, 0);
+    -ms-transform: translate(50%, 0);
+    transform: translate(50%, 0);
+    -ms-flex-direction: row;
+    flex-direction: row;
   }
 
-  .zoom-out .active-planet-mobile .planet [class*="-active"],
-  .zoom-out .active-planet-mobile .earth-tooltip [class*="-active"] {
-    opacity: 1;
+  .main-page-btns a {
+    width: 2.5rem;
+    height: 2.5rem;
   }
 
-  .zoom-out .active-planet-mobile .planet .shadow,
-  .zoom-out .active-planet-mobile .planet .shadow-2,
-  .zoom-out .active-planet-mobile .earth-tooltip .shadow,
-  .zoom-out .active-planet-mobile .earth-tooltip .shadow-2 {
-    opacity: 1;
+  .main-page-btns a:not(:first-child) {
+    margin-top: 0;
+    margin-left: 1rem;
   }
 
-  .zoom-out .active-planet-mobile .card-planet {
-    display: block;
+  .root .solar-system {
+    --planet-mobile-zoom-out-size: 14.125rem;
+    --planet-neptune-size: var(--planet-mobile-zoom-out-size);
+    --planet-jupiter-size: var(--planet-mobile-zoom-out-size);
+    --planet-earth-size: var(--planet-mobile-zoom-out-size);
+    --planet-mercury-size: var(--planet-mobile-zoom-out-size);
+    --planet-sun-size: var(--planet-mobile-zoom-out-size);
+    --planet-venus-size: var(--planet-mobile-zoom-out-size);
+    --planet-mars-size: var(--planet-mobile-zoom-out-size);
+    --planet-saturn-size: 17rem;
+    --planet-moon-size: var(--planet-mobile-zoom-out-size);
+    --planet-uranus-size: 17rem;
+  }
+
+  .root .solar-system .planets-canvas .planet-wrapper {
+    -webkit-animation: none;
+    animation: none;
+    display: none;
+    left: 50%;
+    top: 48%;
+    transition: 1s ease;
+  }
+
+  .root .solar-system .planets-canvas .planet-wrapper.moon {
+    -webkit-transform: none !important;
+    -ms-transform: none !important;
+    transform: none !important;
+  }
+
+  .root .solar-system .planets-canvas .planet-wrapper .planet {
+    z-index: 2;
+  }
+
+  .root .solar-system .planets-canvas .planet-wrapper video {
+    z-index: 1;
+  }
+
+  .root .solar-system .planets-canvas .planet-wrapper .planet,
+  .root .solar-system .planets-canvas .planet-wrapper .planet-body,
+  .root .solar-system .planets-canvas .planet-wrapper video {
+    transition: .4s ease;
+  }
+
+  .root .card-planet {
+    display: none;
     position: absolute;
     width: 17.25rem;
-    height: 22.5rem;
-    left: calc(50% - 17.25rem/ 2);
-    top: calc(50% - 22.5rem / 2 + 2rem);
+    height: 15.75rem;
+    left: calc(50% - 17.25rem / 2);
+    top: calc(50% - 15.75rem / 2 + 1rem);
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: justify;
@@ -18055,16 +18100,17 @@ header [data-close-popup].show {
     border-radius: 1.25rem;
     padding: 1.25rem 2rem;
     box-sizing: border-box;
-    transition: .3s ease;
+    transition: .5s ease;
     background: rgba(58, 25, 128, 0.32);
     box-shadow: inset 0px 0px 5px rgba(101, 44, 222, 0.67);
+    opacity: .6;
   }
 
-  .zoom-out .active-planet-mobile .card-planet .card-header {
+  .root .card-planet .card-header {
     position: absolute;
     top: 1.5rem;
     left: 1.5rem;
-    z-index: 1;
+    z-index: 3;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: start;
@@ -18073,17 +18119,21 @@ header [data-close-popup].show {
     align-items: flex-start;
     -ms-flex-direction: column;
     flex-direction: column;
+    opacity: 0;
+    transition: .4s ease;
   }
 
-  .zoom-out .active-planet-mobile .card-planet .btn-icon {
-    position: absolute;
-    width: calc( 100% - 3rem);
-    left: 1.5rem;
-    bottom: 1.5rem;
-    box-sizing: border-box;
+  .root .card-planet .card-header .planet-name {
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-size: 2.5rem;
+    line-height: 3rem;
+    font-weight: 500;
+    text-shadow: 0px 2px 5px #381E75;
+    color: #FFFFFF;
   }
 
-  .zoom-out .active-planet-mobile .card-planet .row {
+  .root .card-planet .card-header .row {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: center;
@@ -18094,8 +18144,8 @@ header [data-close-popup].show {
     flex-direction: row;
   }
 
-  .zoom-out .active-planet-mobile .card-planet .row .actual-planet-number,
-  .zoom-out .active-planet-mobile .card-planet .row .planet-number {
+  .root .card-planet .card-header .row .actual-planet-number,
+  .root .card-planet .card-header .row .planet-number {
     font-family: 'Poppins', sans-serif;
     font-style: normal;
     font-size: .875rem;
@@ -18103,29 +18153,1079 @@ header [data-close-popup].show {
     font-weight: 400;
   }
 
-  .zoom-out .active-planet-mobile .card-planet .row .actual-planet-number {
+  .root .card-planet .card-header .row .actual-planet-number {
     color: #F2EBFF;
   }
 
-  .zoom-out .active-planet-mobile .card-planet .row .planet-number {
+  .root .card-planet .card-header .row .planet-number {
     color: #FFFFFF;
     opacity: .6;
   }
 
-  .zoom-out .active-planet-mobile .card-planet .row img {
+  .root .card-planet .card-header .row img {
     width: 100%;
     opacity: .6;
     margin: 0 .5rem;
   }
 
-  .zoom-out .active-planet-mobile .card-planet .planet-name {
+  .root .card-planet .card-details {
+    position: absolute;
+    left: 1.5rem;
+    top: 13rem;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    opacity: 0;
+    transition: .3s ease;
+  }
+
+  .root .card-planet .card-details .details-icon {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+
+  .root .card-planet .card-details .details-icon .btn {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .root .card-planet .card-details .details-icon .eth-value {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-direction: row;
+    flex-direction: row;
     font-family: 'Poppins', sans-serif;
     font-style: normal;
-    font-size: 2.5rem;
-    line-height: 3rem;
-    font-weight: 500;
-    text-shadow: 0px 2px 5px #381E75;
-    color: #FFFFFF;
+    font-size: 1.25rem;
+    line-height: 1rem;
+    font-weight: 600;
+  }
+
+  .root .card-planet .card-details .details-icon .eth-value > strong {
+    margin-left: .25rem;
+    opacity: .8;
+    color: #F2EBFF;
+  }
+
+  .root .card-planet .card-details .details-icon .eth-value > div {
+    opacity: .64;
+    margin-left: .25rem;
+    font-size: .75rem;
+  }
+
+  .root .card-planet .card-details .details-values {
+    color: #C7ADFF;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-style: normal;
+    font-size: .875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .root .card-planet .btn-icon {
+    position: absolute;
+    width: calc( 100% - 3rem);
+    left: 1.5rem;
+    bottom: 1.5rem;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: .3s ease;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.mercury,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.neptune,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.venus,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.uranus {
+    display: block;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun .card-planet,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.mercury .card-planet,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.neptune .card-planet,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.venus .card-planet,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.uranus .card-planet {
+    display: block;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.mercury {
+    left: 110%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.neptune {
+    left: -10%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.venus {
+    left: 155%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.uranus {
+    left: -55%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun {
+    --planet-sun-size: 17rem;
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun .planet-body,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun video {
+    top: calc(50% - var(--planet-sun-size) / 2 + 1rem);
+    left: calc(50% - var(--planet-sun-size) * 0.28);
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun .planet {
+    left: calc(50% - var(--planet-sun-size) * var(--planet-scaling-coef) * 0.33);
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun .card-planet {
+    width: 17.25rem;
+    height: 22.5rem;
+    left: calc(50% - 17.25rem/ 2);
+    top: calc(50% - 22.5rem / 2 + 2rem);
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun .card-header,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun .card-details,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun .btn-icon {
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.mercury .card-planet,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.mercury .planet-body,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.mercury .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.mercury video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.mercury .card-planet {
+    left: calc(50% - 3.5rem);
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.neptune .card-planet,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.neptune .planet-body,
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.neptune .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.neptune video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.neptune .card-planet {
+    left: calc(50% - 14rem);
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.neptune,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.sun,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.uranus,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.mercury,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.saturn {
+    display: block;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.neptune .card-planet,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.sun .card-planet,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.uranus .card-planet,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.mercury .card-planet,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.saturn .card-planet {
+    display: block;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.sun {
+    left: 110%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.uranus {
+    left: -10%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.mercury {
+    left: 155%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.saturn {
+    left: -55%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.neptune {
+    --planet-neptune-size: 17rem;
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.neptune .planet-body,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.neptune video {
+    top: calc(50% - var(--planet-neptune-size) / 2 + 1rem);
+    left: calc(50% - var(--planet-neptune-size) * 0.28);
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.neptune .planet {
+    left: calc(50% - var(--planet-neptune-size) * var(--planet-scaling-coef) * 0.33);
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.neptune .card-planet {
+    width: 17.25rem;
+    height: 22.5rem;
+    left: calc(50% - 17.25rem/ 2);
+    top: calc(50% - 22.5rem / 2 + 2rem);
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.neptune .card-header,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.neptune .card-details,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.neptune .btn-icon {
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.sun .card-planet,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.sun .planet-body,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.sun .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.sun video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.sun .card-planet {
+    left: calc(50% - 3.5rem);
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.uranus .card-planet,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.uranus .planet-body,
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.uranus .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.uranus video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-neptune .solar-system .planets-canvas .planet-wrapper.uranus .card-planet {
+    left: calc(50% - 14rem);
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.earth,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.moon,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.venus,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.mars,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.mercury {
+    display: block;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.earth .card-planet,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.moon .card-planet,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.venus .card-planet,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.mars .card-planet,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.mercury .card-planet {
+    display: block;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.moon {
+    left: 110%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.venus {
+    left: -10%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.mars {
+    left: 155%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.mercury {
+    left: -55%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.earth {
+    --planet-earth-size: 17rem;
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.earth .planet-body,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.earth video {
+    top: calc(50% - var(--planet-earth-size) / 2 + 1rem);
+    left: calc(50% - var(--planet-earth-size) * 0.28);
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.earth .planet {
+    left: calc(50% - var(--planet-earth-size) * var(--planet-scaling-coef) * 0.33);
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.earth .card-planet {
+    width: 17.25rem;
+    height: 22.5rem;
+    left: calc(50% - 17.25rem/ 2);
+    top: calc(50% - 22.5rem / 2 + 2rem);
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.earth .card-header,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.earth .card-details,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.earth .btn-icon {
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.moon .card-planet,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.moon .planet-body,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.moon .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.moon video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.moon .card-planet {
+    left: calc(50% - 3.5rem);
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.venus .card-planet,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.venus .planet-body,
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.venus .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.venus video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-earth .solar-system .planets-canvas .planet-wrapper.venus .card-planet {
+    left: calc(50% - 14rem);
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.moon,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.mars,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.earth,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.jupiter,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.venus {
+    display: block;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.moon .card-planet,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.mars .card-planet,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.earth .card-planet,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.jupiter .card-planet,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.venus .card-planet {
+    display: block;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.mars {
+    left: 110%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.earth {
+    left: -10%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.jupiter {
+    left: 155%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.venus {
+    left: -55%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.moon {
+    --planet-moon-size: 17rem;
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.moon .planet-body,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.moon video {
+    top: calc(50% - var(--planet-moon-size) / 2 + 1rem);
+    left: calc(50% - var(--planet-moon-size) * 0.28);
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.moon .planet {
+    left: calc(50% - var(--planet-moon-size) * var(--planet-scaling-coef) * 0.33);
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.moon .card-planet {
+    width: 17.25rem;
+    height: 22.5rem;
+    left: calc(50% - 17.25rem/ 2);
+    top: calc(50% - 22.5rem / 2 + 2rem);
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.moon .card-header,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.moon .card-details,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.moon .btn-icon {
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.mars .card-planet,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.mars .planet-body,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.mars .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.mars video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.mars .card-planet {
+    left: calc(50% - 3.5rem);
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.earth .card-planet,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.earth .planet-body,
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.earth .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.earth video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-moon .solar-system .planets-canvas .planet-wrapper.earth .card-planet {
+    left: calc(50% - 14rem);
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.jupiter,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.saturn,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.mars,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.uranus,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.moon {
+    display: block;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.jupiter .card-planet,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.saturn .card-planet,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.mars .card-planet,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.uranus .card-planet,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.moon .card-planet {
+    display: block;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.saturn {
+    left: 110%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.mars {
+    left: -10%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.uranus {
+    left: 155%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.moon {
+    left: -55%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.jupiter {
+    --planet-jupiter-size: 17rem;
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.jupiter .planet-body,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.jupiter video {
+    top: calc(50% - var(--planet-jupiter-size) / 2 + 1rem);
+    left: calc(50% - var(--planet-jupiter-size) * 0.28);
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.jupiter .planet {
+    left: calc(50% - var(--planet-jupiter-size) * var(--planet-scaling-coef) * 0.33);
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.jupiter .card-planet {
+    width: 17.25rem;
+    height: 22.5rem;
+    left: calc(50% - 17.25rem/ 2);
+    top: calc(50% - 22.5rem / 2 + 2rem);
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.jupiter .card-header,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.jupiter .card-details,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.jupiter .btn-icon {
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.saturn .card-planet,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.saturn .planet-body,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.saturn .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.saturn video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.saturn .card-planet {
+    left: calc(50% - 3.5rem);
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.mars .card-planet,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.mars .planet-body,
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.mars .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.mars video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-jupiter .solar-system .planets-canvas .planet-wrapper.mars .card-planet {
+    left: calc(50% - 14rem);
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.mercury,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.venus,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.sun,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.earth,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.neptune {
+    display: block;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.mercury .card-planet,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.venus .card-planet,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.sun .card-planet,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.earth .card-planet,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.neptune .card-planet {
+    display: block;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.venus {
+    left: 110%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.sun {
+    left: -10%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.earth {
+    left: 155%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.neptune {
+    left: -55%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.mercury {
+    --planet-mercury-size: 17rem;
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.mercury .planet-body,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.mercury video {
+    top: calc(50% - var(--planet-mercury-size) / 2 + 1rem);
+    left: calc(50% - var(--planet-mercury-size) * 0.28);
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.mercury .planet {
+    left: calc(50% - var(--planet-mercury-size) * var(--planet-scaling-coef) * 0.33);
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.mercury .card-planet {
+    width: 17.25rem;
+    height: 22.5rem;
+    left: calc(50% - 17.25rem/ 2);
+    top: calc(50% - 22.5rem / 2 + 2rem);
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.mercury .card-header,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.mercury .card-details,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.mercury .btn-icon {
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.venus .card-planet,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.venus .planet-body,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.venus .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.venus video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.venus .card-planet {
+    left: calc(50% - 3.5rem);
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.sun .card-planet,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.sun .planet-body,
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.sun .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.sun video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-mercury .solar-system .planets-canvas .planet-wrapper.sun .card-planet {
+    left: calc(50% - 14rem);
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.venus,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.earth,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.mercury,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.moon,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.sun {
+    display: block;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.venus .card-planet,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.earth .card-planet,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.mercury .card-planet,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.moon .card-planet,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.sun .card-planet {
+    display: block;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.earth {
+    left: 110%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.mercury {
+    left: -10%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.moon {
+    left: 155%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.sun {
+    left: -55%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.venus {
+    --planet-venus-size: 17rem;
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.venus .planet-body,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.venus video {
+    top: calc(50% - var(--planet-venus-size) / 2 + 1rem);
+    left: calc(50% - var(--planet-venus-size) * 0.28);
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.venus .planet {
+    left: calc(50% - var(--planet-venus-size) * var(--planet-scaling-coef) * 0.33);
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.venus .card-planet {
+    width: 17.25rem;
+    height: 22.5rem;
+    left: calc(50% - 17.25rem/ 2);
+    top: calc(50% - 22.5rem / 2 + 2rem);
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.venus .card-header,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.venus .card-details,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.venus .btn-icon {
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.earth .card-planet,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.earth .planet-body,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.earth .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.earth video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.earth .card-planet {
+    left: calc(50% - 3.5rem);
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.mercury .card-planet,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.mercury .planet-body,
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.mercury .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.mercury video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-venus .solar-system .planets-canvas .planet-wrapper.mercury .card-planet {
+    left: calc(50% - 14rem);
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.mars,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.jupiter,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.moon,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.saturn,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.earth {
+    display: block;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.mars .card-planet,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.jupiter .card-planet,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.moon .card-planet,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.saturn .card-planet,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.earth .card-planet {
+    display: block;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.jupiter {
+    left: 110%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.moon {
+    left: -10%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.saturn {
+    left: 155%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.earth {
+    left: -55%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.mars {
+    --planet-mars-size: 17rem;
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.mars .planet-body,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.mars video {
+    top: calc(50% - var(--planet-mars-size) / 2 + 1rem);
+    left: calc(50% - var(--planet-mars-size) * 0.28);
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.mars .planet {
+    left: calc(50% - var(--planet-mars-size) * var(--planet-scaling-coef) * 0.33);
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.mars .card-planet {
+    width: 17.25rem;
+    height: 22.5rem;
+    left: calc(50% - 17.25rem/ 2);
+    top: calc(50% - 22.5rem / 2 + 2rem);
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.mars .card-header,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.mars .card-details,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.mars .btn-icon {
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.jupiter .card-planet,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.jupiter .planet-body,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.jupiter .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.jupiter video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.jupiter .card-planet {
+    left: calc(50% - 3.5rem);
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.moon .card-planet,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.moon .planet-body,
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.moon .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.moon video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-mars .solar-system .planets-canvas .planet-wrapper.moon .card-planet {
+    left: calc(50% - 14rem);
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.saturn,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.uranus,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.jupiter,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.neptune,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.mars {
+    display: block;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.saturn .card-planet,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.uranus .card-planet,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.jupiter .card-planet,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.neptune .card-planet,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.mars .card-planet {
+    display: block;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.uranus {
+    left: 110%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.jupiter {
+    left: -10%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.neptune {
+    left: 155%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.mars {
+    left: -55%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.saturn {
+    --planet-saturn-size: 22rem;
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.saturn .planet-body,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.saturn video {
+    top: calc(50% - var(--planet-saturn-size) / 2);
+    left: calc(50% - var(--planet-saturn-size) * 0.28);
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.saturn .planet {
+    left: calc(50% - var(--planet-saturn-size) * var(--planet-scaling-coef) * 0.33);
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.saturn .card-planet {
+    width: 17.25rem;
+    height: 22.5rem;
+    left: calc(50% - 17.25rem/ 2);
+    top: calc(50% - 22.5rem / 2 + 2rem);
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.saturn .card-header,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.saturn .card-details,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.saturn .btn-icon {
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.uranus .card-planet,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.uranus .planet-body,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.uranus .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.uranus video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.uranus .card-planet {
+    left: calc(50% - 3.5rem);
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.jupiter .card-planet,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.jupiter .planet-body,
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.jupiter .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.jupiter video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-saturn .solar-system .planets-canvas .planet-wrapper.jupiter .card-planet {
+    left: calc(50% - 14rem);
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.uranus,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.neptune,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.saturn,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.sun,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.jupiter {
+    display: block;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.uranus .card-planet,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.neptune .card-planet,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.saturn .card-planet,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.sun .card-planet,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.jupiter .card-planet {
+    display: block;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.neptune {
+    left: 110%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.saturn {
+    left: -10%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.sun {
+    left: 155%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.jupiter {
+    left: -55%;
+    top: 52%;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.uranus {
+    --planet-uranus-size: 22rem;
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.uranus .planet-body,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.uranus video {
+    top: calc(50% - var(--planet-uranus-size) / 2 + 1rem);
+    left: calc(50% - var(--planet-uranus-size) * 0.28);
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.uranus .planet {
+    left: calc(50% - var(--planet-uranus-size) * var(--planet-scaling-coef) * 0.33);
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.uranus .card-planet {
+    width: 17.25rem;
+    height: 22.5rem;
+    left: calc(50% - 17.25rem/ 2);
+    top: calc(50% - 22.5rem / 2 + 2rem);
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.uranus .card-header,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.uranus .card-details,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.uranus .btn-icon {
+    opacity: 1;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.neptune .card-planet,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.neptune .planet-body,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.neptune .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.neptune video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.neptune .card-planet {
+    left: calc(50% - 3.5rem);
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.saturn .card-planet,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.saturn .planet-body,
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.saturn .planet {
+    opacity: .8;
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.saturn video {
+    -webkit-animation: 10s clickMe 5s ease infinite;
+    animation: 10s clickMe 5s ease infinite;
+  }
+
+  .root.planet-mobile-active-uranus .solar-system .planets-canvas .planet-wrapper.saturn .card-planet {
+    left: calc(50% - 14rem);
   }
 
   .planet-info .toolbar .custom-switch,
@@ -18332,54 +19432,32 @@ header [data-close-popup].show {
     max-width: 100%;
   }
 
-  .planets-canvas,
-  .orbits-canvas,
-  .main-page-btns,
-  .modals,
-  .planets-info {
-    display: none;
+  .preloader-wrapper .preloader {
+    margin-bottom: 5rem;
+  }
+
+  .preloader-wrapper .progress {
+    font-size: 1rem;
+  }
+
+  .spinner-box {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .spinner-box .circle-border {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .spinner-box .circle-core {
+    background-color: #000;
   }
 }
 
-@media screen and (max-width: 799px) and (min-aspect-ratio: 375 / 789) {
+@media screen and (max-width: 799px) and (min-aspect-ratio: 375 / 788) {
   html {
-    font-size: 3.5vw;
-  }
-}
-
-@media screen and (max-width: 799px) and (min-aspect-ratio: 375 / 655) {
-  html {
-    font-size: 3vw;
-  }
-}
-
-@media screen and (max-width: 799px) and (min-aspect-ratio: 375 / 565) {
-  html {
-    font-size: 2.5vw;
-  }
-}
-
-@media screen and (max-width: 799px) and (min-aspect-ratio: 375 / 465) {
-  html {
-    font-size: 2vw;
-  }
-}
-
-@media screen and (max-width: 799px) and (min-aspect-ratio: 375 / 365) {
-  html {
-    font-size: 1.5vw;
-  }
-}
-
-@media screen and (max-width: 799px) and (min-aspect-ratio: 375 / 285) {
-  html {
-    font-size: 1vw;
-  }
-}
-
-@media screen and (max-width: 799px) and (min-aspect-ratio: 375 / 185) {
-  html {
-    font-size: .5vw;
+    font-size: 4vw;
   }
 }
 
