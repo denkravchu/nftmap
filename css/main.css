@@ -1915,6 +1915,7 @@ a {
   transform: translateY(100%);
   transition: .3s ease;
   z-index: 10;
+  box-sizing: border-box;
 }
 
 .metamask.show {
@@ -1942,6 +1943,7 @@ a {
   font: normal 500 1.75rem/1.75rem 'Poppins', sans-serif;
   margin-top: 4rem;
   margin-bottom: 2.5rem;
+  text-align: center;
 }
 
 .metamask-image {
@@ -2144,9 +2146,9 @@ header img {
 
 .nav-btn [class^="line"] {
   width: 1.5rem;
-  height: 2px;
-  min-width: 12px;
-  min-height: 2px;
+  height: 0.125rem;
+  min-width: .75rem;
+  min-height: .125rem;
   background: white;
   border-radius: .25rem;
 }
@@ -2155,7 +2157,7 @@ header img {
 .nav-btn .line-1,
 .nav-btn .line-2,
 .nav-btn .line-3 {
-  transition: 0.5s cubic-bezier(0.68, -0.18, 0.38, 1.23);
+  transition: 0.3s cubic-bezier(0.68, -0.18, 0.38, 1.23);
   position: absolute;
 }
 
@@ -2164,37 +2166,11 @@ header img {
 }
 
 .nav-btn .line-2 {
-  top: calc(.25rem + 8px);
+  top: calc(.25rem + .5rem);
 }
 
 .nav-btn .line-3 {
-  top: calc(.25rem + 8px * 2);
-}
-
-.nav-btn.active .bg {
-  opacity: 1;
-}
-
-.nav-btn.active .line-1 {
-  -webkit-transform: rotateZ(45deg) translate(4px, 3px);
-  -ms-transform: rotate(45deg) translate(4px, 3px);
-  transform: rotateZ(45deg) translate(4px, 3px);
-  background: #1D0C40;
-}
-
-.nav-btn.active .line-2 {
-  -webkit-transform: rotateZ(-45deg) translate(2.5px, -2px);
-  -ms-transform: rotate(-45deg) translate(2.5px, -2px);
-  transform: rotateZ(-45deg) translate(2.5px, -2px);
-  background: #1D0C40;
-}
-
-.nav-btn.active .line-3 {
-  opacity: 0;
-  -webkit-transform: rotateZ(-45deg) translate(21px, 3px);
-  -ms-transform: rotate(-45deg) translate(21px, 3px);
-  transform: rotateZ(-45deg) translate(21px, 3px);
-  background: #1D0C40;
+  top: calc(.25rem + .5rem * 2);
 }
 
 .nav-block {
@@ -2221,15 +2197,21 @@ header img {
   display: none;
 }
 
-.nav-block.active {
+.nav-block nav {
   display: -ms-flexbox;
   display: flex;
-  opacity: 1;
-}
-
-.nav-block nav {
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-direction: column;
+  flex-direction: column;
   margin-top: auto;
   margin-bottom: 5rem;
+}
+
+.nav-block nav .btn {
+  margin-bottom: 2rem;
 }
 
 .nav-block nav p {
@@ -2296,6 +2278,7 @@ header img {
 header .logo,
 header .logo-mobile {
   cursor: pointer;
+  transition: 1s ease .3s;
 }
 
 header .logo-mobile {
@@ -2321,6 +2304,44 @@ header .back-content-btn.show,
 header [data-close-popup].show {
   opacity: 1;
   visibility: visible;
+}
+
+.root.active-menu .nav-block {
+  display: -ms-flexbox;
+  display: flex;
+  opacity: 1;
+}
+
+.root.active-menu .nav-btn .bg {
+  opacity: 1;
+}
+
+.root.active-menu .nav-btn .line-1 {
+  -webkit-transform: rotateZ(45deg) translate(0.4375rem, 0.4375rem);
+  -ms-transform: rotate(45deg) translate(0.4375rem, 0.4375rem);
+  transform: rotateZ(45deg) translate(0.4375rem, 0.4375rem);
+  background: #1D0C40;
+}
+
+.root.active-menu .nav-btn .line-2 {
+  -webkit-transform: rotateZ(-45deg) translate(-0.09375rem, 0.0625rem);
+  -ms-transform: rotate(-45deg) translate(-0.09375rem, 0.0625rem);
+  transform: rotateZ(-45deg) translate(-0.09375rem, 0.0625rem);
+  background: #1D0C40;
+}
+
+.root.active-menu .nav-btn .line-3 {
+  opacity: 0;
+  -webkit-transform: rotateZ(-45deg) translate(21px, 3px);
+  -ms-transform: rotate(-45deg) translate(21px, 3px);
+  transform: rotateZ(-45deg) translate(21px, 3px);
+  background: #1D0C40;
+}
+
+.root.active-menu header .btn.mobile-only {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: .5s ease !important;
 }
 
 .main-page-title {
@@ -20399,6 +20420,10 @@ header [data-close-popup].show {
     font-weight: 500;
   }
 
+  .popup.popup-wallet {
+    z-index: 11;
+  }
+
   .popup.popup-wallet .popup-container {
     background: rgba(58, 25, 128, 0.88);
     width: 100%;
@@ -20778,7 +20803,24 @@ header [data-close-popup].show {
   }
 
   .popup-background {
-    z-index: 6;
+    z-index: 10;
+  }
+
+  .metamask.metamask-popup {
+    z-index: 11;
+    padding: 2rem;
+    width: calc(100vw - 3rem);
+    height: auto;
+    left: 1.5rem;
+    top: 40%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+
+  .metamask-title {
+    margin: 2rem 0;
+    font-size: 1.5rem;
   }
 
   .planets-info .planet-info#earthInfo {
@@ -21110,6 +21152,7 @@ header [data-close-popup].show {
     flex-direction: column;
     opacity: 0;
     transition: .5s ease;
+    z-index: 5;
   }
 
   .root .card-planet .card-details .details-icon {
