@@ -10,22 +10,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   function openPopupFunction() {
-    let target = document.querySelector('#' + item.getAttribute('data-open-popup'))
-    let btns = document.querySelectorAll('header .btn.mobile-only')
+    let target = document.querySelector('#' + this.getAttribute('data-open-popup'))
+    let popupbtn = this
     target.style.display = 'block'
     popupShadow.style.display = 'block'
     setTimeout(function() {
       target.classList.add('show')
       popupShadow.classList.add('show')
-      btns.forEach(btn => {
-        btn.classList.remove('show')
-        btn.setAttribute('data-active', "second")
-
-        if (btn.getAttribute('data-close-popup') === item.getAttribute('data-open-popup')) {
-          btn.classList.add('show')
-          btn.setAttribute('data-active', true)
-        }
-      })
     }, 10)
   }
   function closePopupFunction() {
@@ -44,18 +35,9 @@ document.addEventListener("DOMContentLoaded", function() {
       document.querySelector('.root').classList.remove('transaction-confirmed-' + planetIso)
     }
 
-      let btns = document.querySelectorAll('header .btn.mobile-only')
       let btnClose = document.querySelector( `[data-close-popup="${this.getAttribute('data-close-popup')}"]` )
       btnClose.setAttribute('data-active', false)
       btnClose.classList.remove('show')
-      setTimeout(function() {
-        btns.forEach(btn => {
-          if (btn.getAttribute('data-active') === 'second') {
-            btn.classList.add('show')
-            btn.setAttribute('data-active', true)
-          }
-        })
-      }, 500)
   }
   function openTransactionPopup() {
     let target = document.querySelector('#' + this.getAttribute('data-open-transaction-popup'))
@@ -64,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let planetIso = this.getAttribute('data-iso')
     let root = document.querySelector('.root')
     let closeTransactionPopupBtn = target.querySelector('.popup-close')
+
     closeTransactionPopupBtn.setAttribute('data-iso', planetIso)
     transactionLoader.style.display = 'block'
     popupShadow.style.display = 'block'

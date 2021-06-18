@@ -1,20 +1,22 @@
+const planets = ['earth', 'moon', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'sun', 'mercury', 'venus']
+const mobileCarousel = {
+  planets: planets,
+  previousIndex: planets.length - 1,
+  activeIndex: 0,
+  nextIndex: 1
+}
+const swipeContainerId = 'swipe'
+
 window.addEventListener('load', function() {
   // Переключение планет на главном экране -------------------------
-  const planets = ['earth', 'moon', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'sun', 'mercury', 'venus']
-  const mobileCarousel = {
-    planets: planets,
-    previousIndex: planets.length - 1,
-    activeIndex: 0,
-    nextIndex: 1
-  }
   let readyToSwipe = true
-  detectSwipe('swipe', mobileCarousel, (root, direction) => {
+  detectSwipe(swipeContainerId, mobileCarousel, (root, direction) => {
     if (root.classList.contains('zoom-out') && window.outerWidth < 799 && readyToSwipe) {
 
       readyToSwipe = false
       setTimeout(function() {
         readyToSwipe = true
-      }, 100)
+      }, 210)
 
       switch ( direction ) {
         case 'left':
@@ -41,22 +43,19 @@ function swipePlanet(root, mobileCarousel, step) {
   mobileCarousel.activeIndex = newIndex
   mobileCarousel.nextIndex = nextIndex
 
-  console.log(mobileCarousel)
-
   const previousPlanetName = mobileCarousel.planets[previousPlanet_Index]
   const newPlanetName = mobileCarousel.planets[newIndex]
 
   root.classList.add('planet-mobile-active-' + newPlanetName)
   root.classList.remove('planet-mobile-active-' + previousPlanetName)
 }
-function detectSwipe(id, mobileCarousel, func, deltaMin = 100) {
+function detectSwipe(id, mobileCarousel, func, deltaMin = 90) {
   const swipe_det = {
     sX: 0,
     sY: 0,
     eX: 0,
     eY: 0
   }
-  // Directions enumeration
   const directions = Object.freeze({
     UP: 'up',
     DOWN: 'down',
@@ -74,7 +73,7 @@ function detectSwipe(id, mobileCarousel, func, deltaMin = 100) {
 
   }, false)
   el.addEventListener('touchmove', function(e) {
-    // Prevent default will stop user from scrolling, use with care
+    // Prevent default will stop user from scrolling
     // e.preventDefault();
     const t = e.touches[0]
     swipe_det.eX = t.screenX
@@ -83,7 +82,7 @@ function detectSwipe(id, mobileCarousel, func, deltaMin = 100) {
     // Показываем, куда свайпать будет
     const deltaSkewX = swipe_det.eX - swipe_det.sX
     const deltaSkewY = swipe_det.eY - swipe_det.sY
-    if (deltaSkewY === 0 || Math.abs(deltaSkewX / deltaSkewY) > 1) {
+    if ((deltaSkewY === 0 || Math.abs(deltaSkewX / deltaSkewY) > 1) && document.getElementById(swipeContainerId).classList.contains('zoom-out')) {
       const skewActivePlanetCard = document.querySelector('.' + mobileCarousel.planets[mobileCarousel.activeIndex]  + ' .card-planet')
       const skewPrevPlanetCard = document.querySelector('.' + mobileCarousel.planets[mobileCarousel.previousIndex]  + ' .card-planet')
       const skewNextPlanetCard = document.querySelector('.' + mobileCarousel.planets[mobileCarousel.nextIndex]  + ' .card-planet')
@@ -118,13 +117,11 @@ function detectSwipe(id, mobileCarousel, func, deltaMin = 100) {
     const deltaX = swipe_det.eX - swipe_det.sX
     const deltaY = swipe_det.eY - swipe_det.sY
 
-    // Min swipe distance, you could use absolute value rather
-    // than square. It just felt better for personnal use
     if (deltaX ** 2 + deltaY ** 2 < deltaMin ** 2) return
-    // horizontal
+
     if (deltaY === 0 || Math.abs(deltaX / deltaY) > 1)
       direction = deltaX > 0 ? directions.RIGHT : directions.LEFT
-    else // vertical
+    else
       direction = deltaY > 0 ? directions.UP : directions.DOWN
 
     if (direction && typeof func === 'function') func(el, direction)
