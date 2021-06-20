@@ -470,6 +470,11 @@ a {
   fill: #AB83FF;
 }
 
+.validated input:invalid ~ .invalid-text {
+  display: block;
+  opacity: 1;
+}
+
 .custom-input input {
   font: normal 500 1rem/1rem 'Poppins', sans-serif;
   border: 1px solid rgba(242, 235, 255, 0.24);
@@ -487,6 +492,15 @@ a {
 
 .custom-input input:not(:placeholder-shown) ~ button {
   opacity: .8;
+}
+
+.custom-input .invalid-text {
+  font-size: .75rem;
+  color: #DD383E;
+  display: none;
+  opacity: 0;
+  transition: .3s ease;
+  margin-top: .25rem;
 }
 
 .custom-input:hover > input,
@@ -2356,9 +2370,9 @@ header [data-close-popup].show {
   position: absolute;
   width: 100%;
   top: 9rem;
-  z-index: -1;
   transition: .3s ease, opacity .15s ease;
   box-sizing: border-box;
+  z-index: 1;
 }
 
 .main-page-title h1 {
@@ -2428,6 +2442,86 @@ header [data-close-popup].show {
 
 .main-page-btns a:not(:first-child) {
   margin-top: 1rem;
+}
+
+.offer-card {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.offer-card .offer {
+  font: normal 300 .875rem 'Poppins', sans-serif;
+  letter-spacing: .1em;
+  text-align: center;
+  margin-bottom: .75rem;
+  text-transform: uppercase;
+}
+
+.offer-card .offer > b {
+  color: #8E58FF;
+  font-weight: 600;
+}
+
+.offer-card .card {
+  padding: 1.25rem 2.5rem;
+}
+
+.offer-card .card label {
+  font: normal 600 .875rem/2rem 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.115em;
+  color: #C7ADFF;
+}
+
+.offer-card .card .custom-input {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.offer-card .card .validated input:invalid {
+  border-bottom-color: #DD383E;
+}
+
+.offer-card .card form {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.offer-card .card input {
+  font: normal 600 1.25rem 'Poppins', sans-serif;
+  border-radius: 0;
+  border-color: transparent;
+  border-bottom-color: #C7ADFF;
+  padding: 0;
+  padding-bottom: .25rem;
+}
+
+.offer-card .card .custom-input {
+  position: relative;
+}
+
+.offer-card .card .btn {
+  font: normal 500 1rem/1rem 'Poppins', sans-serif;
+  width: 7.875rem;
+  padding: 1rem 1.375rem;
+  margin-left: 1.5rem;
 }
 
 .space-background {
@@ -20405,6 +20499,10 @@ header [data-close-popup].show {
     padding: 1rem 2rem;
   }
 
+  .custom-input .invalid-text {
+    font-size: .5rem;
+  }
+
   .country-tooltip {
     display: none;
   }
@@ -20917,6 +21015,25 @@ header [data-close-popup].show {
   .main-page-btns a:not(:first-child) {
     margin-top: 0;
     margin-left: 1rem;
+  }
+
+  .offer-card .card {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .offer-card .card input {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .offer-card .card .custom-input {
+    width: 100%;
+  }
+
+  .offer-card .card .btn {
+    width: 8rem;
   }
 
   .root.transaction-confirmed-sun .planets-info .planet-info#sunInfo .right-content video {
