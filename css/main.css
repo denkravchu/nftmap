@@ -179,7 +179,7 @@ a {
 }
 
 .btn {
-  border-radius: 0.9375rem;
+  border-radius: 0.5rem;
   outline: none;
   border: none;
   cursor: pointer;
@@ -190,17 +190,17 @@ a {
 .btn-rectangle {
   font: normal 600 1.5rem/1.5rem 'Poppins', sans-serif;
   padding: 1.5rem 2.5rem;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
 }
 
 .btn-square {
-  border-radius: 1.5rem;
+  border-radius: 0.5rem;
 }
 
 .btn-more {
   font: normal 500 1rem/1rem 'Poppins', sans-serif;
   padding: 1rem 5.09375rem;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
 }
 
 .btn-buy {
@@ -413,11 +413,11 @@ a {
 }
 
 .custom-switch.switch-icons {
-  border-radius: 2rem;
+  border-radius: .75rem;
 }
 
 .custom-switch.switch-icons .active-switch {
-  border-radius: 2rem;
+  border-radius: .75rem;
 }
 
 .custom-switch input:not(:checked) ~ .active-switch {
@@ -478,7 +478,7 @@ a {
 .custom-input input {
   font: normal 500 1rem/1rem 'Poppins', sans-serif;
   border: 1px solid rgba(242, 235, 255, 0.24);
-  border-radius: 1.25rem;
+  border-radius: 0.75rem;
   outline: none;
   background: transparent;
   padding: 1rem;
@@ -834,10 +834,11 @@ a {
   -ms-flex-direction: column;
   flex-direction: column;
   cursor: default;
-  border: 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   background: linear-gradient(180deg, rgba(28, 191, 241, 0.28) 0%, rgba(28, 191, 241, 0.24) 29.4%, rgba(28, 191, 241, 0.24) 78.88%);
   box-shadow: none;
   transition: .5s ease;
+  border-radius: .25rem;
 }
 
 .card.card-token-item .token-number {
@@ -860,13 +861,38 @@ a {
   color: #FFADAD;
 }
 
+.card.card-token-item .token-sold {
+  width: 100%;
+  height: 10.5rem;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  display: none;
+}
+
+.card.card-token-item .token-sold img {
+  width: 70%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
 .card.card-token-item.sold {
   background: linear-gradient(180deg, rgba(28, 191, 241, 0.08) 0%, rgba(28, 191, 241, 0.08) 29.4%, rgba(28, 191, 241, 0.08) 78.88%);
+  border: none;
 }
 
 .card.card-token-item.sold .token-price {
-  background: rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.05);
+  display: none;
+}
+
+.card.card-token-item.sold .token-sold {
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .card.card-token-item.sold .token-name,
@@ -898,12 +924,12 @@ a {
 .card.card-token-item .token-image {
   width: 9.125rem;
   height: 6.25rem;
-  margin-top: -4.375rem;
+  margin-top: -5.5rem;
 }
 
 .card.card-token-item .token-image > * {
-  width: 100%;
-  height: 100%;
+  width: 120%;
+  height: 120%;
 }
 
 .card.card-token-item .token-number {
@@ -999,7 +1025,7 @@ a {
   align-items: center;
   -ms-flex-direction: row;
   flex-direction: row;
-  border-radius: 1.25rem;
+  border-radius: 0.25rem;
   border: 1px solid #1E98B4;
   padding: 1.25rem 2rem;
   box-sizing: border-box;
@@ -1544,7 +1570,7 @@ a {
   -webkit-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  border-radius: 2rem;
+  border-radius: .75rem;
   box-sizing: border-box;
 }
 
@@ -1787,8 +1813,8 @@ a {
 .popup-container {
   position: absolute;
   width: calc(100% - 6.25rem);
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
   background: rgba(13, 54, 63, 0.7);
   box-shadow: inset 0px 0px 5px #0F678C;
   -webkit-transform: translateX(-50%);
@@ -2146,7 +2172,7 @@ header img {
   height: 100%;
   left: 0;
   top: 0;
-  border-radius: 2rem;
+  border-radius: 1rem;
   background: linear-gradient(180deg, rgba(53, 164, 199, 0.6) 0%, rgba(31, 121, 150, 0.6) 100%);
   box-shadow: 0px 26.2667px 52.5333px rgba(41, 19, 20, 0.3345), inset 0px -4px 6px rgba(79, 184, 243, 0.47), inset 0px 4px 4px rgba(78, 170, 255, 0.56);
   transition: .15s ease;
@@ -3278,12 +3304,13 @@ header [data-close-popup].show {
   --planet-earth-size: 8.125em;
   --planet-moon-size: 2.625em;
   --planet-mercury-size: 3.75em;
-  --planet-sun-size: 8.75em;
+  --planet-sun-size: 12em;
   --planet-venus-size: 4em;
   --planet-mars-size: 7.25em;
   --planet-saturn-size: 12.875em;
   --planet-uranus-size: 7.75em;
   --planet-scaling-coef: 0.6;
+  --planet-sun-scaling-coef: 0.4;
 }
 
 .planets-canvas .planet-wrapper {
@@ -3381,8 +3408,8 @@ header [data-close-popup].show {
 }
 
 .planets-canvas .planet-wrapper.sun .planet {
-  width: calc(var(--planet-sun-size) * var(--planet-scaling-coef));
-  height: calc(var(--planet-sun-size) * var(--planet-scaling-coef));
+  width: calc(var(--planet-sun-size) * var(--planet-sun-scaling-coef));
+  height: calc(var(--planet-sun-size) * var(--planet-sun-scaling-coef));
 }
 
 .planets-canvas .planet-wrapper.neptune .planet-body > video {
@@ -3732,8 +3759,8 @@ header [data-close-popup].show {
 }
 
 .planets-canvas .sun .planet {
-  left: calc(50% - var(--planet-sun-size) * var(--planet-scaling-coef) / 2);
-  top: calc(50% - var(--planet-sun-size) * var(--planet-scaling-coef) / 2);
+  left: calc(50% - var(--planet-sun-size) * var(--planet-sun-scaling-coef) / 2);
+  top: calc(50% - var(--planet-sun-size) * var(--planet-sun-scaling-coef) / 2);
 }
 
 .planets-canvas .venus .planet {
@@ -4555,7 +4582,7 @@ header [data-close-popup].show {
   background: #0A333C;
   margin-top: 2rem;
   margin-bottom: 2rem;
-  border-radius: 2rem;
+  border-radius: .75rem;
   padding: 2rem;
 }
 
@@ -4717,13 +4744,13 @@ header [data-close-popup].show {
   -ms-flex-align: center;
   align-items: center;
   border-radius: 50%;
-  background: linear-gradient(129.99deg, #381B77 14%, #190447 34.1%, rgba(18, 2, 52, 0) 65.86%);
+  background: linear-gradient(129.99deg, #28CAF0 14%, rgba(40, 192, 240, 0.81) 34.1%, rgba(40, 202, 240, 0) 65.86%);
   -webkit-animation: spin .8s linear 0s infinite;
   animation: spin .8s linear 0s infinite;
 }
 
 .spinner-box .circle-core {
-  background: #04020B;
+  background: #030010;
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -4864,7 +4891,7 @@ header [data-close-popup].show {
   --planet-jupiter-size: var(--planet-zoomin-size);
   --planet-earth-size: var(--planet-zoomin-size);
   --planet-mercury-size: var(--planet-zoomin-size);
-  --planet-sun-size: var(--planet-zoomin-size);
+  --planet-sun-size: 17rem;
   --planet-venus-size: var(--planet-zoomin-size);
   --planet-mars-size: var(--planet-zoomin-size);
   --planet-saturn-size: 18rem;
@@ -4881,10 +4908,10 @@ header [data-close-popup].show {
 }
 
 .zoom-in:not([class="zooming"]) .planets-canvas .planet-wrapper.sun .planet ~ video {
-  width: var(--planet-zoomin-size);
-  height: var(--planet-zoomin-size);
-  left: calc(50% - var(--planet-zoomin-size) / 2);
-  top: calc(50% - var(--planet-zoomin-size) / 2);
+  width: var(--planet-sun-size);
+  height: var(--planet-sun-size);
+  left: calc(50% - var(--planet-sun-size) / 2);
+  top: calc(50% - var(--planet-sun-size) / 2);
 }
 
 .zoom-in:not([class="zooming"]) .planet {
@@ -6231,7 +6258,7 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-sun .planets-canvas {
-  --planet-zoomin-size: 15rem;
+  --planet-zoomin-size: 21rem;
 }
 
 .zoom-in.planet-active-sun .planets-canvas .sun {
@@ -6246,7 +6273,7 @@ header [data-close-popup].show {
 
 .zoom-in.planet-active-sun .planets-canvas .planet-wrapper.sun .planet ~ video,
 .zoom-in.planet-active-sun .planets-canvas .planet-wrapper.sun .planet .shadow-1 {
-  transition: 1s ease, opacity .3s linear 1.5s;
+  transition: 1s ease, opacity .3s linear 1.5s !important;
 }
 
 .zoom-in.planet-active-sun .sun video {
@@ -21233,7 +21260,7 @@ header [data-close-popup].show {
     align-items: flex-start;
     -ms-flex-direction: row;
     flex-direction: row;
-    border-radius: 1.25rem;
+    border-radius: 0.25rem;
     padding: 1.25rem 2rem;
     box-sizing: border-box;
     transition: .3s ease;
@@ -21467,7 +21494,7 @@ header [data-close-popup].show {
   }
 
   .root.zoom-out.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun {
-    --planet-sun-size: 21em;
+    --planet-sun-size: 26em;
     opacity: 1;
   }
 
@@ -21478,7 +21505,7 @@ header [data-close-popup].show {
   }
 
   .root.zoom-out.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun .planet {
-    left: calc(50% - var(--planet-sun-size) * var(--planet-scaling-coef) * 0.33);
+    left: calc(50% - var(--planet-sun-size) * var(--planet-scaling-coef) * 0.1);
   }
 
   .root.zoom-out.planet-mobile-active-sun .solar-system .planets-canvas .planet-wrapper.sun .card-planet {
@@ -22983,11 +23010,16 @@ header [data-close-popup].show {
   .earth-continents .card .token-image {
     width: 9.125em;
     height: 6.25em;
-    margin-top: -4.375em;
+    margin-top: -5.5em;
   }
 
   .earth-continents .card .token-number {
     font-size: 1.25em;
+  }
+
+  .earth-continents .card .token-sold {
+    width: 100%;
+    height: 10.5em;
   }
 
   .earth-continents .card .token-name {
@@ -23093,7 +23125,7 @@ header [data-close-popup].show {
   }
 
   .spinner-box .circle-core {
-    background-color: #000;
+    background-color: #030010;
   }
 
   .zoom-in .main-page-btns {
@@ -26845,10 +26877,10 @@ header [data-close-popup].show {
   }
 
   .root.zoom-in.planet-active-sun .planet-wrapper.sun video {
-    width: 12.5rem !important;
-    height: 12.5rem !important;
-    left: calc(50% - 12rem / 2) !important;
-    top: calc(50% - 12rem / 2 - .5rem) !important;
+    width: 17rem !important;
+    height: 17rem !important;
+    left: calc(50% - 17rem / 2) !important;
+    top: calc(50% - 17rem / 2 - .5rem) !important;
   }
 
   .root.zoom-in.planet-active-sun #sunInfo video {
