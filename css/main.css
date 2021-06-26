@@ -330,7 +330,7 @@ a {
 
 .custom-switch {
   padding: 1rem;
-  border-radius: 2.75rem;
+  border-radius: 0.75rem;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.048) 0%, rgba(255, 255, 255, 0.078) 100%);
   box-shadow: inset 0px -3px 4px rgba(255, 255, 255, 0.04), inset 0px 3px 3px rgba(255, 255, 255, 0.04);
   position: relative;
@@ -342,9 +342,9 @@ a {
 
 .custom-switch .active-switch {
   position: absolute;
-  border-radius: 2.75rem;
-  background: linear-gradient(180deg, rgba(123, 64, 247, 0.6) 0%, rgba(84, 31, 196, 0.6) 100%);
-  box-shadow: 0px 26.2667px 52.5333px rgba(41, 19, 20, 0.3345), inset 0px -4px 6px rgba(132, 79, 243, 0.47), inset 0px 4px 4px rgba(135, 78, 255, 0.65);
+  border-radius: 0.75rem;
+  background: linear-gradient(180deg, rgba(53, 164, 199, 0.6) 0%, rgba(31, 121, 150, 0.6) 100%);
+  box-shadow: 0px 26.2667px 52.5333px rgba(41, 19, 20, 0.3345), inset 0px -4px 6px rgba(79, 184, 243, 0.47), inset 0px 4px 4px rgba(78, 170, 255, 0.56);
   width: 50%;
   height: 100%;
   top: 0;
@@ -445,14 +445,14 @@ a {
 > .switch-right-content {
   transition: opacity .3s ease, color .3s ease;
   opacity: 1;
-  color: #AB83FF;
+  color: #7EDFF6;
 }
 
 .custom-switch input:hover:not(:checked) ~ .active-switch
 ~ .switch-content
 > .switch-right-content svg path {
   transition: .3s ease;
-  fill: #AB83FF;
+  fill: #7EDFF6;
 }
 
 .custom-switch input:hover:checked ~ .active-switch
@@ -460,14 +460,14 @@ a {
 > .switch-left-content {
   transition: opacity .3s ease, color .3s ease;
   opacity: 1;
-  color: #AB83FF;
+  color: #7EDFF6;
 }
 
 .custom-switch input:hover:checked ~ .active-switch
 ~ .switch-content
 > .switch-left-content svg path {
   transition: .3s ease;
-  fill: #AB83FF;
+  fill: #7EDFF6;
 }
 
 .validated input:invalid ~ .invalid-text {
@@ -482,7 +482,7 @@ a {
   outline: none;
   background: transparent;
   padding: 1rem;
-  color: #F2EBFF;
+  color: #EAFAFE;
   transition: .3s ease;
 }
 
@@ -551,7 +551,7 @@ a {
   background: #FFFFFF;
   border-radius: 1.125rem;
   padding: 1.25rem 1.5rem;
-  color: #5625BF;
+  color: #1E98B4;
   -webkit-transform: translate(-50%, -2rem);
   -ms-transform: translate(-50%, -2rem);
   transform: translate(-50%, -2rem);
@@ -600,7 +600,7 @@ a {
 }
 
 .tooltip .tooltip-row .union svg path {
-  fill: #5625BF;
+  fill: #1E98B4;
 }
 
 .tooltip .subtitle {
@@ -682,7 +682,7 @@ a {
   height: 7.3125rem;
   border-bottom-left-radius: 1.5rem;
   border-bottom-right-radius: 1.5rem;
-  color: #F2EBFF;
+  color: #EAFAFE;
   box-sizing: border-box;
   padding: 1.5rem 2rem;
 }
@@ -801,7 +801,7 @@ a {
 }
 
 .card.card-purchased-item.disabled {
-  background: rgba(58, 25, 128, 0);
+  background: rgba(20, 101, 120, 0);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: none;
 }
@@ -834,7 +834,9 @@ a {
   -ms-flex-direction: column;
   flex-direction: column;
   cursor: default;
-  border: none;
+  border: 1px rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, rgba(28, 191, 241, 0.28) 0%, rgba(28, 191, 241, 0.24) 29.4%, rgba(28, 191, 241, 0.24) 78.88%);
+  box-shadow: none;
   transition: .5s ease;
 }
 
@@ -843,14 +845,14 @@ a {
 }
 
 .card.card-token-item .token-name {
-  color: #FFEBEB;
+  color: #28CAF0;
   text-overflow: ellipsis;
   max-width: 100%;
   overflow: hidden;
 }
 
 .card.card-token-item .token-price {
-  background: rgba(64, 12, 12, 0.12);
+  background: rgba(2, 7, 16, 0.31);
   box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.12);
 }
 
@@ -859,8 +861,7 @@ a {
 }
 
 .card.card-token-item.sold {
-  background: rgba(58, 25, 128, 0.2);
-  box-shadow: inset 0px 0px 5px rgba(101, 44, 222, 0.2);
+  background: linear-gradient(180deg, rgba(28, 191, 241, 0.08) 0%, rgba(28, 191, 241, 0.08) 29.4%, rgba(28, 191, 241, 0.08) 78.88%);
 }
 
 .card.card-token-item.sold .token-price {
@@ -878,7 +879,7 @@ a {
 }
 
 .card.card-token-item.sold:hover {
-  background: rgba(58, 25, 128, 0.4);
+  background: linear-gradient(180deg, rgba(28, 191, 241, 0.1) 0%, rgba(28, 191, 241, 0.1) 29.4%, rgba(28, 191, 241, 0.1) 78.88%);
 }
 
 .card.card-token-item.sold:hover > .token-price {
@@ -908,12 +909,11 @@ a {
 .card.card-token-item .token-number {
   font: normal 600 1.25rem/1.875rem 'Poppins', sans-serif;
   letter-spacing: 1px;
-  color: #C7ADFF;
+  color: #A9EAF9;
 }
 
 .card.card-token-item .token-name {
   font: normal 500 1.75rem/1.75rem 'Poppins', sans-serif;
-  color: #F2EBFF;
   white-space: nowrap;
   text-align: center;
   margin-top: 0.5rem;
@@ -927,7 +927,6 @@ a {
 }
 
 .card.card-token-item .token-price {
-  background: rgba(29, 12, 64, 0.12);
   width: 100%;
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -975,7 +974,7 @@ a {
   margin-top: 2px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #C7ADFF;
+  color: #A9EAF9;
 }
 
 .card.card-token-item .btn-more {
@@ -983,11 +982,11 @@ a {
 }
 
 .card.card-token-item:hover {
-  background: rgba(58, 25, 128, 0.88);
+  background: linear-gradient(180deg, rgba(28, 191, 241, 0.3) 0%, rgba(28, 191, 241, 0.3) 29.4%, rgba(28, 191, 241, 0.3) 78.88%);
 }
 
 .card.card-token-item:hover .token-price {
-  background: rgba(29, 12, 64, 0.24);
+  background: rgba(2, 7, 16, 0.4);
   box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.24);
 }
 
@@ -1001,7 +1000,7 @@ a {
   -ms-flex-direction: row;
   flex-direction: row;
   border-radius: 1.25rem;
-  border: 1px solid #5625BF;
+  border: 1px solid #1E98B4;
   padding: 1.25rem 2rem;
   box-sizing: border-box;
   transition: .3s ease;
@@ -1012,7 +1011,7 @@ a {
 }
 
 .card-blue {
-  background: rgba(58, 25, 128, 0.8);
+  background: rgba(20, 101, 120, 0.8);
   box-shadow: inset 0px 0px 4px #5828BE;
   cursor: pointer;
 }
@@ -1035,7 +1034,7 @@ a {
 .params {
   padding: 1.5rem;
   border-radius: 0.5rem;
-  border: 1px solid #5625BF;
+  border: 1px solid #1E98B4;
   box-sizing: border-box;
 }
 
@@ -1055,12 +1054,12 @@ a {
   font: normal 500 1rem/1.25rem 'Barlow Condensed', sans-serif;
   letter-spacing: 0.115em;
   text-transform: uppercase;
-  color: #C7ADFF;
+  color: #A9EAF9;
 }
 
 .params-value {
   font: normal 500 1.25rem/1.5rem 'Poppins', sans-serif;
-  color: #F2EBFF;
+  color: #EAFAFE;
   margin-top: .25rem;
 }
 
@@ -1105,7 +1104,7 @@ a {
 
 .popup.popup-wallet .wallet-label {
   font: normal 500 1.25rem/1.5rem 'Poppins', sans-serif;
-  color: #E3D6FF;
+  color: #D4F4FC;
   margin-top: .5rem;
 }
 
@@ -1135,12 +1134,12 @@ a {
   font: normal 600 .875rem/1.25rem 'Barlow Condensed', sans-serif;
   letter-spacing: 0.115em;
   text-transform: uppercase;
-  color: #C7ADFF;
+  color: #A9EAF9;
 }
 
 .popup.popup-wallet .wallet-data-value {
   font: normal 600 1.25rem/1 'Poppins', sans-serif;
-  color: #F2EBFF;
+  color: #EAFAFE;
 }
 
 .popup.popup-wallet .wallet-data-info {
@@ -1155,9 +1154,9 @@ a {
   align-items: center;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  border: 1px solid #5625BF;
+  border: 1px solid #0A333C;
   box-sizing: border-box;
-  border-radius: 1.25rem;
+  border-radius: .75rem;
   padding: 1.5rem 1.875rem;
   -ms-flex-positive: 1;
   flex-grow: 1;
@@ -1205,8 +1204,8 @@ a {
 }
 
 .popup.popup-wallet .wallet-owned-image {
-  width: 14.1875rem;
-  height: 9.6875rem;
+  width: 10rem;
+  height: 10rem;
   margin-left: auto;
   margin-right: auto;
 }
@@ -1231,14 +1230,33 @@ a {
   -ms-flex-direction: row;
   flex-direction: row;
   max-width: 100%;
+  padding-bottom: 2rem;
+}
+
+.popup.popup-wallet .wallet-owned-list::-webkit-scrollbar-track {
+  background: #D4F4FC;
+}
+
+.popup.popup-wallet .wallet-owned-list::-webkit-scrollbar {
+  height: .25rem;
+}
+
+.popup.popup-wallet .wallet-owned-list::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background: #1E98B4;
+}
+
+.popup.popup-wallet .wallet-owned-list:hover::-webkit-scrollbar-thumb {
+  background: #1E98B4;
 }
 
 .popup.popup-wallet .wallet-owned-item,
 .popup.popup-wallet .wallet-owned-empty {
   width: 15rem;
-  border-radius: 2rem;
-  background: rgba(58, 25, 128, 0.64);
-  box-shadow: inset 0px 0px 5px rgba(101, 44, 222, 0.72);
+  min-width: 15rem;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, rgba(28, 191, 241, 0.07) 0%, rgba(28, 191, 241, 0.02) 29.4%, rgba(28, 191, 241, 0.08) 78.88%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 2rem;
   margin-right: 2rem;
   text-align: center;
@@ -1248,21 +1266,18 @@ a {
 
 .popup.popup-wallet .wallet-owned-item:last-child,
 .popup.popup-wallet .wallet-owned-empty:last-child {
-  margin-right: 0;
+  margin-right: 1px;
 }
 
 .popup.popup-wallet .wallet-owned-item:hover,
 .popup.popup-wallet .wallet-owned-empty:hover {
-  background: #29115C;
-  box-shadow: none;
+  background: linear-gradient(180deg, rgba(28, 191, 241, 0.15) 0%, rgba(28, 191, 241, 0.1) 29.4%, rgba(28, 191, 241, 0.12) 78.88%);
 }
 
 .popup.popup-wallet .wallet-owned-empty {
-  background: #29115C;
   padding-top: 2.9375rem;
   padding-bottom: 2.9375rem;
   vertical-align: top;
-  box-shadow: none;
   cursor: default;
 }
 
@@ -1276,7 +1291,7 @@ a {
   white-space: normal;
   padding-left: 2rem;
   padding-right: 2rem;
-  color: #58399B;
+  color: white;
 }
 
 .popup.popup-wallet .wallet-owned-text div {
@@ -1426,7 +1441,7 @@ a {
 .popup.popup-token .details-values div {
   font: normal 600 1.125rem 'Barlow Condensed', sans-serif;
   letter-spacing: 0.04em;
-  color: #C7ADFF;
+  color: #A9EAF9;
 }
 
 .popup.popup-token .details-arrow {
@@ -1539,8 +1554,8 @@ a {
 }
 
 .popup-transaction-loader .popup-container .transaction-loader {
-  width: 6rem;
-  height: 6rem;
+  width: 9rem;
+  height: 9rem;
   margin: 0 auto;
   position: relative;
   margin-bottom: 2rem;
@@ -1554,8 +1569,12 @@ a {
   height: 100%;
 }
 
+.popup-transaction-loader .popup-container .transaction-loader svg.ellipse path {
+  stroke-width: .25rem;
+}
+
 .popup-transaction-loader .popup-container .transaction-loader svg.ellipse .progress {
-  stroke: rgba(255, 255, 255, 0);
+  stroke: rgba(126, 223, 246, 0);
   fill: none;
   stroke-dashoffset: 138.5;
   stroke-dasharray: 138.5;
@@ -1563,33 +1582,33 @@ a {
   animation: circleProgress 3s ease-in infinite;
 }
 
-.popup-transaction-loader .popup-container .transaction-loader svg.logo-dark {
+.popup-transaction-loader .popup-container .transaction-loader .logo-dark {
   position: absolute;
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
 }
 
 @-webkit-keyframes circleProgress {
   from {
     stroke-dashoffset: 138.5;
-    stroke: rgba(255, 255, 255, 0);
+    stroke: rgba(126, 223, 246, 0);
   }
 
   20% {
-    stroke: #FFFFFF;
+    stroke: #7EDFF6;
   }
 
   80% {
-    stroke: #FFFFFF;
+    stroke: #7EDFF6;
   }
 
   to {
-    stroke: rgba(255, 255, 255, 0);
+    stroke: rgba(126, 223, 246, 0);
     stroke-dashoffset: 0;
   }
 }
@@ -1597,19 +1616,19 @@ a {
 @keyframes circleProgress {
   from {
     stroke-dashoffset: 138.5;
-    stroke: rgba(255, 255, 255, 0);
+    stroke: rgba(126, 223, 246, 0);
   }
 
   20% {
-    stroke: #FFFFFF;
+    stroke: #7EDFF6;
   }
 
   80% {
-    stroke: #FFFFFF;
+    stroke: #7EDFF6;
   }
 
   to {
-    stroke: rgba(255, 255, 255, 0);
+    stroke: rgba(126, 223, 246, 0);
     stroke-dashoffset: 0;
   }
 }
@@ -1770,8 +1789,8 @@ a {
   width: calc(100% - 6.25rem);
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
-  background: rgba(58, 25, 128, 0.88);
-  box-shadow: inset 0px 0px 5px #652CDE;
+  background: rgba(13, 54, 63, 0.7);
+  box-shadow: inset 0px 0px 5px #0F678C;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   transform: translateX(-50%);
@@ -1818,7 +1837,7 @@ a {
 
 .slider-wrapper .title {
   font: normal 500 1rem/1rem 'Poppins', sans-serif;
-  color: #F2EBFF;
+  color: #EAFAFE;
   margin-right: 1rem;
   margin-bottom: .25rem;
 }
@@ -1837,7 +1856,7 @@ a {
 
 .slider-wrapper .slider-header p {
   font: normal 500 1rem/1rem 'Poppins', sans-serif;
-  color: #F2EBFF;
+  color: #EAFAFE;
 }
 
 .slider-wrapper .slider.slider-horizontal {
@@ -1859,11 +1878,11 @@ a {
 }
 
 .slider-wrapper .slider .slider-track-selection {
-  background: #F2EBFF;
+  background: #EAFAFE;
 }
 
 .slider-wrapper .slider .slider-handle {
-  background: #F2EBFF;
+  background: #EAFAFE;
   width: 0.875rem;
   height: 0.875rem;
   top: calc(50% - .875rem / 2);
@@ -1911,8 +1930,8 @@ a {
 }
 
 .metamask {
-  background: rgba(58, 25, 128, 0.88);
-  box-shadow: inset 0px 0px 5px #652CDE;
+  background: rgba(13, 54, 63, 0.7);
+  box-shadow: inset 0px 0px 5px #0F678C;
   border-radius: 2rem;
   width: 34.375rem;
   height: 31.25rem;
@@ -1924,9 +1943,9 @@ a {
   left: calc(50% - 34.375rem / 2);
   opacity: 0;
   display: none;
-  -webkit-transform: translateY(100%);
-  -ms-transform: translateY(100%);
-  transform: translateY(100%);
+  -webkit-transform: translateY(100vh);
+  -ms-transform: translateY(100vh);
+  transform: translateY(100vh);
   transition: .3s ease;
   z-index: 10;
   box-sizing: border-box;
@@ -1954,9 +1973,8 @@ a {
 }
 
 .metamask-title {
-  font: normal 500 1.75rem/1.75rem 'Poppins', sans-serif;
-  margin-top: 4rem;
-  margin-bottom: 2.5rem;
+  font: normal 300 1.75rem/1.75rem 'Poppins', sans-serif;
+  margin: 2.5rem 0;
   text-align: center;
 }
 
@@ -1965,8 +1983,8 @@ a {
 }
 
 .metamask-image img {
-  width: 11.625rem;
-  height: 10.625rem;
+  width: 8rem;
+  height: 8rem;
   -webkit-filter: drop-shadow(0px 42px 45px rgba(0, 0, 0, 0.12)), drop-shadow(0px 16.1778px 14.3333px rgba(0, 0, 0, 0.0728889)), drop-shadow(0px 3.42222px 3.66667px rgba(0, 0, 0, 0.0471111));
   filter: drop-shadow(0px 42px 45px rgba(0, 0, 0, 0.12)), drop-shadow(0px 16.1778px 14.3333px rgba(0, 0, 0, 0.0728889)), drop-shadow(0px 3.42222px 3.66667px rgba(0, 0, 0, 0.0471111));
 }
@@ -2014,8 +2032,8 @@ a {
 .planets-info .planet-info#earthInfo .map svg,
 .planets-info .planet-info#earthInfo .map img {
   position: absolute;
-  width: auto;
-  height: 110%;
+  width: 120%;
+  height: auto;
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
@@ -2040,14 +2058,14 @@ a {
 
 .planets-info .planet-info#earthInfo .map svg g path,
 .planets-info .planet-info#earthInfo .map svg g polygon {
-  fill: rgba(143, 90, 255, 0);
+  fill: rgba(83, 213, 243, 0);
   stroke-width: 2px;
   transition: .1s ease;
 }
 
 .planets-info .planet-info#earthInfo .map svg g:hover > path,
 .planets-info .planet-info#earthInfo .map svg g:hover > polygon {
-  fill: rgba(143, 90, 255, 0.9);
+  fill: rgba(83, 213, 243, 0.9);
 }
 
 .planets-info .planet-info#earthInfo .map svg g.sold path,
@@ -2129,8 +2147,8 @@ header img {
   left: 0;
   top: 0;
   border-radius: 2rem;
-  background: linear-gradient(180deg, rgba(123, 64, 247, 0.6) 0%, rgba(84, 31, 196, 0.6) 100%);
-  box-shadow: 0px 26.2667px 52.5333px rgba(41, 19, 20, 0.3345), inset 0px -4px 6px rgba(132, 79, 243, 0.47), inset 0px 4px 4px rgba(135, 78, 255, 0.65);
+  background: linear-gradient(180deg, rgba(53, 164, 199, 0.6) 0%, rgba(31, 121, 150, 0.6) 100%);
+  box-shadow: 0px 26.2667px 52.5333px rgba(41, 19, 20, 0.3345), inset 0px -4px 6px rgba(79, 184, 243, 0.47), inset 0px 4px 4px rgba(78, 170, 255, 0.56);
   transition: .15s ease;
   z-index: -1;
 }
@@ -2243,7 +2261,7 @@ header img {
 }
 
 .nav-block nav p.active {
-  color: #8F5AFF;
+  color: #53D5F3;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: center;
@@ -2256,7 +2274,7 @@ header img {
 
 .nav-block nav p.active::before {
   border: .5rem solid transparent;
-  border-left: 0.75rem solid #8F5AFF;
+  border-left: 0.75rem solid #53D5F3;
 }
 
 .nav-block .social {
@@ -2334,14 +2352,14 @@ header [data-close-popup].show {
   -webkit-transform: rotateZ(45deg) translate(0.4375rem, 0.4375rem);
   -ms-transform: rotate(45deg) translate(0.4375rem, 0.4375rem);
   transform: rotateZ(45deg) translate(0.4375rem, 0.4375rem);
-  background: #1D0C40;
+  background: #0A333C;
 }
 
 .root.active-menu .nav-btn .line-2 {
   -webkit-transform: rotateZ(-45deg) translate(-0.09375rem, 0.0625rem);
   -ms-transform: rotate(-45deg) translate(-0.09375rem, 0.0625rem);
   transform: rotateZ(-45deg) translate(-0.09375rem, 0.0625rem);
-  background: #1D0C40;
+  background: #0A333C;
 }
 
 .root.active-menu .nav-btn .line-3 {
@@ -2349,7 +2367,7 @@ header [data-close-popup].show {
   -webkit-transform: rotateZ(-45deg) translate(21px, 3px);
   -ms-transform: rotate(-45deg) translate(21px, 3px);
   transform: rotateZ(-45deg) translate(21px, 3px);
-  background: #1D0C40;
+  background: #0A333C;
 }
 
 .root.active-menu header .btn.mobile-only {
@@ -2384,7 +2402,7 @@ header [data-close-popup].show {
   font: normal 500 1.5rem/1.5rem 'Barlow Condensed', sans-serif;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: #7331FF;
+  color: #28CAF0;
   margin-top: 0.5rem;
 }
 
@@ -2444,6 +2462,37 @@ header [data-close-popup].show {
   margin-top: 1rem;
 }
 
+.main-page-btns-2 {
+  position: absolute;
+  left: 50%;
+  bottom: -10rem;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  z-index: 1;
+  transition: .3s ease, opacity .15s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.main-page-btns-2 a {
+  display: block;
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.main-page-btns-2 a:not(:first-child) {
+  margin-left: 1rem;
+}
+
 .offer-card {
   display: -ms-flexbox;
   display: flex;
@@ -2464,7 +2513,7 @@ header [data-close-popup].show {
 }
 
 .offer-card .offer > b {
-  color: #8E58FF;
+  color: #7EDFF6;
   font-weight: 600;
 }
 
@@ -2475,7 +2524,7 @@ header [data-close-popup].show {
 .offer-card .card label {
   font: normal 600 .875rem/2rem 'Barlow Condensed', sans-serif;
   letter-spacing: 0.115em;
-  color: #C7ADFF;
+  color: #A9EAF9;
 }
 
 .offer-card .card .custom-input {
@@ -2508,7 +2557,7 @@ header [data-close-popup].show {
   font: normal 600 1.25rem 'Poppins', sans-serif;
   border-radius: 0;
   border-color: transparent;
-  border-bottom-color: #C7ADFF;
+  border-bottom-color: #A9EAF9;
   padding: 0;
   padding-bottom: .25rem;
 }
@@ -2553,9 +2602,12 @@ header [data-close-popup].show {
 }
 
 .space-background .background-blend-purple {
-  background: rgba(209, 193, 242, 0.6);
-  opacity: .1;
-  transition: .5s ease;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(34, 0, 153, 0.1);
 }
 
 .space-background .background-blend-red {
@@ -2563,7 +2615,7 @@ header [data-close-popup].show {
   height: 30em;
   left: calc(50% - 15vw);
   top: calc(50% - 15vw);
-  background: #BF1600;
+  background: #BF0067;
   border-radius: 100%;
   -webkit-filter: blur(5rem);
   filter: blur(5rem);
@@ -3917,21 +3969,6 @@ header [data-close-popup].show {
   z-index: 11;
 }
 
-.root.transaction-confirmed-sun .planets-canvas .planet-wrapper.sun .planet-body,
-.root.transaction-confirmed-sun .planets-canvas .planet-wrapper.sun .planet,
-.root.transaction-confirmed-sun .planets-canvas .planet-wrapper.sun .planet-body [class^="planet"],
-.root.transaction-confirmed-sun .planets-canvas .planet-wrapper.sun video {
-  z-index: 11;
-  transition: .4s ease !important;
-  opacity: 1 !important;
-  -webkit-transform: matrix3d(1.4, 0, 0, 0, 0, 1.4, 0, 0, 0, 0, 1.4, 0, 0, 0, 0, 1) !important;
-  transform: matrix3d(1.4, 0, 0, 0, 0, 1.4, 0, 0, 0, 0, 1.4, 0, 0, 0, 0, 1) !important;
-}
-
-.root.transaction-confirmed-sun .planets-canvas .planet-wrapper.sun .planet .shadow-1 {
-  z-index: 12;
-}
-
 .switch-distance {
   display: -ms-flexbox;
   display: flex;
@@ -4135,7 +4172,7 @@ header [data-close-popup].show {
 
 .planet-info .details-values::-webkit-scrollbar-track,
 .country-info .details-values::-webkit-scrollbar-track {
-  background: #E3D6FF;
+  background: #D4F4FC;
 }
 
 .planet-info .details-values::-webkit-scrollbar,
@@ -4146,12 +4183,12 @@ header [data-close-popup].show {
 .planet-info .details-values::-webkit-scrollbar-thumb,
 .country-info .details-values::-webkit-scrollbar-thumb {
   border-radius: 0;
-  background: #5625BF;
+  background: #1E98B4;
 }
 
 .planet-info .details-values:hover::-webkit-scrollbar-thumb,
 .country-info .details-values:hover::-webkit-scrollbar-thumb {
-  background: #5625BF;
+  background: #1E98B4;
 }
 
 .planet-info .details-values strong,
@@ -4308,7 +4345,7 @@ header [data-close-popup].show {
 }
 
 .earth-continents::-webkit-scrollbar-track {
-  background: #E3D6FF;
+  background: #D4F4FC;
 }
 
 .earth-continents::-webkit-scrollbar {
@@ -4317,11 +4354,11 @@ header [data-close-popup].show {
 
 .earth-continents::-webkit-scrollbar-thumb {
   border-radius: 0;
-  background: #5625BF;
+  background: #1E98B4;
 }
 
 .earth-continents:hover::-webkit-scrollbar-thumb {
-  background: #5625BF;
+  background: #1E98B4;
 }
 
 .earth-continents.switch-checked {
@@ -4470,7 +4507,7 @@ header [data-close-popup].show {
 }
 
 .about-us::-webkit-scrollbar-track {
-  background: #E3D6FF;
+  background: #D4F4FC;
 }
 
 .about-us::-webkit-scrollbar {
@@ -4479,11 +4516,11 @@ header [data-close-popup].show {
 
 .about-us::-webkit-scrollbar-thumb {
   border-radius: 0;
-  background: #5625BF;
+  background: #1E98B4;
 }
 
 .about-us:hover::-webkit-scrollbar-thumb {
-  background: #5625BF;
+  background: #1E98B4;
 }
 
 .about-us.active-tab {
@@ -4504,7 +4541,7 @@ header [data-close-popup].show {
 
 .about-us .provenance-title {
   font: normal 500 1.75rem/1.5rem 'Poppins', sans-serif;
-  color: #F2EBFF;
+  color: #EAFAFE;
 }
 
 .about-us .provenance-text {
@@ -4515,7 +4552,7 @@ header [data-close-popup].show {
 }
 
 .about-us .provenance-verify {
-  background: #1D0C40;
+  background: #0A333C;
   margin-top: 2rem;
   margin-bottom: 2rem;
   border-radius: 2rem;
@@ -4525,7 +4562,7 @@ header [data-close-popup].show {
 .about-us .provenance-verify-title,
 .about-us .provenance-verify-text {
   font: normal 600 1rem/1.5rem 'Poppins', sans-serif;
-  color: #E3D6FF;
+  color: #D4F4FC;
 }
 
 .about-us .provenance-verify-text {
@@ -4551,7 +4588,7 @@ header [data-close-popup].show {
   position: relative;
   text-decoration: underline;
   padding-left: 2rem;
-  color: #8F5AFF;
+  color: #53D5F3;
   font-weight: 600;
 }
 
@@ -4570,7 +4607,7 @@ header [data-close-popup].show {
 
 .about-us .provenance-subtitle {
   font: normal 500 1.25rem/1.5rem 'Poppins', sans-serif;
-  color: #F2EBFF;
+  color: #EAFAFE;
 }
 
 .about-us .provenance-list {
@@ -4586,7 +4623,7 @@ header [data-close-popup].show {
 }
 
 .about-us .provenance-list table a {
-  color: #8F5AFF;
+  color: #53D5F3;
   text-decoration: underline;
   font-weight: 600;
 }
@@ -4611,7 +4648,7 @@ header [data-close-popup].show {
   letter-spacing: 0.115em;
   text-transform: uppercase;
   text-transform: uppercase;
-  color: #F2EBFF;
+  color: #EAFAFE;
   margin-bottom: .5rem;
 }
 
@@ -4686,7 +4723,7 @@ header [data-close-popup].show {
 }
 
 .spinner-box .circle-core {
-  background: #0c0b0e;
+  background: #04020B;
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -4809,6 +4846,12 @@ header [data-close-popup].show {
   right: -9rem;
   opacity: 0;
   visibility: hidden;
+}
+
+.zoom-in .main-page-btns-2 {
+  bottom: 2rem;
+  opacity: 1;
+  visibility: visible;
 }
 
 .zoom-in .comet {
@@ -5022,7 +5065,7 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-neptune .planets-canvas {
-  --planet-neptune-size: var(--planet-scaled-size);
+  --planet-neptune-size: 22rem;
 }
 
 .zoom-in.planet-active-neptune .planets-canvas .neptune {
@@ -5258,7 +5301,7 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-earth .planets-canvas .earth {
-  left: 50%;
+  left: 60%;
   top: 50%;
   transition: 1.25s ease;
   visibility: hidden;
@@ -5493,7 +5536,7 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-jupiter .planets-canvas {
-  --planet-jupiter-size: var(--planet-scaled-size);
+  --planet-jupiter-size: 21rem;
 }
 
 .zoom-in.planet-active-jupiter .planets-canvas .jupiter {
@@ -5724,7 +5767,7 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-moon .planets-canvas {
-  --planet-moon-size: var(--planet-scaled-size);
+  --planet-moon-size: 22rem;
 }
 
 .zoom-in.planet-active-moon .planets-canvas .moon {
@@ -5952,7 +5995,7 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-mercury .planets-canvas {
-  --planet-mercury-size: 23rem;
+  --planet-mercury-size: 21rem;
   --planet-zoomin-top: calc(50% - .5rem);
 }
 
@@ -6188,7 +6231,7 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-sun .planets-canvas {
-  --planet-sun-size: var(--planet-scaled-size);
+  --planet-zoomin-size: 15rem;
 }
 
 .zoom-in.planet-active-sun .planets-canvas .sun {
@@ -6198,12 +6241,12 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-sun .planets-canvas .planet-wrapper.sun .planet {
-  opacity: 1;
+  transition: 1s ease, opacity .3s linear 1.5s;
 }
 
-.zoom-in.planet-active-sun .planets-canvas .planet-wrapper.sun .planet ~ video {
-  opacity: 1;
-  transition: 1.5s ease;
+.zoom-in.planet-active-sun .planets-canvas .planet-wrapper.sun .planet ~ video,
+.zoom-in.planet-active-sun .planets-canvas .planet-wrapper.sun .planet .shadow-1 {
+  transition: 1s ease, opacity .3s linear 1.5s;
 }
 
 .zoom-in.planet-active-sun .sun video {
@@ -6232,8 +6275,6 @@ header [data-close-popup].show {
 
 .zoom-in.planet-active-sun .sun .planet .shadow-1,
 .zoom-in.planet-active-sun .sun .planet-body .shadow-1 {
-  opacity: 1;
-  visibility: visible;
   width: calc(100% * 0.6);
   height: calc(100% * 0.6);
   background: #D43112;
@@ -6312,7 +6353,6 @@ header [data-close-popup].show {
 .zoom-in.zooming.planet-active-sun .sun .planet,
 .zoom-in.zooming.planet-active-sun .sun video {
   transition: 2s ease;
-  opacity: 1;
 }
 
 .zoom-in.zooming.planet-active-sun .neptune {
@@ -6451,7 +6491,7 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-venus .planets-canvas {
-  --planet-venus-size: 23rem;
+  --planet-venus-size: 21rem;
   --planet-zoomin-top: calc(50% - .5rem);
 }
 
@@ -6684,7 +6724,7 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-mars .planets-canvas {
-  --planet-mars-size: var(--planet-scaled-size);
+  --planet-mars-size: 21rem;
 }
 
 .zoom-in.planet-active-mars .planets-canvas .mars {
@@ -6915,7 +6955,7 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-saturn .planets-canvas {
-  --planet-saturn-size: 34.75rem;
+  --planet-saturn-size: 33.5rem;
   --planet-zoomin-top: calc(50% - .6rem);
   --planet-zoomin-left: calc(50% + 16.75rem);
 }
@@ -7148,7 +7188,7 @@ header [data-close-popup].show {
 }
 
 .zoom-in.planet-active-uranus .planets-canvas {
-  --planet-uranus-size: 35.5rem;
+  --planet-uranus-size: 34rem;
   --planet-zoomin-top: calc(50% - .3rem);
   --planet-zoomin-left: calc(50% + 16.75rem);
 }
@@ -20523,7 +20563,6 @@ header [data-close-popup].show {
   }
 
   .popup.popup-wallet .popup-container {
-    background: rgba(58, 25, 128, 0.88);
     width: 100%;
     height: 100%;
     border-radius: 0;
@@ -20625,10 +20664,18 @@ header [data-close-popup].show {
     padding-bottom: 1.5rem;
   }
 
+  .popup.popup-wallet .wallet-owned-list::-webkit-scrollbar {
+    display: none;
+  }
+
   .popup.popup-wallet .wallet-owned-item,
   .popup.popup-wallet .wallet-owned-empty {
     margin-right: 1rem;
-    min-width: 15rem;
+  }
+
+  .popup.popup-wallet .wallet-owned-item:last-child,
+  .popup.popup-wallet .wallet-owned-empty:last-child {
+    margin-right: 1.5rem;
   }
 
   .popup.popup-token {
@@ -20911,6 +20958,9 @@ header [data-close-popup].show {
     height: auto;
     left: 1.5rem;
     top: 40%;
+  }
+
+  .metamask.show {
     -webkit-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
@@ -21187,8 +21237,8 @@ header [data-close-popup].show {
     padding: 1.25rem 2rem;
     box-sizing: border-box;
     transition: .3s ease;
-    background: rgba(58, 25, 128, 0.32);
-    box-shadow: inset 0px 0px 5px rgba(101, 44, 222, 0.67);
+    background: rgba(13, 54, 63, 0.7);
+    box-shadow: inset 0px 0px 5px #0F678C;
     opacity: .6;
   }
 
@@ -21243,7 +21293,7 @@ header [data-close-popup].show {
   }
 
   .root .card-planet .card-header .row .actual-planet-number {
-    color: #F2EBFF;
+    color: #EAFAFE;
   }
 
   .root .card-planet .card-header .row .planet-number {
@@ -21315,7 +21365,7 @@ header [data-close-popup].show {
   }
 
   .root .card-planet .card-details .details-values {
-    color: #C7ADFF;
+    color: #A9EAF9;
     font-family: 'Barlow Condensed', sans-serif;
     font-style: normal;
     font-size: .875rem;
@@ -26794,14 +26844,11 @@ header [data-close-popup].show {
     top: 20.5rem;
   }
 
-  .root.zoom-in.planet-active-sun .planet-wrapper.sun .planet {
-    opacity: 1 !important;
-  }
-
   .root.zoom-in.planet-active-sun .planet-wrapper.sun video {
-    opacity: 1 !important;
-    transition: 1s ease;
-    z-index: -1;
+    width: 12.5rem !important;
+    height: 12.5rem !important;
+    left: calc(50% - 12rem / 2) !important;
+    top: calc(50% - 12rem / 2 - .5rem) !important;
   }
 
   .root.zoom-in.planet-active-sun #sunInfo video {
