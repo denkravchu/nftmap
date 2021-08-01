@@ -1,4 +1,4 @@
-const planets = ['earth', 'moon', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'sun', 'mercury', 'venus']
+const planets = ['earth', 'moon', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'tesla', 'sun', 'mercury', 'venus']
 const mobileCarousel = {
   planets: planets,
   previousIndex: planets.length - 1,
